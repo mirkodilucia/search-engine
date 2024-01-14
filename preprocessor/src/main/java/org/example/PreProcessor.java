@@ -32,7 +32,11 @@ public class PreProcessor {
     }
 
     public String cleanMultipleSpaces(String input) {
-        return input.replaceAll(MULTIPLE_SPACE_MATCHER, "").trim();
+        return input.replaceAll(MULTIPLE_SPACE_MATCHER, " ").trim();
+    }
+
+    public String addSpaceToCamelCase(String input) {
+        return input.replaceAll(CAMEL_CASE_MATCHER, REPLACEMENT).trim();
     }
 
     public String cleanByRegex(String input, String regexPattern, String replacement) {

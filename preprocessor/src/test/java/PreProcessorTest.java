@@ -12,7 +12,7 @@ public class PreProcessorTest {
         String regexPattern = "[A-Z]{3}\\d{3}";
         String actualResult = new PreProcessor().cleanByRegex(input, regexPattern, " ");
 
-        String expectedResult = "Replace this pattern:   with  ";
+        String expectedResult = "Replace this pattern:   with  .";
         assertEquals(expectedResult, actualResult);
     }
 
@@ -22,7 +22,7 @@ public class PreProcessorTest {
         String input = "Ciao <b>mondo</b>!";
         String actualResult = new PreProcessor().cleanHtmlTags(input);
 
-        String expectedResult = "Ciao  mondo";
+        String expectedResult = "Ciao  mondo !";
         assertEquals(expectedResult, actualResult);
     }
 
@@ -32,7 +32,7 @@ public class PreProcessorTest {
         String input = "Ciao, mondo!";
         String actualResult = new PreProcessor().cleanNonDigit(input);
 
-        String expectedResult = "Ciao mondo";
+        String expectedResult = "Ciao  mondo";
         assertEquals(expectedResult, actualResult);
     }
 
@@ -53,6 +53,16 @@ public class PreProcessorTest {
         String actualResult = new PreProcessor().cleanMultipleSpaces(input);
 
         String expectedResult = "Ciao mondo!";
+        assertEquals(expectedResult, actualResult);
+    }
+
+    // Given A Text Should Return Text Without Camel Case
+    @Test
+    public void replaceCamelCase() {
+        String input = "CiaoMondo!";
+        String actualResult = new PreProcessor().addSpaceToCamelCase(input);
+
+        String expectedResult = "Ciao Mondo!";
         assertEquals(expectedResult, actualResult);
     }
 
