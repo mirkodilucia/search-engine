@@ -7,7 +7,7 @@ public class PreProcessor {
 
     private static final String URL_MATCHER = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     private static final String HTML_TAGS_MATCHER = "<[^>]+>";
-    private static final String NON_DIGIT_MATCHER = "[^a-zA-Z ]";
+    private static final String NON_DIGIT_AND_PUNCTUATION_MATCHER = "[^a-zA-Z ]";
     private static final String MULTIPLE_SPACE_MATCHER = " +";
     private static final String CONSECUTIVE_LETTERS_MATCHER = "(.)\\1{2,}";
 
@@ -21,6 +21,10 @@ public class PreProcessor {
 
     public String cleanHtmlTags(String input) {
         return cleanByRegex(input, HTML_TAGS_MATCHER).trim();
+    }
+
+    public String cleanNonDigit(String input) {
+        return cleanByRegex(input, NON_DIGIT_AND_PUNCTUATION_MATCHER).trim();
     }
 
     public String cleanByRegex(String input, String regexPattern) {

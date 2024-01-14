@@ -26,6 +26,16 @@ public class PreProcessorTest {
         assertEquals(expectedResult, actualResult);
     }
 
+    // Given A Text Should Return Text Without Non Digit And Punctuation
+    @Test
+    public void cleanNonDigit() {
+        String input = "Ciao, mondo!";
+        String actualResult = new PreProcessor().cleanNonDigit(input);
+
+        String expectedResult = "Ciao  mondo";
+        assertEquals(expectedResult, actualResult);
+    }
+
     // Given A Text Should Return Text Without Urls
     @Test
     public void cleanUrl() {
