@@ -31,9 +31,14 @@ public class PreProcessor {
         return input.replaceAll(CONSECUTIVE_LETTERS_MATCHER, "$1$1").trim();
     }
 
+    public String cleanMultipleSpaces(String input) {
+        return input.replaceAll(MULTIPLE_SPACE_MATCHER, "").trim();
+    }
+
     public String cleanByRegex(String input, String regexPattern, String replacement) {
         return input.replaceAll(regexPattern, replacement);
     }
+
 
     public String cleanText(String input) {
         StringBuilder result = new StringBuilder();

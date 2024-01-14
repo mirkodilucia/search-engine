@@ -46,6 +46,16 @@ public class PreProcessorTest {
         assertEquals(expectedResult, actualResult);
     }
 
+    // Given A Text Should Return Text Without Multiple Spaces
+    @Test
+    public void cleanMultipleSpaces() {
+        String input = "Ciao    mondo!";
+        String actualResult = new PreProcessor().cleanMultipleSpaces(input);
+
+        String expectedResult = "Ciao mondo!";
+        assertEquals(expectedResult, actualResult);
+    }
+
     // Given A Text Should Return Text Without Urls
     @Test
     public void cleanUrl() {
