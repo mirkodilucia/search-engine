@@ -1,6 +1,9 @@
 name: Java CI with Maven
 
 on:
+  merge:
+    branches:
+      - main
   push:
     branches:
       - main
