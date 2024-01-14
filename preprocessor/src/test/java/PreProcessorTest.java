@@ -16,6 +16,16 @@ public class PreProcessorTest {
         assertEquals(expectedResult, actualResult);
     }
 
+    // Given A Text Should Return Text Without Html Tags
+    @Test
+    public void cleanHtmlTags() {
+        String input = "Ciao <b>mondo</b>!";
+        String actualResult = new PreProcessor().cleanHtmlTags(input);
+
+        String expectedResult = "Ciao  mondo";
+        assertEquals(expectedResult, actualResult);
+    }
+
     // Given A Text Should Return Text Without Urls
     @Test
     public void cleanUrl() {

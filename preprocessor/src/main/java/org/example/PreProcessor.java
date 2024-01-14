@@ -19,6 +19,10 @@ public class PreProcessor {
         return cleanByRegex(input, URL_MATCHER).trim();
     }
 
+    public String cleanHtmlTags(String input) {
+        return cleanByRegex(input, HTML_TAGS_MATCHER).trim();
+    }
+
     public String cleanByRegex(String input, String regexPattern) {
         StringBuilder result = new StringBuilder();
 
