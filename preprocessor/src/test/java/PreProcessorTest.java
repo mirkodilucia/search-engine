@@ -10,7 +10,7 @@ public class PreProcessorTest {
     public void cleanByRegex() {
         String input = "Replace this pattern: ABC123 with XYZ789.";
         String regexPattern = "[A-Z]{3}\\d{3}";
-        String actualResult = new PreProcessor().cleanByRegex(input, regexPattern);
+        String actualResult = new PreProcessor().cleanByRegex(input, regexPattern, " ");
 
         String expectedResult = "Replace this pattern:   with  ";
         assertEquals(expectedResult, actualResult);
@@ -32,7 +32,17 @@ public class PreProcessorTest {
         String input = "Ciao, mondo!";
         String actualResult = new PreProcessor().cleanNonDigit(input);
 
-        String expectedResult = "Ciao  mondo";
+        String expectedResult = "Ciao mondo";
+        assertEquals(expectedResult, actualResult);
+    }
+
+    // Given A Text Should Return Text Without Consecutive Letters
+    @Test
+    public void cleanConsecutiveLetters() {
+        String input = "Ciaooooo, monddddooooo!";
+        String actualResult = new PreProcessor().cleanConsecutiveLetters(input);
+
+        String expectedResult = "Ciaoo, monddo!";
         assertEquals(expectedResult, actualResult);
     }
 
