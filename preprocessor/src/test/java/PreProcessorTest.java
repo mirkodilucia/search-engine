@@ -7,7 +7,7 @@ public class PreProcessorTest {
 
     // Given A Regex Pattern Should Return Text Replaced By Spaces
     @Test
-    public void cleanByRegex_givenARegexPatternShouldReturnTextReplacedBySpaces() {
+    public void cleanByRegex() {
         String input = "Replace this pattern: ABC123 with XYZ789.";
         String regexPattern = "[A-Z]{3}\\d{3}";
         String actualResult = new PreProcessor().cleanByRegex(input, regexPattern);
@@ -16,19 +16,13 @@ public class PreProcessorTest {
         assertEquals(expectedResult, actualResult);
     }
 
-
+    // Given A Text Should Return Text Without Urls
     @Test
-    public void testRegexReplacement_shouldChangePatternWithSpace() {
-        // Input string
-        String input = "Replace this pattern: ABC123 with XYZ789.";
+    public void cleanUrl() {
+        String input = "Ciao https://www.google.com/";
+        String actualResult = new PreProcessor().cleanUrl(input);
 
-        // Expected result after replacement
-        String expectedResult = "Replace this pattern:   with  ";
-
-        // Perform the replacement
-        String actualResult = new PreProcessor().cleanText(input);
-
-        // Assert the result
+        String expectedResult = "Ciao";
         assertEquals(expectedResult, actualResult);
     }
 }

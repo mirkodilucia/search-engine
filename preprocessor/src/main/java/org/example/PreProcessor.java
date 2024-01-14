@@ -15,8 +15,8 @@ public class PreProcessor {
 
     private static final String REPLACEMENT = "\s";
 
-    public String cleanUrl(StringBuilder result) {
-        return "";
+    public String cleanUrl(String input) {
+        return cleanByRegex(input, URL_MATCHER).trim();
     }
 
     public String cleanByRegex(String input, String regexPattern) {
