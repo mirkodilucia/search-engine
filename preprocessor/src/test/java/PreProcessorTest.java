@@ -75,4 +75,14 @@ public class PreProcessorTest {
         String expectedResult = "Ciao";
         assertEquals(expectedResult, actualResult);
     }
+
+    // Given A Text Should Return Text Without Html Tags, Non Digit And Punctuation, Consecutive Letters, Multiple Spaces, Camel Case And Urls
+    @Test
+    public void cleanText() {
+        String input = "Ciao <b>mondo</b>! Ciao, mondo! Ciaooooo, monddddooooo! Ciao    mondo! CiaoMondo! Ciao https://www.google.com/";
+        String actualResult = new PreProcessor().cleanText(input);
+
+        String expectedResult = "Ciao mondo Ciao mondo Ciaoo monddoo Ciao mondo Ciao Mondo Ciao";
+        assertEquals(expectedResult, actualResult);
+    }
 }

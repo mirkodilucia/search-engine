@@ -43,23 +43,18 @@ public class PreProcessor {
         return input.replaceAll(regexPattern, replacement);
     }
 
-
     public String cleanText(String input) {
-        StringBuilder result = new StringBuilder();
+        String result = input;
 
-        // Input string
-        String regexPattern = "[A-Z]{3}\\d{3}";
+        result = cleanUrl(result);
+        result = cleanHtmlTags(result);
+        result = cleanNonDigit(result);
+        result = cleanConsecutiveLetters(result);
+        result = cleanMultipleSpaces(result);
+        result = addSpaceToCamelCase(result);
 
-        // Replacement string
-        String replacement = "\s";
 
-        Pattern pattern = Pattern.compile(regexPattern);
-        Matcher matcher = pattern.matcher(input);
-        while (matcher.find()) {
-            matcher.appendReplacement(result, replacement);
-        }
-
-        return result.toString();
+        return result;
     }
 
 }
