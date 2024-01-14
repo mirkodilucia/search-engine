@@ -9,7 +9,6 @@ public class PreProcessor {
     private static final String HTML_TAGS_MATCHER = "<[^>]+>";
     private static final String NON_DIGIT_AND_PUNCTUATION_MATCHER = "[^a-zA-Z ]";
     private static final String CONSECUTIVE_LETTERS_MATCHER = "(.)\\1{2,}";
-    private static final String DOUBLE_VOWELS_MATCHER = "(?i)([aeiou])\1{1,}";
 
     private static final String MULTIPLE_SPACE_MATCHER = " +";
     private static final String CAMEL_CASE_MATCHER = "(?<=[a-z])(?=[A-Z])";
@@ -29,8 +28,7 @@ public class PreProcessor {
     }
 
     public String cleanConsecutiveLetters(String input) {
-        return cleanByRegex(input, CONSECUTIVE_LETTERS_MATCHER, "$1$1")
-                .replaceAll(DOUBLE_VOWELS_MATCHER, "$1$1").trim();
+        return input.replaceAll(CONSECUTIVE_LETTERS_MATCHER, "$1$1").trim();
     }
 
     public String cleanByRegex(String input, String regexPattern, String replacement) {

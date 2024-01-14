@@ -42,7 +42,7 @@ public class PreProcessorTest {
         String input = "Ciaooooo, monddddooooo!";
         String actualResult = new PreProcessor().cleanConsecutiveLetters(input);
 
-        String expectedResult = "Ciaoo, monddo!";
+        String expectedResult = "Ciaoo, monddoo!";
         assertEquals(expectedResult, actualResult);
     }
 
