@@ -37,6 +37,16 @@ public class Stopword {
         return meaningfulToken.toArray(new String[0]);
     }
 
+    public static String[] getStems(String[] words) {
+        ArrayList<String> stemmedTokens = new ArrayList<>();
+
+        for (String word : words) {
+            stemmedTokens.add(stemmer.stemWord(word));
+        }
+
+        return stemmedTokens.toArray(new String[0]);
+    }
+
     private void loadStopwords() {
         if (!stopwords.isEmpty()) {
             throw new IllegalStateException("Stopwords already loaded");

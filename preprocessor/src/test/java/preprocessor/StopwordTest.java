@@ -17,4 +17,14 @@ public class StopwordTest {
         assertEquals(expectedResult[1], actualResult[1]);
     }
 
+    // Given A Text array Should Return Text array with stemmed words (camel case)
+    @Test
+    public void getStems() {
+        String[] input = {"Hello", "World"};
+        String[] actualResult = Stopword.getStems(input);
+
+        String[] expectedResult = {"hello", "world"};
+        assertEquals(expectedResult[0], actualResult[0]);
+        assertEquals(expectedResult[1], actualResult[1]);
+    }
 }
