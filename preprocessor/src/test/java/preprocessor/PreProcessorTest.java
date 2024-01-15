@@ -1,5 +1,6 @@
-import jdk.jfr.Description;
-import org.example.PreProcessor;
+package preprocessor;
+
+import it.unipi.dii.aide.mircv.preprocessor.PreProcessor;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

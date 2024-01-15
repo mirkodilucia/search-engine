@@ -1,4 +1,4 @@
-package org.example;
+package it.unipi.dii.aide.mircv.application;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,7 +1,4 @@
-package org.example;
-
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+package it.unipi.dii.aide.mircv.preprocessor;
 
 public class PreProcessor {
 
