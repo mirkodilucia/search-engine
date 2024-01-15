@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="Given A Text array Should Return Text array with stemmed words (camel case)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="Given A Text array Should Return Text array without stopwords">
+      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stopword.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stopword.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StopwordTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StopwordTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,7 +130,7 @@
       <workItem from="1705246743902" duration="2392000" />
       <workItem from="1705250816785" duration="6253000" />
       <workItem from="1705340582305" duration="260000" />
-      <workItem from="1705344598208" duration="272000" />
+      <workItem from="1705344598208" duration="354000" />
     </task>
     <task id="LOCAL-00001" summary="shouldChangePatternWithSpace">
       <option name="closed" value="true" />
@@ -252,7 +252,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705344776136</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Given A Text array Should Return Text array without stopwords">
+      <option name="closed" value="true" />
+      <created>1705344884239</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1705344884239</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,7 +279,8 @@
     <MESSAGE value="chore: restructured application with github actions" />
     <MESSAGE value="chore: add main app configuration for launch" />
     <MESSAGE value="Given A Text array Should Return Text array with stemmed words (camel case)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Given A Text array Should Return Text array with stemmed words (camel case)" />
+    <MESSAGE value="Given A Text array Should Return Text array without stopwords" />
+    <option name="LAST_COMMIT_MESSAGE" value="Given A Text array Should Return Text array without stopwords" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

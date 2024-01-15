@@ -47,6 +47,24 @@ public class Stopword {
         return stemmedTokens.toArray(new String[0]);
     }
 
+    public String[] tokenize(String text) {
+        ArrayList<String> tokens = new ArrayList<>();
+
+        String[] words = text.split(SPACE);
+        for (String token : words) {
+            String[] subtokens = token.split(CAMEL_CASE_MATCHER);
+
+            for (String subtoken : subtokens) {
+                //truncate subtoken to THRESHOLD characters
+                subtoken = subtoken.substring(0, Math.min(subtoken.length(), THRESHOLD));
+                //return token in lower case
+                tokens.add(subtoken.toLowerCase(Locale.ROOT));
+            }
+        }
+
+        return tokens.toArray(new String[0]);
+    }
+
     private void loadStopwords() {
         if (!stopwords.isEmpty()) {
             throw new IllegalStateException("Stopwords already loaded");

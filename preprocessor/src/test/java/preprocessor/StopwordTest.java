@@ -28,4 +28,15 @@ public class StopwordTest {
         assertEquals(expectedResult[0], actualResult[0]);
         assertEquals(expectedResult[1], actualResult[1]);
     }
+
+    // Given A Text in camel case should Return Text with spaces between Camel Case
+    @Test
+    public void tokenize() {
+        String input = "HelloWorld";
+        String[] actualResult = Stopword.getInstance().tokenize(input);
+
+        String[] expectedResult = {"hello", "world"};
+        assertEquals(expectedResult[0], actualResult[0]);
+        assertEquals(expectedResult[1], actualResult[1]);
+    }
 }
