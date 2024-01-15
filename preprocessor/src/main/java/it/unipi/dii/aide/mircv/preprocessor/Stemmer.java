@@ -6,12 +6,12 @@ import it.unipi.dii.aide.mircv.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class Stopword {
+public class Stemmer {
 
     private static final String CAMEL_CASE_MATCHER = "(?<=[a-z])(?=[A-Z])";
 
     private static final int THRESHOLD = 64;
-    private static Stopword INSTANCE;
+    private static Stemmer INSTANCE;
 
     private static final String SPACE = " ";
 
@@ -19,7 +19,7 @@ public class Stopword {
 
     private static final ArrayList<String> stopwords = new ArrayList<>();
 
-    private Stopword() {
+    private Stemmer() {
         loadStopwords();
     }
 
@@ -77,9 +77,9 @@ public class Stopword {
         }
     }
 
-    public static Stopword getInstance() {
+    public static Stemmer getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Stopword();
+            INSTANCE = new Stemmer();
         }
 
         return INSTANCE;

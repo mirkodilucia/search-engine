@@ -1,17 +1,17 @@
 package preprocessor;
 
-import it.unipi.dii.aide.mircv.preprocessor.Stopword;
+import it.unipi.dii.aide.mircv.preprocessor.Stemmer;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StopwordTest {
+public class StemmerTest {
 
     // Given A Text array Should Return Text array without stopwords
     @Test
     public void removeStopwords() {
         String[] input = {"Hello", "World", "the", "and", "or"};
-        String[] actualResult = Stopword.getInstance().removeStopwords(input);
+        String[] actualResult = Stemmer.getInstance().removeStopwords(input);
 
         String[] expectedResult = {"Hello", "World"};
         assertEquals(expectedResult[0], actualResult[0]);
@@ -22,7 +22,7 @@ public class StopwordTest {
     @Test
     public void getStems() {
         String[] input = {"Hello", "World"};
-        String[] actualResult = Stopword.getStems(input);
+        String[] actualResult = Stemmer.getStems(input);
 
         String[] expectedResult = {"hello", "world"};
         assertEquals(expectedResult[0], actualResult[0]);
@@ -33,7 +33,7 @@ public class StopwordTest {
     @Test
     public void tokenize() {
         String input = "HelloWorld";
-        String[] actualResult = Stopword.getInstance().tokenize(input);
+        String[] actualResult = Stemmer.getInstance().tokenize(input);
 
         String[] expectedResult = {"hello", "world"};
         assertEquals(expectedResult[0], actualResult[0]);
@@ -44,7 +44,7 @@ public class StopwordTest {
     @Test
     public void processDocument() {
         String input = "If you hold to my teaching, you are really my disciples. Then you will know the truth, and the truth will set you free";
-        String actualResult = Stopword.getInstance().processDocument(input);
+        String actualResult = Stemmer.getInstance().processDocument(input);
 
         String expectedResult = "hold teaching, disciples. will truth, truth will set free";
         assertEquals(expectedResult, actualResult);
