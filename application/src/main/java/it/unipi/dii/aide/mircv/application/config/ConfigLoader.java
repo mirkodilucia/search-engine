@@ -23,11 +23,13 @@ public class ConfigLoader {
         }
     }
 
-    private ConfigLoader() {}
+    private ConfigLoader() {
+        INSTANCE = this;
+    }
 
     public static ConfigLoader getInstance() {
         if (INSTANCE == null) {
-            return new ConfigLoader();
+            INSTANCE = new ConfigLoader();
         }
 
         return INSTANCE;
