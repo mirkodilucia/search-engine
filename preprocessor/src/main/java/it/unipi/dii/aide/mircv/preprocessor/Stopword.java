@@ -84,4 +84,17 @@ public class Stopword {
 
         return INSTANCE;
     }
+
+    public String processDocument(String input) {
+        String[] tokens = tokenize(input);
+        String[] meaningfulTokens = removeStopwords(tokens);
+        String[] stemmedTokens = getStems(meaningfulTokens);
+
+        StringBuilder sb = new StringBuilder();
+        for (String token : stemmedTokens) {
+            sb.append(token).append(SPACE);
+        }
+
+        return sb.toString().trim();
+    }
 }

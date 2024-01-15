@@ -39,4 +39,14 @@ public class StopwordTest {
         assertEquals(expectedResult[0], actualResult[0]);
         assertEquals(expectedResult[1], actualResult[1]);
     }
+
+    // Given document should Return processed document
+    @Test
+    public void processDocument() {
+        String input = "If you hold to my teaching, you are really my disciples. Then you will know the truth, and the truth will set you free";
+        String actualResult = Stopword.getInstance().processDocument(input);
+
+        String expectedResult = "hold teaching, disciples. will truth, truth will set free";
+        assertEquals(expectedResult, actualResult);
+    }
 }
