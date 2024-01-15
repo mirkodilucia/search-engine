@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StopwordTest {
 
+    // Given A Text array Should Return Text array without stopwords
     @Test
     public void removeStopwords() {
-        String[] input = {"Hello", "World"};
+        String[] input = {"Hello", "World", "the", "and", "or"};
         String[] actualResult = Stopword.getInstance().removeStopwords(input);
 
         String[] expectedResult = {"Hello", "World"};
