@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="Given document should Return processed document">
-      <change afterPath="$PROJECT_DIR$/compression/src/main/java/it/unipi/dii/aide/mircv/compression/VariableByteCompression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/compression/src/test/java/MainTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="VariableByteCompression class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compression/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/compression/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compression/src/main/java/it/unipi/dii/aide/mircv/compression/VariableByteCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/compression/src/main/java/it/unipi/dii/aide/mircv/compression/VariableByteCompression.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +41,7 @@
     "JUnit.PreProcessorTest.cleanUrl.executor": "Debug",
     "JUnit.PreProcessorTest.testRegexReplacement.executor": "Run",
     "JUnit.PreprocesserTest.PreProcessor_ShouldReturnBeginAsATest.executor": "Run",
-    "JUnit.Run All Test.executor": "Debug",
+    "JUnit.Run All Test.executor": "Run",
     "JUnit.StopwordTest.removeStopwords.executor": "Debug",
     "JUnit.VariableByteCompressionTest.decode.executor": "Run",
     "JUnit.VariableByteCompressionTest.encode.executor": "Run",
@@ -175,9 +172,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.VariableByteCompressionTest" />
+        <item itemvalue="JUnit.Run All Test" />
         <item itemvalue="JUnit.VariableByteCompressionTest.decode" />
         <item itemvalue="JUnit.VariableByteCompressionTest.encode" />
-        <item itemvalue="JUnit.Run All Test" />
       </list>
     </recent_temporary>
   </component>
@@ -345,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705345263319</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="VariableByteCompression class">
+      <option name="closed" value="true" />
+      <created>1705434377041</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1705434377041</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -367,7 +372,8 @@
     <MESSAGE value="Given A Text array Should Return Text array without stopwords" />
     <MESSAGE value="Given A Text in camel case should Return Text with spaces between Camel Case" />
     <MESSAGE value="Given document should Return processed document" />
-    <option name="LAST_COMMIT_MESSAGE" value="Given document should Return processed document" />
+    <MESSAGE value="VariableByteCompression class" />
+    <option name="LAST_COMMIT_MESSAGE" value="VariableByteCompression class" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

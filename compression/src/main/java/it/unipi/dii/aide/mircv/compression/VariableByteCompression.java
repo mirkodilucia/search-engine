@@ -29,30 +29,24 @@ public static byte[] encode(int[] numbers)
     {
         int[] numbers = new int[bytes.length];
         int i = 0;
-        int j = 0;
-        int number = 0;
-        while (i < bytes.length)
+        for (byte b : bytes)
         {
-            if (bytes[i] >= 0)
+            int number = 0;
+            int j = 0;
+            while (b < 0)
             {
-                number += bytes[i];
-                i++;
-            }
-            else
-            {
-                number += bytes[i] + 128;
-                i++;
-                numbers[j] = number;
-                number = 0;
+                number += (b % 128) * Math.pow(128, j);
+                b += 128;
                 j++;
             }
+            number += b * Math.pow(128, j);
+            numbers[i] = number;
+            i++;
         }
-        int[] result = new int[j];
-        System.arraycopy(numbers, 0, result, 0, j);
+        int[] result = new int[i];
+        System.arraycopy(numbers, 0, result, 0, i);
         return result;
     }
-
-
 
 
 
