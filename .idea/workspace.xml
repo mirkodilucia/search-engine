@@ -4,27 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="chore: add main app configuration for launch">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/run-unit-tests.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/config/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/config/ConfigLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stopword.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/utils/FileUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/test/java/MainTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StopwordTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/stopwords.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compression/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/compression/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compression/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/compression/src/main/java/it/unipi/dii/aide/mircv/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/org/example/PreProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/PreProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/test/java/PreProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/PreProcessorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/Main.java" afterDir="false" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="Given document should Return processed document">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stopword.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stemmer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StopwordTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StemmerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +46,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Merging add-preprocessor-class",
+    "git-widget-placeholder": "add-stemmer-class",
     "jdk.selected.JAVA_MODULE": "17",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -148,6 +131,7 @@
       <workItem from="1705246743902" duration="2392000" />
       <workItem from="1705250816785" duration="6253000" />
       <workItem from="1705340582305" duration="260000" />
+      <workItem from="1705344598208" duration="827000" />
     </task>
     <task id="LOCAL-00001" summary="shouldChangePatternWithSpace">
       <option name="closed" value="true" />
@@ -261,7 +245,39 @@
       <option name="project" value="LOCAL" />
       <updated>1705258798879</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Given A Text array Should Return Text array with stemmed words (camel case)">
+      <option name="closed" value="true" />
+      <created>1705344776136</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1705344776136</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Given A Text array Should Return Text array without stopwords">
+      <option name="closed" value="true" />
+      <created>1705344884239</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1705344884239</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Given A Text in camel case should Return Text with spaces between Camel Case">
+      <option name="closed" value="true" />
+      <created>1705344959901</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1705344959901</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Given document should Return processed document">
+      <option name="closed" value="true" />
+      <created>1705345263319</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1705345263319</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,7 +295,11 @@
     <MESSAGE value="Given A Text Should Return Text Without Html Tags, Non Digit And Punctuation, Consecutive Letters, Multiple Spaces, Camel Case And Urls" />
     <MESSAGE value="chore: restructured application with github actions" />
     <MESSAGE value="chore: add main app configuration for launch" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: add main app configuration for launch" />
+    <MESSAGE value="Given A Text array Should Return Text array with stemmed words (camel case)" />
+    <MESSAGE value="Given A Text array Should Return Text array without stopwords" />
+    <MESSAGE value="Given A Text in camel case should Return Text with spaces between Camel Case" />
+    <MESSAGE value="Given document should Return processed document" />
+    <option name="LAST_COMMIT_MESSAGE" value="Given document should Return processed document" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
