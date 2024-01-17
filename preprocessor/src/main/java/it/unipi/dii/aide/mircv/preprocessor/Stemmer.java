@@ -15,7 +15,6 @@ public class Stemmer {
 
     private static final String SPACE = " ";
 
-    private static final PorterStemmer stemmer = new PorterStemmer();
 
     private static final ArrayList<String> stopwords = new ArrayList<>();
 
@@ -37,7 +36,8 @@ public class Stemmer {
         return meaningfulToken.toArray(new String[0]);
     }
 
-    public static String[] getStems(String[] words) {
+    public String[] getStems(String[] words) {
+        PorterStemmer stemmer = new PorterStemmer();
         ArrayList<String> stemmedTokens = new ArrayList<>();
 
         for (String word : words) {
@@ -97,4 +97,5 @@ public class Stemmer {
 
         return sb.toString().trim();
     }
+
 }

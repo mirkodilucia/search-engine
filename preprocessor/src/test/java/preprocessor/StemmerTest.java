@@ -22,7 +22,7 @@ public class StemmerTest {
     @Test
     public void getStems() {
         String[] input = {"Hello", "World"};
-        String[] actualResult = Stemmer.getStems(input);
+        String[] actualResult = Stemmer.getInstance().getStems(input);
 
         String[] expectedResult = {"hello", "world"};
         assertEquals(expectedResult[0], actualResult[0]);

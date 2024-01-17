@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Config>
+    <datasetPath>resources/dataset/</datasetPath>
+    <rawCollectionPath>resources/data/sampled_collection.tsv</rawCollectionPath>
+    <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
+    <stopwordsPath>config/stopwords.txt</stopwordsPath>
+    <documentIndexPath>resources/data/documentIndex</documentIndexPath>
+    <frequencyFileName>/frequencies</frequencyFileName>
+    <vocabularyFileName>/vocabulary</vocabularyFileName>
+    <docidsFileName>/docids</docidsFileName>
+    <vocabularyPath>resources/data/vocabulary</vocabularyPath>
+    <invertedIndexDocs>resources/data/invertedIndexDocs</invertedIndexDocs>
+    <invertedIndexFreqs>resources/data/invertedIndexFreqs</invertedIndexFreqs>
+    <partialVocabularyDir>resources/data/partial_vocabulary</partialVocabularyDir>
+    <frequencyDir>resources/data/partial_frequencies</frequencyDir>
+    <docidsDir>resources/data/partial_docids</docidsDir>
+    <collectionStatisticsPath>config/collectionStatistics</collectionStatisticsPath>
+    <blockDescriptorsPath>resources/data/blockDescriptors</blockDescriptorsPath>
+    <flagsFilePath>resources/data/flags</flagsFilePath>
+    <testDir>resources/data/test</testDir>
+</Config>
