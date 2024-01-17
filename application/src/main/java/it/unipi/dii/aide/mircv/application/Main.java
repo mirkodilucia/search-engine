@@ -9,7 +9,5 @@ public class Main {
         Config config = ConfigLoader.load();
 
         DocumentManager dp = DocumentManager.with(config);
-
-
     }
 }

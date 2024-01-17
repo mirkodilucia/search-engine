@@ -4,24 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="chore: renamed class to Stemmer">
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/config/CustomXStreamSecurity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/document/Configuration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/document/DocumentManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/document/data/PlainDocument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/config.xsd" afterDir="false" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="chore: fix configuration loading and DocumentManager">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/application/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/config/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/src/main/java/it/unipi/dii/aide/mircv/application/config/ConfigLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/config/ConfigLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/PreProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/PreProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stemmer.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/preprocessor/Stemmer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/document/DocumentManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/document/DocumentManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/main/java/it/unipi/dii/aide/mircv/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/PreProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/PreProcessorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StemmerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessor/src/test/java/preprocessor/StemmerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +48,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "add-stemmer-class",
+    "git-widget-placeholder": "document-manager",
     "jdk.selected.JAVA_MODULE": "17",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -148,7 +135,7 @@
       <workItem from="1705246743902" duration="2392000" />
       <workItem from="1705250816785" duration="6253000" />
       <workItem from="1705340582305" duration="260000" />
-      <workItem from="1705344598208" duration="10962000" />
+      <workItem from="1705344598208" duration="11222000" />
     </task>
     <task id="LOCAL-00001" summary="shouldChangePatternWithSpace">
       <option name="closed" value="true" />
@@ -302,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705345471388</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="chore: fix configuration loading and DocumentManager">
+      <option name="closed" value="true" />
+      <created>1705531400916</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1705531400916</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -336,7 +331,8 @@
     <MESSAGE value="Given A Text in camel case should Return Text with spaces between Camel Case" />
     <MESSAGE value="Given document should Return processed document" />
     <MESSAGE value="chore: renamed class to Stemmer" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: renamed class to Stemmer" />
+    <MESSAGE value="chore: fix configuration loading and DocumentManager" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: fix configuration loading and DocumentManager" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

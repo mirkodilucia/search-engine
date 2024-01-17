@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.document;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import it.unipi.dii.aide.mircv.utils.FileUtils;
 import it.unipi.dii.aide.mircv.config.Config;
@@ -25,6 +26,12 @@ public class DocumentManager {
         for (String path : filePaths) {
             documents.add(load(path));
         }
+
+        for (PlainDocument doc : documents) {
+            process(doc);
+        }
+
+        System.out.println("Loaded " + documents.size() + " documents");
     }
 
     private ArrayList<String> scanDirectory() {
@@ -47,7 +54,8 @@ public class DocumentManager {
 
     public PlainDocument load(String path) {
         String plainText = FileUtils.readFile(path);
-        return new PlainDocument("docId", plainText);
+        String uuid = UUID.randomUUID().toString();
+        return new PlainDocument(uuid, plainText);
     }
 
     public PlainDocument process(PlainDocument doc) {

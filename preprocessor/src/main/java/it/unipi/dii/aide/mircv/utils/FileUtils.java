@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
-    private static final String PATH_TO_STOPWORDS = "../resources/stopwords.dat";
+    private static final String PATH_TO_STOPWORDS = "resources/stopwords.dat";
 
     public static Collection<String> readStopwordLines() {
         Collection<String> stopwords = new ArrayList<>();
