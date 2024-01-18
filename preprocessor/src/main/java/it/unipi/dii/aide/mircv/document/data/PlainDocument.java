@@ -3,21 +3,20 @@ package it.unipi.dii.aide.mircv.document.data;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.preprocessor.PreProcessor;
 import it.unipi.dii.aide.mircv.preprocessor.Stemmer;
+import it.unipi.dii.aide.mircv.utils.FileUtils;
 
 public class PlainDocument {
 
     private final Stemmer stemmer;
+    private final Config config;
     protected String docId;
     private String plainText;
     private String[] tokens;
     private String[] relevantTokens;
     private String[] stems;
 
-    protected String getDocId() {
-        return docId;
-    }
-
     public PlainDocument(Config config, String docId, String plainText) {
+        this.config = config;
         stemmer = Stemmer.with(config);
 
         this.docId = docId;
@@ -38,5 +37,10 @@ public class PlainDocument {
 
     public void stem() {
         this.stems = stemmer.getStems(this.relevantTokens);
+    }
+
+    public void writeFileString() {
+        String fileData = this.docId + ";" + String.join(",", this.stems);
+        FileUtils.writeFile(config.rawCollectionPath + "/" + docId, fileData);
     }
 }

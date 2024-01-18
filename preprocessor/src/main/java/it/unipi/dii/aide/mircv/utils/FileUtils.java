@@ -35,4 +35,36 @@ public class FileUtils {
             return null;
         }
     }
+
+    public static void writeFile(String path, String data) {
+        try {
+            Files.write(Paths.get(path), data.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeFile(String path) {
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFolder(String path) {
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createFolder(String folderPath) {
+        try {
+            Files.createDirectory(Paths.get(folderPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

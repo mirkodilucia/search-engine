@@ -2,13 +2,9 @@
 <Config>
     <removeStopwords>true</removeStopwords>
     <datasetPath>resources/dataset/</datasetPath>
-    <rawCollectionPath>resources/data/sampled_collection.tsv</rawCollectionPath>
     <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
     <stopwordsPath>resources/stopwords.dat</stopwordsPath>
-    <documentIndexPath>resources/data/documentIndex</documentIndexPath>
-    <frequencyFileName>/frequencies</frequencyFileName>
-    <vocabularyFileName>/vocabulary</vocabularyFileName>
-    <docidsFileName>/docids</docidsFileName>
+
     <vocabularyPath>resources/data/vocabulary</vocabularyPath>
     <invertedIndexDocs>resources/data/invertedIndexDocs</invertedIndexDocs>
     <invertedIndexFreqs>resources/data/invertedIndexFreqs</invertedIndexFreqs>
@@ -19,4 +15,11 @@
     <blockDescriptorsPath>resources/data/blockDescriptors</blockDescriptorsPath>
     <flagsFilePath>resources/data/flags</flagsFilePath>
     <testDir>resources/data/test</testDir>
+
+    <rawCollectionPath>data/sampled_collection</rawCollectionPath>
+    <documentIndexPath>data/index</documentIndexPath>
+    <frequencyFileName>data/frequencies</frequencyFileName>
+    <vocabularyFileName>data/vocabulary</vocabularyFileName>
+    <docidsFileName>data/docids</docidsFileName>
+    <debugDir>debugDir</debugDir>
 </Config>

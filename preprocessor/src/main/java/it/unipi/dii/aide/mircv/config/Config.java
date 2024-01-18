@@ -23,4 +23,6 @@ public class Config implements Serializable {
     public String blockDescriptorsPath;
     public String flagsFilePath;
     public String testDir;
+
+    public String debugDir;
 }

@@ -1,6 +1,5 @@
 package it.unipi.dii.aide.mircv.document;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -17,36 +16,16 @@ public class DocumentManager {
 
     private DocumentManager() {
         filePaths = new ArrayList<>();
-        scanDirectory();
 
         documents = new ArrayList<>();
-        for (String path : filePaths) {
-            documents.add(load(path));
-        }
 
         for (PlainDocument doc : documents) {
             process(doc);
+            doc.writeFileString();
+
         }
 
         System.out.println("Loaded " + documents.size() + " documents");
-    }
-
-    private ArrayList<String> scanDirectory() {
-        // Load all files from the directory
-        File folder = new File(configuration.datasetPath);
-        File[] listOfFiles = folder.listFiles();
-
-        if (listOfFiles == null) {
-            System.out.println("No files found in the directory");
-            return null;
-        }
-
-        // Create an array of file paths
-        for (File listOfFile : listOfFiles) {
-            filePaths.add(listOfFile.getPath());
-        }
-
-        return filePaths;
     }
 
     public PlainDocument load(String path) {
@@ -75,5 +54,22 @@ public class DocumentManager {
         }
 
         return INSTANCE;
+    }
+
+    public void initialize() {
+        FileUtils.removeFile(configuration.documentIndexPath);
+        FileUtils.removeFile(configuration.vocabularyFileName);
+        FileUtils.removeFile(configuration.invertedIndexDocs);
+        FileUtils.removeFile(configuration.invertedIndexFreqs);
+        FileUtils.removeFile(configuration.blockDescriptorsPath);
+
+        FileUtils.deleteFolder(configuration.partialVocabularyDir);
+        FileUtils.deleteFolder(configuration.docidsDir);
+        FileUtils.deleteFolder(configuration.frequencyDir);
+        FileUtils.deleteFolder(configuration.debugDir);
+
+        FileUtils.createFolder(configuration.partialVocabularyDir);
+        FileUtils.createFolder(configuration.docidsDir);
+        FileUtils.createFolder(configuration.frequencyDir);
     }
 }
