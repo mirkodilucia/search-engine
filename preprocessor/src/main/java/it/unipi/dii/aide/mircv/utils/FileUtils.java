@@ -9,12 +9,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
-    private static final String PATH_TO_STOPWORDS = "resources/stopwords.dat";
-
-    public static Collection<String> readStopwordLines() {
+    public static Collection<String> readStopwordLines(String stopwordPath) {
         Collection<String> stopwords = new ArrayList<>();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(PATH_TO_STOPWORDS), StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(stopwordPath), StandardCharsets.UTF_8)) {
             for (String line; (line = br.readLine()) != null; ) {
                 if (line.isEmpty())
                     continue;

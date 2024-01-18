@@ -3,6 +3,8 @@ package it.unipi.dii.aide.mircv.config;
 import java.io.Serializable;
 
 public class Config implements Serializable {
+
+    public Boolean removeStopwords;
     public String datasetPath;
     public String rawCollectionPath;
     public String compressedCollectionPath;

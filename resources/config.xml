@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
+    <removeStopwords>true</removeStopwords>
     <datasetPath>resources/dataset/</datasetPath>
     <rawCollectionPath>resources/data/sampled_collection.tsv</rawCollectionPath>
     <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
-    <stopwordsPath>config/stopwords.txt</stopwordsPath>
+    <stopwordsPath>resources/stopwords.dat</stopwordsPath>
     <documentIndexPath>resources/data/documentIndex</documentIndexPath>
     <frequencyFileName>/frequencies</frequencyFileName>
     <vocabularyFileName>/vocabulary</vocabularyFileName>

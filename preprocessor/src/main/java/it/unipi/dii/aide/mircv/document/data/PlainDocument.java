@@ -1,23 +1,25 @@
 package it.unipi.dii.aide.mircv.document.data;
 
+import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.preprocessor.PreProcessor;
 import it.unipi.dii.aide.mircv.preprocessor.Stemmer;
 
 public class PlainDocument {
 
+    private final Stemmer stemmer;
     protected String docId;
+    private String plainText;
+    private String[] tokens;
+    private String[] relevantTokens;
+    private String[] stems;
 
     protected String getDocId() {
         return docId;
     }
 
-    private String plainText;
-    private String[] tokens;
-    private String[] relevantTokens;
+    public PlainDocument(Config config, String docId, String plainText) {
+        stemmer = Stemmer.with(config);
 
-    private String[] stems;
-
-    public PlainDocument(String docId, String plainText) {
         this.docId = docId;
         this.plainText = plainText;
     }
@@ -27,15 +29,14 @@ public class PlainDocument {
     }
 
     public void tokenize() {
-        this.tokens = Stemmer.getInstance().tokenize(this.plainText);
+        this.tokens = stemmer.tokenize(this.plainText);
     }
 
     public void removeStopwords() {
-        this.relevantTokens = Stemmer.getInstance().removeStopwords(this.tokens);
+        this.relevantTokens = stemmer.removeStopwords(this.tokens);
     }
 
-    public String[] stem() {
-        this.stems = Stemmer.getInstance().getStems(this.relevantTokens);
-        return this.stems;
+    public void stem() {
+        this.stems = stemmer.getStems(this.relevantTokens);
     }
 }

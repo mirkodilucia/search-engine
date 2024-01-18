@@ -10,13 +10,10 @@ import it.unipi.dii.aide.mircv.document.data.PlainDocument;
 
 public class DocumentManager {
 
-    private static final boolean REMOVE_STOPWORDS_ENABLED = true;
     private static Config configuration;
-
-    private Config config;
     private static DocumentManager INSTANCE = null;
-    private ArrayList<String> filePaths;
-    private ArrayList<PlainDocument> documents;
+    private final ArrayList<String> filePaths;
+    private final ArrayList<PlainDocument> documents;
 
     private DocumentManager() {
         filePaths = new ArrayList<>();
@@ -45,8 +42,8 @@ public class DocumentManager {
         }
 
         // Create an array of file paths
-        for (int i = 0; i < listOfFiles.length; i++) {
-            filePaths.add(listOfFiles[i].getPath());
+        for (File listOfFile : listOfFiles) {
+            filePaths.add(listOfFile.getPath());
         }
 
         return filePaths;
@@ -55,18 +52,19 @@ public class DocumentManager {
     public PlainDocument load(String path) {
         String plainText = FileUtils.readFile(path);
         String uuid = UUID.randomUUID().toString();
-        return new PlainDocument(uuid, plainText);
+        return new PlainDocument(configuration, uuid, plainText);
     }
 
     public PlainDocument process(PlainDocument doc) {
         doc.cleanText();
         doc.tokenize();
 
-        if (REMOVE_STOPWORDS_ENABLED) {
+        if (configuration.removeStopwords) {
             doc.removeStopwords();
-            String[] stems = doc.stem();
+
         }
 
+        doc.stem();
         return doc;
     }
 

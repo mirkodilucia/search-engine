@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv.preprocessor;
 
 import ca.rmen.porterstemmer.PorterStemmer;
+import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.utils.FileUtils;
 
 import java.util.ArrayList;
@@ -9,16 +10,16 @@ import java.util.Locale;
 public class Stemmer {
 
     private static final String CAMEL_CASE_MATCHER = "(?<=[a-z])(?=[A-Z])";
+    private static final String SPACE = " ";
 
     private static final int THRESHOLD = 64;
     private static Stemmer INSTANCE;
 
-    private static final String SPACE = " ";
-
-
     private static final ArrayList<String> stopwords = new ArrayList<>();
+    private final Config configuration;
 
-    private Stemmer() {
+    private Stemmer(Config configuration) {
+        this.configuration = configuration;
         loadStopwords();
     }
 
@@ -71,15 +72,16 @@ public class Stemmer {
         }
 
         try {
-            stopwords.addAll(FileUtils.readStopwordLines());
+            stopwords.addAll(FileUtils.readStopwordLines(configuration.stopwordsPath));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static Stemmer getInstance() {
+    public static Stemmer with(Config configuration) {
+
         if (INSTANCE == null) {
-            INSTANCE = new Stemmer();
+            INSTANCE = new Stemmer(configuration);
         }
 
         return INSTANCE;
