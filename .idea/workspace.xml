@@ -33,37 +33,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Application.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanByRegex_givenARegexPatternShouldReturnTextReplacedBySpaces.executor": "Run",
-    "JUnit.PreProcessorTest.cleanConsecutiveLetters.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanHtmlTags.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanNonDigit.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanUrl.executor": "Debug",
-    "JUnit.PreProcessorTest.testRegexReplacement.executor": "Run",
-    "JUnit.PreprocesserTest.PreProcessor_ShouldReturnBeginAsATest.executor": "Run",
-    "JUnit.Run All Test.executor": "Debug",
-    "JUnit.StopwordTest.removeStopwords.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Application.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanByRegex_givenARegexPatternShouldReturnTextReplacedBySpaces.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PreProcessorTest.cleanConsecutiveLetters.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanHtmlTags.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanNonDigit.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanUrl.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.testRegexReplacement.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PreprocesserTest.PreProcessor_ShouldReturnBeginAsATest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Run All Test.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.StopwordTest.removeStopwords.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="it.unipi.dii.aide.mircv.document" />
@@ -79,7 +79,7 @@
       <recent name="$PROJECT_DIR$/src/main/java/org/example/config" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Application">
+  <component name="RunManager" selected="JUnit.Run All Test">
     <configuration name="Application" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.application.Main" />
       <module name="application" />
