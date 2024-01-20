@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="fix: pom" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="fix: workspace.xml">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -355,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705765518048</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="fix: workspace.xml">
+      <option name="closed" value="true" />
+      <created>1705765563030</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1705765563030</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,7 +407,8 @@
     <MESSAGE value="fix: add Main and indexer module" />
     <MESSAGE value="merge" />
     <MESSAGE value="fix: pom" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: pom" />
+    <MESSAGE value="fix: workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: workspace.xml" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
