@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv;
 
+import it.unipi.dii.aide.mircv.data.Vocabulary;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

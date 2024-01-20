@@ -1,5 +1,8 @@
 package it.unipi.dii.aide.mircv;
 
+import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.data.VocabularyEntry;
+
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -9,14 +12,14 @@ import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 
 
-import it.unipi.dii.aide.mircv.common.beans.BlockDescriptor;
+//import it.unipi.dii.aide.mircv.common.beans.BlockDescriptor;
 //import it.unipi.dii.aide.mircv.Posting;
 //import it.unipi.dii.aide.mircv.PostingList;
-import it.unipi.dii.aide.mircv.common.beans.VocabularyEntry;
-import it.unipi.dii.aide.mircv.common.compression.UnaryCompressor;
-import it.unipi.dii.aide.mircv.common.compression.VariableByteCompressor;
-import it.unipi.dii.aide.mircv.common.config.CollectionSize;
-import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
+//import it.unipi.dii.aide.mircv.common.beans.VocabularyEntry;
+//import it.unipi.dii.aide.mircv.common.compression.UnaryCompressor;
+//import it.unipi.dii.aide.mircv.common.compression.VariableByteCompressor;
+//import it.unipi.dii.aide.mircv.common.config.CollectionSize;
+//import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
 
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -70,8 +73,11 @@ public class Merger {
     // File channels for frequencies of partial indexes
     private static FileChannel[] frequencyChannels;
 
-    private static boolean initialize() {
+    private static Config config;
+
+    private static boolean initialize(Config configuration) {
         // Initialize arrays and offsets
+        config = configuration;
         nextTerms = new VocabularyEntry[numIndexes];
         vocEntryMemOffset = new long[numIndexes];
         docidChannels = new FileChannel[numIndexes];
@@ -82,7 +88,7 @@ public class Merger {
         try {
             // Initialize data structures for each index
             for (int i = 0; i < numIndexes; i++) {
-                nextTerms[i] = new VocabularyEntry();
+                nextTerms[i] = new VocabularyEntry(config.blockDescriptorsPath);
                 vocEntryMemOffset[i] = 0;
 
                 // Read the first entry of the vocabulary from disk
@@ -222,7 +228,7 @@ public class Merger {
                 }
 
                 // New vocabulary entry for the processed term
-                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess);
+                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.blockDescriptorsPath);
 
                 // Merge the posting lists for the term to be processed
                 PostingList mergedPostingList = processTerm(termToProcess, vocabularyEntry);
