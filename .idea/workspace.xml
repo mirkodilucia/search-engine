@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="encode, decode test working">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="file add" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,10 +66,11 @@
       <recent name="it.unipi.dii.aide.mircv.preprocessor.utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/indexewr" />
+      <recent name="$PROJECT_DIR$/indexer/src" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/application/src/main/java" />
-      <recent name="$PROJECT_DIR$/src/main/java/org/example/config" />
     </key>
   </component>
   <component name="RunManager" selected="JUnit.VariableByteCompressionTest">
@@ -196,7 +195,7 @@
       <workItem from="1705250816785" duration="6253000" />
       <workItem from="1705340582305" duration="260000" />
       <workItem from="1705344598208" duration="827000" />
-      <workItem from="1705753805083" duration="353000" />
+      <workItem from="1705753805083" duration="707000" />
     </task>
     <task id="LOCAL-00001" summary="shouldChangePatternWithSpace">
       <option name="closed" value="true" />
@@ -358,7 +357,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705434871278</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="file add">
+      <option name="closed" value="true" />
+      <created>1705754492283</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1705754492283</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,7 +389,8 @@
     <MESSAGE value="Given document should Return processed document" />
     <MESSAGE value="VariableByteCompression class" />
     <MESSAGE value="encode, decode test working" />
-    <option name="LAST_COMMIT_MESSAGE" value="encode, decode test working" />
+    <MESSAGE value="file add" />
+    <option name="LAST_COMMIT_MESSAGE" value="file add" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
