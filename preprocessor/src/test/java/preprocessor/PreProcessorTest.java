@@ -11,7 +11,7 @@ public class PreProcessorTest {
     public void cleanByRegex() {
         String input = "Replace this pattern: ABC123 with XYZ789.";
         String regexPattern = "[A-Z]{3}\\d{3}";
-        String actualResult = new PreProcessor().cleanByRegex(input, regexPattern, " ");
+        String actualResult = PreProcessor.getInstance().cleanByRegex(input, regexPattern, " ");
 
         String expectedResult = "Replace this pattern:   with  .";
         assertEquals(expectedResult, actualResult);
@@ -21,7 +21,7 @@ public class PreProcessorTest {
     @Test
     public void cleanHtmlTags() {
         String input = "Ciao <b>mondo</b>!";
-        String actualResult = new PreProcessor().cleanHtmlTags(input);
+        String actualResult = PreProcessor.getInstance().cleanHtmlTags(input);
 
         String expectedResult = "Ciao  mondo !";
         assertEquals(expectedResult, actualResult);
@@ -31,7 +31,7 @@ public class PreProcessorTest {
     @Test
     public void cleanNonDigit() {
         String input = "Ciao, mondo!";
-        String actualResult = new PreProcessor().cleanNonDigit(input);
+        String actualResult =  PreProcessor.getInstance().cleanNonDigit(input);
 
         String expectedResult = "Ciao  mondo";
         assertEquals(expectedResult, actualResult);
@@ -41,7 +41,7 @@ public class PreProcessorTest {
     @Test
     public void cleanConsecutiveLetters() {
         String input = "Ciaooooo, monddddooooo!";
-        String actualResult = new PreProcessor().cleanConsecutiveLetters(input);
+        String actualResult =  PreProcessor.getInstance().cleanConsecutiveLetters(input);
 
         String expectedResult = "Ciaoo, monddoo!";
         assertEquals(expectedResult, actualResult);
@@ -51,7 +51,7 @@ public class PreProcessorTest {
     @Test
     public void cleanMultipleSpaces() {
         String input = "Ciao    mondo!";
-        String actualResult = new PreProcessor().cleanMultipleSpaces(input);
+        String actualResult = PreProcessor.getInstance().cleanMultipleSpaces(input);
 
         String expectedResult = "Ciao mondo!";
         assertEquals(expectedResult, actualResult);
@@ -61,7 +61,7 @@ public class PreProcessorTest {
     @Test
     public void replaceCamelCase() {
         String input = "CiaoMondo!";
-        String actualResult = new PreProcessor().addSpaceToCamelCase(input);
+        String actualResult =  PreProcessor.getInstance().addSpaceToCamelCase(input);
 
         String expectedResult = "Ciao Mondo!";
         assertEquals(expectedResult, actualResult);
@@ -71,7 +71,7 @@ public class PreProcessorTest {
     @Test
     public void cleanUrl() {
         String input = "Ciao https://www.google.com/";
-        String actualResult = new PreProcessor().cleanUrl(input);
+        String actualResult = PreProcessor.getInstance().cleanUrl(input);
 
         String expectedResult = "Ciao";
         assertEquals(expectedResult, actualResult);
@@ -81,7 +81,7 @@ public class PreProcessorTest {
     @Test
     public void cleanText() {
         String input = "Ciao <b>mondo</b>! Ciao, mondo! Ciaooooo, monddddooooo! Ciao    mondo! CiaoMondo! Ciao https://www.google.com/";
-        String actualResult = new PreProcessor().cleanText(input);
+        String actualResult = PreProcessor.getInstance().cleanText(input);
 
         String expectedResult = "Ciao mondo Ciao mondo Ciaoo monddoo Ciao mondo Ciao Mondo Ciao";
         assertEquals(expectedResult, actualResult);

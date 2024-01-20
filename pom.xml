@@ -12,6 +12,8 @@
         <module>preprocessor</module>
         <module>compression</module>
         <module>application</module>
+        <module>spimi</module>
+        <module>indexer</module>
     </modules>
 
     <properties>

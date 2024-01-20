@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="Given document should Return processed document">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="merge" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,47 +29,53 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.PreProcessorTest.cleanByRegex_givenARegexPatternShouldReturnTextReplacedBySpaces.executor": "Run",
-    "JUnit.PreProcessorTest.cleanConsecutiveLetters.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanHtmlTags.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanNonDigit.executor": "Debug",
-    "JUnit.PreProcessorTest.cleanUrl.executor": "Debug",
-    "JUnit.PreProcessorTest.testRegexReplacement.executor": "Run",
-    "JUnit.PreprocesserTest.PreProcessor_ShouldReturnBeginAsATest.executor": "Run",
-    "JUnit.Run All Test.executor": "Debug",
-    "JUnit.StopwordTest.removeStopwords.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "indexer",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Application.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanByRegex_givenARegexPatternShouldReturnTextReplacedBySpaces.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PreProcessorTest.cleanConsecutiveLetters.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanHtmlTags.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanNonDigit.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.cleanUrl.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PreProcessorTest.testRegexReplacement.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PreprocesserTest.PreProcessor_ShouldReturnBeginAsATest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Run All Test.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.StopwordTest.removeStopwords.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;document-manager&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="it.unipi.dii.aide.mircv.document" />
+      <recent name="it.unipi.dii.aide.mircv.document.data" />
+      <recent name="it.unipi.dii.aide.mircv.utils" />
       <recent name="it.unipi.dii.aide.mircv.preprocessor.utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/dataset" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/application/src/main/java" />
       <recent name="$PROJECT_DIR$/src/main/java/org/example/config" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Run All Test">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.application.Main" />
       <module name="application" />
@@ -130,7 +134,10 @@
       <workItem from="1705246743902" duration="2392000" />
       <workItem from="1705250816785" duration="6253000" />
       <workItem from="1705340582305" duration="260000" />
-      <workItem from="1705344598208" duration="827000" />
+      <workItem from="1705344598208" duration="11222000" />
+      <workItem from="1705531649673" duration="52000" />
+      <workItem from="1705557577163" duration="9940000" />
+      <workItem from="1705611973791" duration="2217000" />
     </task>
     <task id="LOCAL-00001" summary="shouldChangePatternWithSpace">
       <option name="closed" value="true" />
@@ -276,11 +283,78 @@
       <option name="project" value="LOCAL" />
       <updated>1705345263319</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="chore: renamed class to Stemmer">
+      <option name="closed" value="true" />
+      <created>1705345471388</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1705345471388</updated>
+    </task>
+    <task id="LOCAL-00020" summary="chore: fix configuration loading and DocumentManager">
+      <option name="closed" value="true" />
+      <created>1705531400916</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1705531400916</updated>
+    </task>
+    <task id="LOCAL-00021" summary="chore: add process document">
+      <option name="closed" value="true" />
+      <created>1705531685154</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1705531685154</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix: test">
+      <option name="closed" value="true" />
+      <created>1705559653051</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705559653051</updated>
+    </task>
+    <task id="LOCAL-00023" summary="fix: add Main and indexer module">
+      <option name="closed" value="true" />
+      <created>1705613783583</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1705613783583</updated>
+    </task>
+    <task id="LOCAL-00024" summary="merge">
+      <option name="closed" value="true" />
+      <created>1705765115572</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1705765115572</updated>
+    </task>
+    <task id="LOCAL-00025" summary="merge">
+      <option name="closed" value="true" />
+      <created>1705765155480</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1705765155480</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="shouldChangePatternWithSpace" />
@@ -298,7 +372,13 @@
     <MESSAGE value="Given A Text array Should Return Text array without stopwords" />
     <MESSAGE value="Given A Text in camel case should Return Text with spaces between Camel Case" />
     <MESSAGE value="Given document should Return processed document" />
-    <option name="LAST_COMMIT_MESSAGE" value="Given document should Return processed document" />
+    <MESSAGE value="chore: renamed class to Stemmer" />
+    <MESSAGE value="chore: fix configuration loading and DocumentManager" />
+    <MESSAGE value="chore: add process document" />
+    <MESSAGE value="fix: test" />
+    <MESSAGE value="fix: add Main and indexer module" />
+    <MESSAGE value="merge" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
