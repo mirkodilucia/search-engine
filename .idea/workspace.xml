@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="fix: add Main and indexer module" />
+    <list default="true" id="328c06a5-8f8a-4fc6-a2b9-497147d867b5" name="Changes" comment="merge" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +24,7 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2ax48uYuPePygIBrTLHvUMGFiPc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -322,7 +323,23 @@
       <option name="project" value="LOCAL" />
       <updated>1705613783583</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="merge">
+      <option name="closed" value="true" />
+      <created>1705765115572</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1705765115572</updated>
+    </task>
+    <task id="LOCAL-00025" summary="merge">
+      <option name="closed" value="true" />
+      <created>1705765155480</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1705765155480</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,7 +377,8 @@
     <MESSAGE value="chore: add process document" />
     <MESSAGE value="fix: test" />
     <MESSAGE value="fix: add Main and indexer module" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: add Main and indexer module" />
+    <MESSAGE value="merge" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
