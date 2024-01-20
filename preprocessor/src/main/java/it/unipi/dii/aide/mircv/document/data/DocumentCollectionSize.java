@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.document;
+package it.unipi.dii.aide.mircv.document.data;
 
 import java.io.FileOutputStream;
 import java.io.FileInputStream;

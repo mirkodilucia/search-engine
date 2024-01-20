@@ -1,7 +1,6 @@
-package it.unipi.dii.aide.mircv.document;
+package it.unipi.dii.aide.mircv.document.data;
 
 import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.document.data.DocumentIndexEntry;
 
 import java.util.HashMap;
 
