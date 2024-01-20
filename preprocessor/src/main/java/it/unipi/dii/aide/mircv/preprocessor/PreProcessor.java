@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.preprocessor;
 
 public class PreProcessor {
 
+
     private static final String URL_MATCHER = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     private static final String HTML_TAGS_MATCHER = "<[^>]+>";
     private static final String NON_DIGIT_AND_PUNCTUATION_MATCHER = "[^a-zA-Z ]";
@@ -52,6 +53,17 @@ public class PreProcessor {
 
 
         return result;
+    }
+
+    private PreProcessor() {}
+
+    private static PreProcessor INSTANCE;
+
+    public static PreProcessor getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PreProcessor();
+        }
+        return INSTANCE;
     }
 
 }

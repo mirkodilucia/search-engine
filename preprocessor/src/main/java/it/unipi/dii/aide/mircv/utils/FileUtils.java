@@ -9,12 +9,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
-    private static final String PATH_TO_STOPWORDS = "../resources/stopwords.dat";
-
-    public static Collection<String> readStopwordLines() {
+    public static Collection<String> readStopwordLines(String stopwordPath) {
         Collection<String> stopwords = new ArrayList<>();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(PATH_TO_STOPWORDS), StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(stopwordPath), StandardCharsets.UTF_8)) {
             for (String line; (line = br.readLine()) != null; ) {
                 if (line.isEmpty())
                     continue;
@@ -27,5 +25,46 @@ public class FileUtils {
         }
 
         return stopwords;
+    }
+
+    public static String readFile(String path) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(path)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void writeFile(String path, String data) {
+        try {
+            Files.write(Paths.get(path), data.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeFile(String path) {
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFolder(String path) {
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createFolder(String folderPath) {
+        try {
+            Files.createDirectory(Paths.get(folderPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
