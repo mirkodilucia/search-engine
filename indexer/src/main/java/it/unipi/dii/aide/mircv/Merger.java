@@ -14,14 +14,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 
 
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Iterator;
-
-
 public class Merger {
 
     // Inverted index's next free memory offset in docids file
@@ -32,27 +24,6 @@ public class Merger {
 
     // Number of intermediate indexes produced by SPIMI algorithm
     private static int numIndexes;
-
-    // Standard pathname for partial index documents files
-    private static String PATH_TO_PARTIAL_INDEXES_DOCS;
-
-    // Standard pathname for partial index frequencies files
-    private static String PATH_TO_PARTIAL_INDEXES_FREQS;
-
-    // Standard pathname for partial vocabulary files
-    private static String PATH_TO_PARTIAL_VOCABULARIES;
-
-    // Path to the inverted index docs file
-    private static String PATH_TO_INVERTED_INDEX_DOCS;
-
-    // Path to the inverted index freqs file
-    private static String PATH_TO_INVERTED_INDEX_FREQS;
-
-    // Path to vocabulary
-    private static String PATH_TO_VOCABULARY;
-
-    // Path to block descriptors file
-    private static String PATH_TO_BLOCK_DESCRIPTORS;
 
     // Array used to point to the next vocabulary entry to process for each partial index
     private static VocabularyEntry[] nextTerms;
@@ -81,7 +52,7 @@ public class Merger {
         try {
             // Initialize data structures for each index
             for (int i = 0; i < numIndexes; i++) {
-                nextTerms[i] = new VocabularyEntry(config.blockDescriptorsPath);
+                nextTerms[i] = new VocabularyEntry(config.getBlockDescriptorsPath());
                 vocEntryMemOffset[i] = 0;
 
                 // Read the first entry of the vocabulary from disk
@@ -131,7 +102,7 @@ public class Merger {
      * @return The constructed file path.
      */
     private static String getPathToPartialIndexesDocs(int index) {
-        return ConfigurationParameters.getDocidsDir() + ConfigurationParameters.getDocidsFileName() + "_" + index;
+        return config.getDocumentIdFolder() + config.getDocumentIdFileName() + "_" + index;
     }
 
     /**
@@ -141,7 +112,7 @@ public class Merger {
      * @return The constructed file path.
      */
     private static String getPathToPartialIndexesFreqs(int index) {
-        return ConfigurationParameters.getFrequencyDir() + ConfigurationParameters.getFrequencyFileName() + "_" + index;
+        return config.getFrequencyFolder() + config.getFrequencyFileName() + "_" + index;
     }
 
     /**
@@ -151,36 +122,7 @@ public class Merger {
      * @return The constructed file path.
      */
     private static String getPathToPartialVocabularies(int index) {
-        return ConfigurationParameters.getPartialVocabularyDir() + ConfigurationParameters.getVocabularyFileName() + "_" + index;
-    }
-
-
-    private static String getPathToVocabulary() {
-        return PATH_TO_VOCABULARY;
-    }
-
-    private static String getPathToInvertedIndexDocs() {
-        return PATH_TO_INVERTED_INDEX_DOCS;
-    }
-
-    private static String getPathToInvertedIndexFreqs() {
-        return PATH_TO_INVERTED_INDEX_FREQS;
-    }
-
-    private static String getPathToBlockDescriptors() {
-        return PATH_TO_BLOCK_DESCRIPTORS;
-    }
-
-    private static String getPathToPartialIndexesDocs() {
-        return PATH_TO_PARTIAL_INDEXES_DOCS;
-    }
-
-    private static String getPathToPartialIndexesFreqs() {
-        return PATH_TO_PARTIAL_INDEXES_FREQS;
-    }
-
-    private static String getPathToPartialVocabularies() {
-        return PATH_TO_PARTIAL_VOCABULARIES;
+        return config.getPartialVocabularyFolder() + config.getVocabularyFileName() + "_" + index;
     }
 
     /**
@@ -206,10 +148,10 @@ public class Merger {
         // Next memory offset where to write the next vocabulary entry
         long vocMemOffset = 0;
 
-        try (FileChannel vocabularyChan = openFileChannel(getPathToVocabulary());
-             FileChannel docidChan = openFileChannel(getPathToInvertedIndexDocs());
-             FileChannel frequencyChan = openFileChannel(getPathToInvertedIndexFreqs());
-             FileChannel descriptorChan = openFileChannel(getPathToBlockDescriptors())) {
+        try (FileChannel vocabularyChan = openFileChannel(config.getPathToVocabulary());
+             FileChannel docidChan = openFileChannel(config.getPathToInvertedIndexDocs());
+             FileChannel frequencyChan = openFileChannel(config.getPathToInvertedIndexFreqs());
+             FileChannel descriptorChan = openFileChannel(config.getPathToBlockDescriptors())) {
 
             // Process terms and merge posting lists until there are no more terms
             while (true) {
@@ -221,7 +163,7 @@ public class Merger {
                 }
 
                 // New vocabulary entry for the processed term
-                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.blockDescriptorsPath);
+                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.getBlockDescriptorsPath());
 
                 // Merge the posting lists for the term to be processed
                 PostingList mergedPostingList = processTerm(termToProcess, vocabularyEntry);
@@ -263,7 +205,7 @@ public class Merger {
                     }
 
                     // Increment the vocabulary memory offset
-                    vocMemOffset = vocabularyEntry.writeEntryToDisk(vocMemOffset, vocabularyChan);
+                    vocMemOffset = vocabularyEntry.writeEntry(vocMemOffset, vocabularyChan);
                     vocSize++;
 
                     // Debugging information
@@ -278,7 +220,7 @@ public class Merger {
             cleanUp();
 
             // Update vocabulary size
-            CollectionSize.updateVocabularySize(vocSize);
+            DocumentCollectionSize.updateVocabularySize(vocSize);
             return true;
 
         } catch (Exception e) {
@@ -290,10 +232,16 @@ public class Merger {
     /**
      * Process compressed posting list and write to disk.
      */
-    private static void processCompressedPostingList(Iterator<Posting> plIterator, BlockDescriptor blockDescriptor,
-                                                     int nPostingsToBeWritten, int maxNumPostings,
-                                                     FileChannel docidChan, FileChannel frequencyChan,
-                                                     FileChannel descriptorChan) throws IOException {
+    private static void processCompressedPostingList(
+            Iterator<Posting> plIterator,
+            BlockDescriptor blockDescriptor,
+            int nPostingsToBeWritten,
+            int maxNumPostings,
+            FileChannel docidChan,
+            FileChannel frequencyChan,
+            FileChannel descriptorChan
+    ) throws IOException {
+
         int[] docids = new int[nPostingsToBeWritten];
         int[] freqs = new int[nPostingsToBeWritten];
 
@@ -463,8 +411,8 @@ public class Merger {
             // Instantiate MappedByteBuffer for the integer list of docids
             MappedByteBuffer docBuffer = docidChannels[index].map(
                     FileChannel.MapMode.READ_ONLY,
-                    term.getDocidOffset(),
-                    term.getDocidSize()
+                    term.getDocIdOffset(),
+                    term.getDocIdSize()
             );
 
             // Instantiate MappedByteBuffer for the integer list of frequencies
@@ -478,7 +426,7 @@ public class Merger {
             newList = new PostingList(term.getTerm());
 
             // Iterate over the docids and frequencies to construct the posting list
-            for (int i = 0; i < term.getDf(); i++) {
+            for (int i = 0; i < term.getDocumentFrequency(); i++) {
                 Posting posting = new Posting(docBuffer.getInt(), freqBuffer.getInt());
                 newList.getPostings().add(posting);
             }
@@ -585,7 +533,7 @@ public class Merger {
                 vocEntryMemOffset[i] += VocabularyEntry.ENTRY_SIZE;
 
                 // Read next vocabulary entry from the i-th vocabulary
-                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], getPartialVocabularyPath(i));
+                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], config.getPartialVocabularyPath(i));
 
                 // Check if errors occurred while reading the vocabulary entry
                 if (ret == -1 || ret == 0) {
@@ -606,73 +554,5 @@ public class Merger {
         System.out.println("\t> docids: " + docsMemOffset + " bytes");
         System.out.println("\t> freqs: " + freqsMemOffset + " bytes");
     }
-
-
-
-    // Setters for testing...
-
-    /**
-     * Setter for the path to the vocabulary for testing purposes.
-     *
-     * @param pathToVocabulary The path to be set as the vocabulary path.
-     */
-    public static void setPathToVocabulary(String pathToVocabulary) {
-        PATH_TO_VOCABULARY = pathToVocabulary;
-    }
-
-    /**
-     * Setter for the path to the inverted index's docs for testing purposes.
-     *
-     * @param pathToInvertedIndexDocs The path to be set as the inverted index's docs path.
-     */
-    public static void setPathToInvertedIndexDocs(String pathToInvertedIndexDocs) {
-        PATH_TO_INVERTED_INDEX_DOCS = pathToInvertedIndexDocs;
-    }
-
-    /**
-     * Setter for the path to the inverted index's freqs for testing purposes.
-     *
-     * @param invertedIndexFreqs The path to be set as the inverted index's freqs path.
-     */
-    public static void setPathToInvertedIndexFreqs(String invertedIndexFreqs) {
-        PATH_TO_INVERTED_INDEX_FREQS = invertedIndexFreqs;
-    }
-
-    /**
-     * Setter for the path to block descriptors for testing purposes.
-     *
-     * @param blockDescriptorsPath The path to be set as block descriptors' path.
-     */
-    public static void setPathToBlockDescriptors(String blockDescriptorsPath) {
-        PATH_TO_BLOCK_DESCRIPTORS = blockDescriptorsPath;
-    }
-
-    /**
-     * Setter for the path to partial indexes docs for testing purposes.
-     *
-     * @param pathToPartialIndexesDocs The path to be set for partial indexes docs.
-     */
-    public static void setPathToPartialIndexesDocs(String pathToPartialIndexesDocs) {
-        PATH_TO_PARTIAL_INDEXES_DOCS = pathToPartialIndexesDocs;
-    }
-
-    /**
-     * Setter for the path to partial indexes freqs for testing purposes.
-     *
-     * @param pathToPartialIndexesFreqs The path to be set for partial indexes freqs.
-     */
-    public static void setPathToPartialIndexesFreqs(String pathToPartialIndexesFreqs) {
-        PATH_TO_PARTIAL_INDEXES_FREQS = pathToPartialIndexesFreqs;
-    }
-
-    /**
-     * Setter for the path to partial vocabularies for testing purposes.
-     *
-     * @param pathToPartialVocabularies The path to be set for partial vocabularies.
-     */
-    public static void setPathToPartialVocabularies(String pathToPartialVocabularies) {
-        PATH_TO_PARTIAL_VOCABULARIES = pathToPartialVocabularies;
-    }
-
 
 }

@@ -51,7 +51,7 @@ public class VocabularyEntry
     }
 
 
-    public long getDocidOffset() {
+    public long getDocIdOffset() {
         return docidOffset;
     }
 
