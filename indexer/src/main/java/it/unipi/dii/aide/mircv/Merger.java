@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv;
 
 import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.data.BlockDescriptor;
 import it.unipi.dii.aide.mircv.data.VocabularyEntry;
 
 import java.io.IOException;
@@ -572,9 +573,9 @@ public class Merger {
      */
     private static void updateVocabularyEntryInfo(VocabularyEntry vocabularyEntry) {
         // Set memory offsets and compute additional information
-        vocabularyEntry.setMemoryOffset(docsMemOffset);
+        vocabularyEntry.setDocidOffset(docsMemOffset);
         vocabularyEntry.setFrequencyOffset(freqsMemOffset);
-        vocabularyEntry.computeIDF();
+        vocabularyEntry.calculateInverseDocumentFrequency();
         vocabularyEntry.computeUpperBounds();
     }
 

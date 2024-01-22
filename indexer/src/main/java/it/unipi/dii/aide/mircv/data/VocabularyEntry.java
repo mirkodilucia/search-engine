@@ -44,7 +44,7 @@ public class VocabularyEntry
     private long blockOffset=0;
 
     private static final int TERM_SIZE = 64;
-    private static final long ENTRY_SIZE = TERM_SIZE + 76;
+    public static final long ENTRY_SIZE = TERM_SIZE + 76;
 
 
     public long getDocidOffset() {
