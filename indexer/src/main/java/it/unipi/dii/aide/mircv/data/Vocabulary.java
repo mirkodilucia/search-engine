@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.data;
 
 //import it.unipi.dii.aide.mircv.common.config.CollectionSize;
 //import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
+import it.unipi.dii.aide.mircv.document.data.DocumentCollectionSize;
 import org.junit.platform.commons.util.LruCache;
 import java.util.LinkedHashMap;
 import it.unipi.dii.aide.mircv.data.VocabularyEntry;
@@ -106,7 +107,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
         VocabularyEntry entry = new VocabularyEntry(); //entry to be returned
 
         long start = 0; //index of first element of vocabulary portion on which search is performed
-        long end = CollectionSize.getVocabularySize() -1; //index of last element of vocabulary portion on which search is performed
+        long end = DocumentCollectionSize.getVocabularySize() -1; //index of last element of vocabulary portion on which search is performed
         long mid; //index of element of the vocabulary to be read
         String key; //term read from vocabulary
         long entrySize = VocabularyEntry.ENTRY_SIZE; //size of a vocabulary entry

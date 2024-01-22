@@ -3,7 +3,8 @@ package it.unipi.dii.aide.mircv;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.data.BlockDescriptor;
 import it.unipi.dii.aide.mircv.data.VocabularyEntry;
-import it.unipi.dii.aide.mircv.compression.VariableByteCompressor;
+import it.unipi.dii.aide.mircv.compression.VariableByteCompression;
+import it.unipi.dii.aide.mircv.document.data.DocumentCollectionSize;
 
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -257,13 +258,13 @@ public class Merger {
 
                     // Process posting list based on compression mode
                     if (compressionMode) {
-                        processCompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, maxNumPostings, docidChan, frequencyChan, descriptorChan);
+                        processCompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, maxNumPostings, docidChan, frequencyChan, descriptorChan, postingsInBlock);
                     } else {
-                        processUncompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, docidChan, frequencyChan, descriptorChan);
+                        processUncompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, docidChan, frequencyChan, descriptorChan, postingsInBlock);
                     }
 
                     // Increment the vocabulary memory offset
-                    vocMemOffset = vocabularyEntry.writeEntryToDisk(vocMemOffset, vocabularyChan);
+                    vocMemOffset = vocabularyEntry.writeEntry(vocMemOffset, vocabularyChan);
                     vocSize++;
 
                     // Debugging information
@@ -278,7 +279,7 @@ public class Merger {
             cleanUp();
 
             // Update vocabulary size
-            CollectionSize.updateVocabularySize(vocSize);
+            DocumentCollectionSize.updateVocabularySize(vocSize);
             return true;
 
         } catch (Exception e) {
@@ -293,7 +294,7 @@ public class Merger {
     private static void processCompressedPostingList(Iterator<Posting> plIterator, BlockDescriptor blockDescriptor,
                                                      int nPostingsToBeWritten, int maxNumPostings,
                                                      FileChannel docidChan, FileChannel frequencyChan,
-                                                     FileChannel descriptorChan) throws IOException {
+                                                     FileChannel descriptorChan,int postingsInBlock) throws IOException {
         int[] docids = new int[nPostingsToBeWritten];
         int[] freqs = new int[nPostingsToBeWritten];
 
@@ -306,12 +307,12 @@ public class Merger {
             postingsInBlock++;
 
             if (postingsInBlock == nPostingsToBeWritten) {
-                byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docids);
-                byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
+                byte[] compressedDocs = VariableByteCompression.encode(docids);
+                byte[] compressedFreqs = VariableByteCompression.encode(freqs);
 
                 // Write compressed posting lists to disk
                 writeCompressedPostingListsToDisk(docidChan, frequencyChan, descriptorChan,
-                        compressedDocs, compressedFreqs, blockDescriptor, maxNumPostings);
+                        compressedDocs, compressedFreqs, blockDescriptor, maxNumPostings, currPosting, postingsInBlock);
 
                 break;
             }
@@ -323,12 +324,16 @@ public class Merger {
      */
     private static void processUncompressedPostingList(Iterator<Posting> plIterator, BlockDescriptor blockDescriptor,
                                                        int nPostingsToBeWritten, FileChannel docidChan,
-                                                       FileChannel frequencyChan, FileChannel descriptorChan) throws IOException {
+                                                       FileChannel frequencyChan, FileChannel descriptorChan, int postingsInBlock) throws IOException {
         // Posting list must not be compressed
 
         // Set docs and freqs num bytes as (number of postings)*4
         blockDescriptor.setDocidSize(nPostingsToBeWritten * 4);
         blockDescriptor.setFreqSize(nPostingsToBeWritten * 4);
+
+        MappedByteBuffer docsBuffer = docidChan.map(FileChannel.MapMode.READ_WRITE, docsMemOffset, nPostingsToBeWritten* 4L);
+        MappedByteBuffer freqsBuffer = frequencyChan.map(FileChannel.MapMode.READ_WRITE, freqsMemOffset, nPostingsToBeWritten* 4L);
+
 
         // Write postings to block
         while (plIterator.hasNext()) {
@@ -363,7 +368,7 @@ public class Merger {
     private static void writeCompressedPostingListsToDisk(FileChannel docidChan, FileChannel frequencyChan,
                                                           FileChannel descriptorChan, byte[] compressedDocs,
                                                           byte[] compressedFreqs, BlockDescriptor blockDescriptor,
-                                                          int maxNumPostings) throws IOException {
+                                                          int maxNumPostings,Posting currPosting, int postingsInBlock) throws IOException {
         try {
             // Instantiation of MappedByteBuffer for integer list of docids and for integer list of freqs
             MappedByteBuffer docsBuffer = docidChan.map(FileChannel.MapMode.READ_WRITE, docsMemOffset, compressedDocs.length);
@@ -378,7 +383,7 @@ public class Merger {
             blockDescriptor.setFreqSize(compressedFreqs.length);
 
             // Update the max docid of the block
-            blockDescriptor.setMaxDocid(currPosting.getDocid());
+            blockDescriptor.setMaxDocid(currPosting.getDocId());
 
             // Update the number of postings in the block
             blockDescriptor.setNumPostings(postingsInBlock);
@@ -464,7 +469,7 @@ public class Merger {
             MappedByteBuffer docBuffer = docidChannels[index].map(
                     FileChannel.MapMode.READ_ONLY,
                     term.getDocidOffset(),
-                    term.getDocidSize()
+                    term.getDocIdSize()
             );
 
             // Instantiate MappedByteBuffer for the integer list of frequencies
@@ -478,7 +483,7 @@ public class Merger {
             newList = new PostingList(term.getTerm());
 
             // Iterate over the docids and frequencies to construct the posting list
-            for (int i = 0; i < term.getDf(); i++) {
+            for (int i = 0; i < term.getInverseDocumentFrequency(); i++) {
                 Posting posting = new Posting(docBuffer.getInt(), freqBuffer.getInt());
                 newList.getPostings().add(posting);
             }
@@ -554,8 +559,8 @@ public class Merger {
      * @param intermediatePostingList   Posting list from the current intermediate index
      */
     private static void updateVocabularyStatistics(VocabularyEntry vocabularyEntry, VocabularyEntry entry, PostingList intermediatePostingList) {
-        vocabularyEntry.updateBM25Statistics(entry.getBM25Tf(), entry.getBM25Dl());
-        vocabularyEntry.updateStatistics(intermediatePostingList);
+        vocabularyEntry.updateBM25Parameters(entry.getBM25Tf(), entry.getBM25Dl());
+        vocabularyEntry.updateValues(intermediatePostingList);
     }
 
     /**
@@ -585,7 +590,7 @@ public class Merger {
                 vocEntryMemOffset[i] += VocabularyEntry.ENTRY_SIZE;
 
                 // Read next vocabulary entry from the i-th vocabulary
-                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], getPartialVocabularyPath(i));
+                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], Config.getPartialVocabularyPath(i));
 
                 // Check if errors occurred while reading the vocabulary entry
                 if (ret == -1 || ret == 0) {
