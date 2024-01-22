@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.data.BlockDescriptor;
 import it.unipi.dii.aide.mircv.data.VocabularyEntry;
+import it.unipi.dii.aide.mircv.compression.VariableByteCompressor;
 
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -12,15 +13,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 
-
-//import it.unipi.dii.aide.mircv.common.beans.BlockDescriptor;
-//import it.unipi.dii.aide.mircv.Posting;
-//import it.unipi.dii.aide.mircv.PostingList;
-//import it.unipi.dii.aide.mircv.common.beans.VocabularyEntry;
-//import it.unipi.dii.aide.mircv.common.compression.UnaryCompressor;
-//import it.unipi.dii.aide.mircv.common.compression.VariableByteCompressor;
-//import it.unipi.dii.aide.mircv.common.config.CollectionSize;
-//import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
 
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;

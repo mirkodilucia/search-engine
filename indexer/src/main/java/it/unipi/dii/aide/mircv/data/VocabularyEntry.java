@@ -46,6 +46,10 @@ public class VocabularyEntry
     private static final int TERM_SIZE = 64;
     public static final long ENTRY_SIZE = TERM_SIZE + 76;
 
+    public VocabularyEntry() {
+
+    }
+
 
     public long getDocidOffset() {
         return docidOffset;
