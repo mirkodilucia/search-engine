@@ -15,9 +15,11 @@ public class DocumentIndexEntry {
     private static String DOCUMENT_INDEX_PATH;
 
     private String documentId;
-    private int docidId;
-    private int documentLength;
+    public int docidId;
+    public int documentLength;
     private static long memoryOffset = 0;
+
+    public DocumentIndexEntry(){}
 
     public DocumentIndexEntry(String documentIndexPath){
         DOCUMENT_INDEX_PATH = documentIndexPath;
@@ -35,15 +37,16 @@ public class DocumentIndexEntry {
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))) {
 
-            MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
 
             if (mbb == null)
                 return -1;
 
             CharBuffer cb = CharBuffer.allocate(DOC_ID_SIZE);
 
-            for (int i = 0; i < DOC_ID_SIZE; i++) {
-                cb.put(mbb.getChar());
+            for (int i = 0; i < this.documentId.length(); i++) {
+                //cb.put(mbb.getChar());
+                cb.put(i, this.documentId.charAt(i));
             }
 
             mbb.put(StandardCharsets.UTF_8.encode(cb));
@@ -51,10 +54,10 @@ public class DocumentIndexEntry {
             mbb.putInt(this.documentLength);
 
 
-            String[] fields = cb.toString().split("\t");
-            this.documentId = fields[0];
-            this.docidId = Integer.parseInt(fields[1]);
-            this.documentLength = Integer.parseInt(fields[2]);
+            //String[] fields = cb.toString().split("\t");
+            //this.documentId = fields[0];
+            //this.docidId = Integer.parseInt(fields[1]);
+            //this.documentLength = Integer.parseInt(fields[2]);
 
             // save the start offset of the structure
             long startOffset = memoryOffset;
@@ -84,7 +87,7 @@ public class DocumentIndexEntry {
                 return false;
 
             this.documentId = cb.toString().split("\0")[0];
-            this.docidId = mbb.getInt();
+            //this.docidId = mbb.getInt();
 
             // Instantiate the buffer for reading other information
             mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset + DOC_ID_SIZE, ENTRY_SIZE - DOC_ID_SIZE);
@@ -106,4 +109,11 @@ public class DocumentIndexEntry {
     public String getDocumentId() {
         return documentId;
     }
+
+    public static void setTestPath(){
+        DocumentIndexEntry.DOCUMENT_INDEX_PATH = "src/test/testDocumentIndex";
+        DocumentIndexEntry.memoryOffset = 0;
+    }
+
+
 }
