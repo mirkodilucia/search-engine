@@ -12,7 +12,7 @@
                 <element type="string" name="invertedIndexFreqs"/>
                 <element type="string" name="partialVocabularyDir"/>
                 <element type="string" name="frequencyDir"/>
-                <element type="string" name="docidsDir"/>
+                <element type="string" name="docIdsDir"/>
                 <element type="string" name="collectionStatisticsPath"/>
                 <element type="string" name="blockDescriptorsPath"/>
                 <element type="string" name="flagsFilePath"/>
@@ -22,7 +22,9 @@
                 <element type="string" name="documentIndexPath"/>
                 <element type="string" name="frequencyFileName"/>
                 <element type="string" name="vocabularyFileName"/>
-                <element type="string" name="docidsFileName"/>
+                <element type="string" name="docIdsFileName"/>
+                <element type="boolean" name="compressionEnabled"/>
+                <element type="string" name="debugDir"/>
             </sequence>
         </complexType>
     </element>

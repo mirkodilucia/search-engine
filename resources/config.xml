@@ -5,21 +5,22 @@
     <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
     <stopwordsPath>resources/stopwords.dat</stopwordsPath>
 
-    <vocabularyPath>resources/data/vocabulary</vocabularyPath>
-    <invertedIndexDocs>resources/data/invertedIndexDocs</invertedIndexDocs>
-    <invertedIndexFreqs>resources/data/invertedIndexFreqs</invertedIndexFreqs>
-    <partialVocabularyDir>resources/data/partial_vocabulary</partialVocabularyDir>
-    <frequencyDir>resources/data/partial_frequencies</frequencyDir>
-    <docidsDir>resources/data/partial_docids</docidsDir>
+    <vocabularyPath>data/vocabulary</vocabularyPath>
+    <invertedIndexDocs>data/invertedIndexDocs</invertedIndexDocs>
+    <invertedIndexFreqs>data/invertedIndexFreqs</invertedIndexFreqs>
+    <partialVocabularyDir>data/partial_vocabulary</partialVocabularyDir>
+    <frequencyDir>data/partial_frequencies</frequencyDir>
+    <docIdsDir>data/partial_docids</docIdsDir>
     <collectionStatisticsPath>config/collectionStatistics</collectionStatisticsPath>
-    <blockDescriptorsPath>resources/data/blockDescriptors</blockDescriptorsPath>
-    <flagsFilePath>resources/data/flags</flagsFilePath>
-    <testDir>resources/data/test</testDir>
+    <blockDescriptorsPath>data/blockDescriptors</blockDescriptorsPath>
+    <flagsFilePath>data/flags</flagsFilePath>
+    <testDir>data/test</testDir>
 
     <rawCollectionPath>data/sampled_collection</rawCollectionPath>
     <documentIndexPath>data/index</documentIndexPath>
     <frequencyFileName>data/frequencies</frequencyFileName>
     <vocabularyFileName>data/vocabulary</vocabularyFileName>
-    <docidsFileName>data/docids</docidsFileName>
+    <docIdsFileName>data/docids</docIdsFileName>
+    <compressionEnabled>true</compressionEnabled>
     <debugDir>debugDir</debugDir>
 </Config>
