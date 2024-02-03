@@ -1,28 +1,33 @@
-package it.unipi.dii.aide.mircv.application.data;
+package it.unipi.dii.aide.mircv.data;
 
-import it.unipi.dii.aide.mircv.application.config.Config;
+//import it.unipi.dii.aide.mircv.common.config.CollectionSize;
+//import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
+import it.unipi.dii.aide.mircv.document.data.DocumentCollectionSize;
 import org.junit.platform.commons.util.LruCache;
 import java.util.LinkedHashMap;
-
+import it.unipi.dii.aide.mircv.data.VocabularyEntry;
 /**
  * The singleton vocabulary object
  */
 public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
     private static Vocabulary instance = null;
-    private static Config config;
     /**
      * cache used for most recently used vocabulary entries
      */
     private final static LruCache<String, VocabularyEntry> entries= new LruCache<>(1000);
+
+    /**
+     * path to file storing the vocabulary
+     */
+    protected static String VOCABULARY_PATH = ConfigurationParameters.getVocabularyPath();
 
     private Vocabulary(){}
 
     /**
      * singleton pattern
      */
-    public static Vocabulary with(Config configuration) {
-        config = configuration;
+    public static Vocabulary getInstance(){
         if(instance == null){
             instance = new Vocabulary();
         }
@@ -50,7 +55,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
             return entries.get(term);
 
         //get entry from disk
-        VocabularyEntry entry = findEntry(term, config.getPathToVocabulary());
+        VocabularyEntry entry = findEntry(term);
 
         //cache the entry
         if(entry != null)
@@ -63,7 +68,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
     /**
      *  used for testing purposes only
      * */
-    public boolean readFromDisk(String vocabularyPath){
+    public boolean readFromDisk(){
 
         long position = 0;
 
@@ -71,7 +76,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position, vocabularyPath);
+            position = entry.readFromDisk(position,VOCABULARY_PATH);
 
             if(position == 0)
                 return  true;
@@ -96,7 +101,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
      * @param term: term of which we want vocabulary entry
      * @return the vocabulary entry of given term, null if term is not in vocabulary
      **/
-    public VocabularyEntry findEntry(String term, String vocabularyPath){
+    public VocabularyEntry findEntry(String term){
 
 
         VocabularyEntry entry = new VocabularyEntry(); //entry to be returned
@@ -115,7 +120,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
             mid = start + (end - start) / 2;
 
             //get entry from disk
-            entry.readFromDisk(mid * entrySize, vocabularyPath);
+            entry.readFromDisk(mid * entrySize, VOCABULARY_PATH);
             key = entry.getTerm();
 
             //check if the search was successful
@@ -134,10 +139,21 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
         return null;
     }
 
+    /** needed for testing purposes
+     * @param path: path to be set
+     */
+    public static void setVocabularyPath(String path) {VOCABULARY_PATH = path;}
+
+    /** needed for testing purposes
+     */
     public static void clearCache() {
+
         entries.clear();
     }
 
+    /**
+     * needed for testing purposes
+     */
     public static void unsetInstance(){
         instance = null;
     }
