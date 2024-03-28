@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class VocabularyEntry
 {
-    private static String BLOCK_DESCRIPTORS_PATH = "data/blockDescriptors.bin";
+    private static String BLOCK_DESCRIPTORS_PATH = "../test/data/blockDescriptorsTest";
     private String term;
     private int documentFrequency;
     private double inverseDocumentFrequency;

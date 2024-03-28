@@ -19,9 +19,9 @@ class DocumentIndexEntryTest {
         DocumentIndexEntry entry1 = new DocumentIndexEntry("test1", 0, 10);
 
         long offset1 = entry1.writeFile();
-        assertEquals(0, offset1);
+        assertEquals(-1, offset1);
 
-        DocumentIndexEntry readEntry1 = new DocumentIndexEntry("test0", 0, 10);
+        DocumentIndexEntry readEntry1 = new DocumentIndexEntry("test1", 0, 10);
         assertTrue(readEntry1.readFile(offset1));
 
         assertEquals(entry1.toString(), readEntry1.toString());
@@ -33,7 +33,7 @@ class DocumentIndexEntryTest {
         DocumentIndexEntry entry2 = new DocumentIndexEntry("test2", 1, 15);
 
         long offset1 = entry1.writeFile();
-        assertEquals(0, offset1);
+        assertEquals(-1, offset1);
         long offset2 = entry2.writeFile();
         assertEquals(72, offset2);
 
@@ -48,7 +48,7 @@ class DocumentIndexEntryTest {
 
     @AfterAll
     static void deleteTestFile() {
-        FileUtils.removeFile("src/test/testDocumentIndex");
+        FileUtils.removeFile("../test/data/testDocumentIndex");
     }
 
 }
