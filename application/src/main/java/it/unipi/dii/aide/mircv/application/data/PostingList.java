@@ -275,5 +275,4 @@ public class PostingList {
         return result.toString();
     }
 
-
 }

@@ -33,6 +33,10 @@ public class DocumentIndexEntry {
         memoryOffset = 0;
     }
 
+    public static void setTestPath() {
+        DOCUMENT_INDEX_PATH = "data/test/documentIndex";
+    }
+
     public long writeFile(){
         try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_PATH),
                 StandardOpenOption.WRITE,
