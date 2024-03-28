@@ -1,11 +1,9 @@
-package it.unipi.dii.aide.mircv.data;
+package it.unipi.dii.aide.mircv.application.data;
 
-//import it.unipi.dii.aide.mircv.common.config.CollectionSize;
-//import it.unipi.dii.aide.mircv.common.config.ConfigurationParameters;
-import it.unipi.dii.aide.mircv.document.data.DocumentCollectionSize;
 import org.junit.platform.commons.util.LruCache;
+
 import java.util.LinkedHashMap;
-import it.unipi.dii.aide.mircv.data.VocabularyEntry;
+
 /**
  * The singleton vocabulary object
  */
@@ -20,16 +18,18 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
     /**
      * path to file storing the vocabulary
      */
-    protected static String VOCABULARY_PATH = ConfigurationParameters.getVocabularyPath();
+    protected static String VOCABULARY_PATH;
 
-    private Vocabulary(){}
+    private Vocabulary(String path){
+        VOCABULARY_PATH = path;
+    }
 
     /**
      * singleton pattern
      */
-    public static Vocabulary getInstance(){
+    public static Vocabulary with(String path){
         if(instance == null){
-            instance = new Vocabulary();
+            instance = new Vocabulary(path);
         }
         return instance;
     }

@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.application.indexer.spimi;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
+import it.unipi.dii.aide.mircv.application.data.TextDocument;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
@@ -26,10 +27,11 @@ public class Spimi {
         DocumentIndexEntry.reset();
 
         MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 0.2);
-
     }
 
-    public void executeSpimi() {
+    public int executeSpimi() {
+        int numIndexes = 0;
+
         try (BufferedReader bufferReader = initBuffer(config.isCompressionEnabled())) {
             boolean allDocumentsProcessed = false;
             int documentId = 1;
@@ -38,14 +40,15 @@ public class Spimi {
 
 
 
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        return numIndexes;
     }
 
-    private HashMap<String, PostingList> spiiIteration(BufferedReader bufferedReader) throws IOException {
+    private HashMap<String, PostingList> spimiIteration(BufferedReader bufferedReader) throws IOException {
+        boolean allDocumentsProcessed = false;
         HashMap<String, PostingList> index = new HashMap<>();
             while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                 String line;
@@ -63,15 +66,13 @@ public class Spimi {
                 String[] fields = line.split("\t");
 
                 TextDocument document = new TextDocument(fields[0], fields[1].replaceAll("[^\\x00-\\x7F]", ""));
-
-
             }
         return index;
     }
 
     private BufferedReader initBuffer(boolean compressed) throws IOException {
         if(compressed) { //read from compressed collection
-            TarArchiveInputStream tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(PATH_COMPRESSED_COLLECTION)));
+            TarArchiveInputStream tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(config.getPathToCompressedCollection())));
             tarInput.getNextTarEntry();
             return new BufferedReader(new InputStreamReader(tarInput, StandardCharsets.UTF_8));
         }

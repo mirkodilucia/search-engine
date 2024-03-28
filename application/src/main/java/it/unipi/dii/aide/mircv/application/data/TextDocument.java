@@ -1,10 +1,10 @@
-package it.unipi.dii.aide.mircv.data;
+package it.unipi.dii.aide.mircv.application.data;
 
 
 /**
  * The basic TextDocument, formed by an identifier (pid) and the text payload.
  */
-public class TxtDocument {
+public class TextDocument {
 
     /**
      * the identifier of the document
@@ -21,7 +21,7 @@ public class TxtDocument {
      * @param pid the document's identifier
      * @param text the document's payload
      */
-    public TxtDocument(String pid, String text) {
+    public TextDocument(String pid, String text) {
         this.pid = pid;
         this.text = text;
     }

@@ -3,7 +3,7 @@ package it.unipi.dii.aide.mircv.application;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.config.ConfigLoader;
 import it.unipi.dii.aide.mircv.application.config.DocumentManager;
-import it.unipi.dii.aide.mircv.application.indexer.merger.Merger2;
+import it.unipi.dii.aide.mircv.application.indexer.spimi.Spimi;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,7 +20,7 @@ public class Main {
         DocumentManager dp = DocumentManager.with(config);
         dp.initialize();
 
-        int numIndexes = Spimi.whit(config).executeSpimi();
+        int numIndexes = Spimi.with(config).executeSpimi();
         if(numIndexes <= 0){
             System.out.println("An error occurred: no partial indexes.");
             return;
@@ -34,7 +34,7 @@ public class Main {
             long vocabularySize = Files.size(Paths.get(config.getVocabularyFileName()));
             long docIndexSize = Files.size(Paths.get(config.getDocumentIndexPath()));
 
-            long fullTime = stop - start;
+            long fullTime = 0; //stop - start;
             String stats = Arrays.toString(args) + '\t' + fullTime + '\t' + docidSize + '\t' + freqSize + '\t' + vocabularySize + '\t' + docIndexSize + '\n';
             writer.write(stats);
         }catch(Exception e){

@@ -131,4 +131,8 @@ public class Config implements Serializable {
     public String getDebugFolder() {
         return this.debugDir;
     }
+
+    public String getPathToCompressedCollection() {
+        return this.compressedCollectionPath;
+    }
 }
