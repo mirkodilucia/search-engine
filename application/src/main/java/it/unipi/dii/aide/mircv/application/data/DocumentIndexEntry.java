@@ -34,7 +34,7 @@ public class DocumentIndexEntry {
     }
 
     public static void setTestPath() {
-        DOCUMENT_INDEX_PATH = "../data/test/documentIndex";
+        DOCUMENT_INDEX_PATH = "../test/data/documentIndex";
     }
 
     public long writeFile(){
@@ -43,26 +43,20 @@ public class DocumentIndexEntry {
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))) {
 
-            MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
 
             if (mbb == null)
                 return -1;
 
             CharBuffer cb = CharBuffer.allocate(DOC_ID_SIZE);
 
-            for (int i = 0; i < DOC_ID_SIZE; i++) {
-                cb.put(mbb.getChar());
+            for (int i = 0; i < this.documentId.length(); i++) {
+                cb.put(i, this.documentId.charAt(i));
             }
 
             mbb.put(StandardCharsets.UTF_8.encode(cb));
             mbb.putInt(this.docidId);
             mbb.putInt(this.documentLength);
-
-
-            String[] fields = cb.toString().split("\t");
-            this.documentId = fields[0];
-            this.docidId = Integer.parseInt(fields[1]);
-            this.documentLength = Integer.parseInt(fields[2]);
 
             // save the start offset of the structure
             long startOffset = memoryOffset;
@@ -89,10 +83,9 @@ public class DocumentIndexEntry {
 
             CharBuffer cb = StandardCharsets.UTF_8.decode(mbb);
             if (cb.toString().split("\0").length == 0)
-                return false;
+                return true;
 
             this.documentId = cb.toString().split("\0")[0];
-            this.docidId = mbb.getInt();
 
             // Instantiate the buffer for reading other information
             mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset + DOC_ID_SIZE, ENTRY_SIZE - DOC_ID_SIZE);
@@ -109,6 +102,11 @@ public class DocumentIndexEntry {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "document:" + this.documentId + ":pid:" + this.docidId + ":len:" + this.documentLength;
     }
 
     public String getDocumentId() {
