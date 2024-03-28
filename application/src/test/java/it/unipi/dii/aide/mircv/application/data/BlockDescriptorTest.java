@@ -26,7 +26,7 @@ public class BlockDescriptorTest {
     @BeforeAll
     static void setTestPaths() {
         config = new Config();
-        VocabularyEntry.setBlockDescriptorsPath("src/test/data/blockDescriptorsTest");
+        VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptorsTest");
     }
 
     // Test for a single descriptor block
@@ -39,7 +39,7 @@ public class BlockDescriptorTest {
             list.getPostings().add(posting);
         }
         // update block information
-        VocabularyEntry voc = new VocabularyEntry("test");
+        VocabularyEntry voc = new VocabularyEntry("../test/data/blockDescriptorsTest");
         voc.updateValues(list);
         voc.computeBlocksInformation();
 
@@ -48,7 +48,7 @@ public class BlockDescriptorTest {
 
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get("src/test/data/blockDescriptorsTest"),
+                        Paths.get("../test/data/blockDescriptorsTest"),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -105,7 +105,7 @@ public class BlockDescriptorTest {
         Iterator<Posting> plIterator = list.getPostings().iterator();
         try (
                 FileChannel descriptorChan = (FileChannel) Files.newByteChannel(
-                        Paths.get("src/test/data/blockDescriptorsTest"),
+                        Paths.get("../test/data/blockDescriptorsTest"),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
