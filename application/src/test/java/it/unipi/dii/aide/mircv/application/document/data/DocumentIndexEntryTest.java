@@ -48,7 +48,7 @@ class DocumentIndexEntryTest {
 
     @AfterAll
     static void deleteTestFile() {
-        FileUtils.removeFile("src/test/testDocumentIndex");
+        FileUtils.removeFile("../resources/test/testDocumentIndex");
     }
 
 }

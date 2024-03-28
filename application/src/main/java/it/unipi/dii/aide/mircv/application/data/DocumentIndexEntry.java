@@ -34,7 +34,7 @@ public class DocumentIndexEntry {
     }
 
     public static void setTestPath() {
-        DOCUMENT_INDEX_PATH = "data/test/documentIndex";
+        DOCUMENT_INDEX_PATH = "../resources/test/testDocumentIndex";
     }
 
     public long writeFile(){
