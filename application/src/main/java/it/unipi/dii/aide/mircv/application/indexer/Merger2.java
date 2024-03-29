@@ -126,6 +126,7 @@ public class Merger2 {
                 vocabularyEntry.computeBlocksInformation();
                 int maxNumPostings = vocabularyEntry.getMaxNumberOfPostingsInBlock();
 
+                // TODO: spostare in processCompressedPostingList
                 Iterator<Posting> plIterator = mergedPostingList.getPostings().iterator();
                 int numBlocks = vocabularyEntry.getNumBlocks();
 

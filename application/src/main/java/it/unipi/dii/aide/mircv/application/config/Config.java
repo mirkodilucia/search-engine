@@ -135,4 +135,16 @@ public class Config implements Serializable {
     public String getPathToCompressedCollection() {
         return this.compressedCollectionPath;
     }
+
+    public void setPathToInvertedIndexDocs(String invertedIndexDocs) {
+        this.invertedIndexDocs = invertedIndexDocs;
+    }
+
+    public void setPathToInvertedIndexFreq(String invertedIndexFreqs) {
+        this.invertedIndexFreqs = invertedIndexFreqs;
+    }
+
+    public void setPathToBlockDescriptors(String blockDescriptorsPath) {
+        this.blockDescriptorsPath = blockDescriptorsPath;
+    }
 }

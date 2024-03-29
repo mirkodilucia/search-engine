@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.application.indexer.merger;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
+import it.unipi.dii.aide.mircv.application.indexer.MergerLoader;
 import it.unipi.dii.aide.mircv.application.indexer.MergerWorker;
 import org.junit.Test;
 
@@ -38,13 +39,21 @@ public class MergerWorkerTest
         nextTerms[0] = new VocabularyEntry("term", "../test/data/processTermTest");
 
         Config config = new Config();
+        config.setStopwordsPath("../resources/stopwords.dat");
+        config.setPathToInvertedIndexDocs("../test/data/processTermTest");
+        config.setPathToInvertedIndexFreq("../test/data/processTermTest");
+        config.setPathToBlockDescriptors("../test/data/processTermTest");
+
         MergerWorker mergerWorker = MergerWorker.with(config);
 
         VocabularyEntry vocabularyEntry = new VocabularyEntry("term", "../test/data/processTermTest");
         PostingList result = null;
 
         try {
-            result = mergerWorker.processTerm(null, nextTerms, vocabularyEntry, "term");
+            MergerLoader mergerLoader = MergerLoaderMock.load(config);
+            result = mergerWorker.processTerm(mergerLoader, nextTerms, vocabularyEntry, "term");
+
+            assert result.getTerm().equals("term");
         } catch (Exception e) {
             e.printStackTrace();
         }
