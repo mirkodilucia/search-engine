@@ -5,6 +5,8 @@ import it.unipi.dii.aide.mircv.application.preprocessor.PreProcessor;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 import it.unipi.dii.aide.mircv.application.preprocessor.Stemmer;
 
+import java.util.ArrayList;
+
 public class PlainDocument {
 
     private final Stemmer stemmer;
@@ -42,5 +44,9 @@ public class PlainDocument {
     public void writeFileString() {
         String fileData = this.docId + ";" + String.join(",", this.stems);
         FileUtils.writeFile(config.getRawCollectionPath() + "/" + docId, fileData);
+    }
+
+    public void setTokens(ArrayList<String> tokens1) {
+        this.tokens = tokens1.toArray(new String[0]);
     }
 }

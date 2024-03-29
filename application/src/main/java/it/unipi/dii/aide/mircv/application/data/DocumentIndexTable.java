@@ -3,7 +3,7 @@ package it.unipi.dii.aide.mircv.application.data;
 import java.util.HashMap;
 import it.unipi.dii.aide.mircv.application.config.Config;
 
-public class DocumentIndexTable extends HashMap<String, DocumentIndexEntry> {
+public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
 
     private static DocumentIndexTable INSTANCE = null;
     private static Config configuration;

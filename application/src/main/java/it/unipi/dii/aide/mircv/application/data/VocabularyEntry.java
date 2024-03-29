@@ -47,6 +47,22 @@ public class VocabularyEntry
 
     }
 
+    public VocabularyEntry(String adam,
+                           int documentFrequency, int memoryOffset,
+                           int frequencyOffset, int maxTermFrequency,
+                           int BM25Dl, int docIdSize, int docidOffset) {
+
+        this.term = adam;
+        this.documentFrequency = documentFrequency;
+        this.inverseDocumentFrequency = memoryOffset;
+        this.maxTermFrequency = maxTermFrequency;
+        this.BM25Dl = BM25Dl;
+        this.docIdSize = docIdSize;
+        this.docidOffset = docidOffset;
+        this.frequencyOffset = frequencyOffset;
+    }
+
+
 
     public long getDocIdOffset() {
         return docidOffset;

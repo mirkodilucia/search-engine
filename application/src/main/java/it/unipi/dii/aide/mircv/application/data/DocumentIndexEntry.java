@@ -14,8 +14,8 @@ public class DocumentIndexEntry {
     public static final int ENTRY_SIZE = DOC_ID_SIZE + 4 + 4;
     private static String DOCUMENT_INDEX_PATH;
 
-    private String documentId;
-    private int docidId;
+    private String pid;
+    private int documentId;
     private int documentLength;
     private static long memoryOffset = 0;
 
@@ -23,9 +23,9 @@ public class DocumentIndexEntry {
         DOCUMENT_INDEX_PATH = documentIndexPath;
     }
 
-    public DocumentIndexEntry(String documentId, int docidId, int documentLength) {
+    public DocumentIndexEntry(String pid, int documentId, int documentLength) {
+        this.pid = pid;
         this.documentId = documentId;
-        this.docidId = docidId;
         this.documentLength = documentLength;
     }
 
@@ -50,12 +50,12 @@ public class DocumentIndexEntry {
 
             CharBuffer cb = CharBuffer.allocate(DOC_ID_SIZE);
 
-            for (int i = 0; i < this.documentId.length(); i++) {
-                cb.put(i, this.documentId.charAt(i));
+            for (int i = 0; i < this.pid.length(); i++) {
+                cb.put(i, this.pid.charAt(i));
             }
 
             mbb.put(StandardCharsets.UTF_8.encode(cb));
-            mbb.putInt(this.docidId);
+            mbb.putInt(this.documentId);
             mbb.putInt(this.documentLength);
 
             // save the start offset of the structure
@@ -85,7 +85,7 @@ public class DocumentIndexEntry {
             if (cb.toString().split("\0").length == 0)
                 return true;
 
-            this.documentId = cb.toString().split("\0")[0];
+            this.pid = cb.toString().split("\0")[0];
 
             // Instantiate the buffer for reading other information
             mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset + DOC_ID_SIZE, ENTRY_SIZE - DOC_ID_SIZE);
@@ -94,7 +94,7 @@ public class DocumentIndexEntry {
             if(mbb == null)
                 return false;
 
-            this.docidId = mbb.getInt();
+            this.documentId = mbb.getInt();
             this.documentLength = mbb.getInt();
 
             return true;
@@ -106,10 +106,10 @@ public class DocumentIndexEntry {
 
     @Override
     public String toString() {
-        return "document:" + this.documentId + ":pid:" + this.docidId + ":len:" + this.documentLength;
+        return "document:" + this.documentId + ":pid:" + this.pid + ":len:" + this.documentLength;
     }
 
-    public String getDocumentId() {
+    public int getDocumentId() {
         return documentId;
     }
 }

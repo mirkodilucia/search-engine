@@ -32,6 +32,22 @@ public class MergerWorkerTest
         assert result.equals("Apple");
     }
 
+    @Test
+    public void processTermTest() {
+        VocabularyEntry[] nextTerms = new VocabularyEntry[1];
+        nextTerms[0] = new VocabularyEntry("term", "../test/data/processTermTest");
 
+        Config config = new Config();
+        MergerWorker mergerWorker = MergerWorker.with(config);
+
+        VocabularyEntry vocabularyEntry = new VocabularyEntry("term", "../test/data/processTermTest");
+        PostingList result = null;
+
+        try {
+            result = mergerWorker.processTerm(null, nextTerms, vocabularyEntry, "term");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
