@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.application.indexer.merger;
+package it.unipi.dii.aide.mircv.application.indexer;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
@@ -18,6 +18,18 @@ public class MergerWorker {
         return new MergerWorker(config);
     }
 
+    /**
+     * method to process a term in a parallelized way across all the intermediate indexes:
+     * - create the final posting list
+     * - create the vocabulary entry for the term
+     * - update term statistics in the vocabulary entry (side effect)
+     *
+     * @param mergerLoader: merger loader function that carries out the loading of the intermediate indexes
+     * @param nextTerms: next terms to be processed in the intermediate indexes
+     * @param termToProcess: term to be processed
+     * @param vocabularyEntry: vocabulary entry for new term
+     * @return posting list of the processed term
+     */
     public PostingList processTerm(MergerLoader mergerLoader, VocabularyEntry[] nextTerms, VocabularyEntry vocabularyEntry, String termToProcess) throws IOException {
         PostingList finalList = new PostingList(config);
         finalList.setTerm(termToProcess);
@@ -41,6 +53,11 @@ public class MergerWorker {
         return finalList;
     }
 
+
+    /**
+     * Return the minimum term of the terms to be processed in the intermediate indexes
+     *  @return the next term to process
+     */
     public String getMinimumTerm(VocabularyEntry[] nextTerms, int numIndexes) {
         String term = null;
 

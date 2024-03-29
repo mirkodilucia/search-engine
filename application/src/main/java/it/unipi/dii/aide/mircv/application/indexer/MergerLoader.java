@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.application.indexer.merger;
+package it.unipi.dii.aide.mircv.application.indexer;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.BlockDescriptor;

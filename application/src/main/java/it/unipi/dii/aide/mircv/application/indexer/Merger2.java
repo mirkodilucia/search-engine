@@ -1,9 +1,8 @@
-package it.unipi.dii.aide.mircv.application.indexer.merger;
+package it.unipi.dii.aide.mircv.application.indexer;
 
 import it.unipi.dii.aide.mircv.application.compression.UnaryCompressor;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.*;
-import it.unipi.dii.aide.mircv.application.indexer.FileChannelUtils;
 import it.unipi.dii.aide.mircv.application.compression.VariableByteCompressor;
 
 import java.io.IOException;
