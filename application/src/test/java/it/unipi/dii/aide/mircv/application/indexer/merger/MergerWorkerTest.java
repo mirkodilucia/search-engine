@@ -7,7 +7,6 @@ import it.unipi.dii.aide.mircv.application.indexer.MergerLoader;
 import it.unipi.dii.aide.mircv.application.indexer.MergerWorker;
 import org.junit.Test;
 
-
 public class MergerWorkerTest
 {
     @Test
@@ -40,9 +39,9 @@ public class MergerWorkerTest
 
         Config config = new Config();
         config.setStopwordsPath("../resources/stopwords.dat");
-        config.setPathToInvertedIndexDocs("../test/data/processTermTest");
-        config.setPathToInvertedIndexFreq("../test/data/processTermTest");
-        config.setPathToBlockDescriptors("../test/data/processTermTest");
+        config.setPathToInvertedIndexDocs("../test/data/processTerm/invertedIndexDocsTest");
+        config.setPathToInvertedIndexFreq("../test/data/processTerm/invertedIndexFreqTest");
+        config.setPathToBlockDescriptors("../test/data/processTerm/blockDescriptorsTest");
 
         MergerWorker mergerWorker = MergerWorker.with(config);
 

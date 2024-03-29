@@ -18,26 +18,19 @@ public class Merger2 {
     private final long[] vocabularyEntryMemoryOffset;
     private static Merger2 instance = null;
 
-    private final FileChannel[] docIdChannels;
-    private final FileChannel[] frequencyChannels;
-
     private int docsMemOffset;
     private int freqsMemOffset;
 
 
     private final Config config;
-    private MergerLoader loader;
+    private final MergerLoader loader;
 
-    private Merger2(Config config, int numIndexes) {
+    private Merger2(Config config, MergerLoader loader, int numIndexes) {
         this.config = config;
+        this.loader = loader;
 
         nextTerms = new VocabularyEntry[numIndexes];
         vocabularyEntryMemoryOffset = new long[numIndexes];
-
-        docIdChannels = new FileChannel[numIndexes];
-        frequencyChannels = new FileChannel[numIndexes];
-
-        this.loader = new MergerLoader(config, docIdChannels, frequencyChannels);
 
         freqsMemOffset = 0;
         docsMemOffset = 0;
@@ -52,30 +45,17 @@ public class Merger2 {
                     nextTerms[i] = null;
                 }
 
-                docIdChannels[i] = FileChannelUtils.openFileChannel(config.getPartialIndexDocsPath(i),
+                loader.pushDocumentIdChannel(i,  FileChannelUtils.openFileChannel(config.getPartialIndexDocsPath(i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
-                        StandardOpenOption.CREATE);
-                frequencyChannels[i] = FileChannelUtils.openFileChannel(config.getPartialIndexFreqsPath(i),
+                        StandardOpenOption.CREATE));
+                loader.pushFrequencyChannel(i, FileChannelUtils.openFileChannel(config.getPartialIndexFreqsPath(i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
-                        StandardOpenOption.CREATE);
+                        StandardOpenOption.CREATE));
             }
         } catch (Exception e) {
-            cleanup();
-            e.printStackTrace();
-        }
-    }
-
-    private void cleanup() {
-        try {
-            for (int i = 0; i < numIndexes; i++) {
-                if (docIdChannels[i] != null)
-                    docIdChannels[i].close();
-                if (frequencyChannels[i] != null)
-                    frequencyChannels[i].close();
-            }
-        } catch (Exception e) {
+            loader.cleanup();
             e.printStackTrace();
         }
     }
@@ -153,10 +133,11 @@ public class Merger2 {
                 }
             }
 
-            cleanup();
+            loader.cleanup();
             DocumentCollectionSize.updateVocabularySize(vocabularySize, config.getCollectionStatisticsPath());
         } catch (Exception ex) {
-
+            loader.cleanup();
+            ex.printStackTrace();
         }
 
     }
@@ -243,7 +224,8 @@ public class Merger2 {
         }
     }
 
-    public static void with(Config config, int numIndexes) {
-        instance = new Merger2(config, numIndexes);
+    public static Merger2 with(Config config, MergerLoader loader, int numIndexes) {
+        instance = new Merger2(config, loader, numIndexes);
+        return instance;
     }
 }

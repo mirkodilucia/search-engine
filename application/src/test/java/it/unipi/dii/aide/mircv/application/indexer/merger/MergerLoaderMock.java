@@ -123,15 +123,13 @@ public class MergerLoaderMock {
                 byte[] compressedDocs = VariableByteCompressor.encode(docids);
                 byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
 
-
                 loader.writeCompressedPostingListsToDisk(currPosting, documentsId[0], frequencyChannels[0], descriptorChan,
                         compressedDocs, compressedFreqs, blockDescriptor, 1 * 4L, 1 * 4L, maxNumPostings);
 
             }
+            return loader;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
-        return new MergerLoader(config, new FileChannel[0], new FileChannel[0]);
     }
 }

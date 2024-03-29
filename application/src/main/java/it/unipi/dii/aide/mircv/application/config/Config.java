@@ -147,4 +147,16 @@ public class Config implements Serializable {
     public void setPathToBlockDescriptors(String blockDescriptorsPath) {
         this.blockDescriptorsPath = blockDescriptorsPath;
     }
+
+    public void setPartialIndexesPath(String partialVocabularyDir) {
+        this.partialVocabularyDir = partialVocabularyDir;
+    }
+
+    public void setPathToVocabulary(String vocabularyPath) {
+        this.vocabularyPath = vocabularyPath;
+    }
+
+    public void setCollectionStatisticsPath(String collectionStatisticsPath) {
+        this.collectionStatisticsPath = collectionStatisticsPath;
+    }
 }

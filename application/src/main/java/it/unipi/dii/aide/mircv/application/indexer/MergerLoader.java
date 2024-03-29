@@ -13,8 +13,8 @@ import java.nio.channels.FileChannel;
 
 public class MergerLoader {
 
-    FileChannel[] documentsIdChannels;
-    FileChannel[] frequencyChannels;
+    public FileChannel[] documentsIdChannels;
+    public FileChannel[] frequencyChannels;
 
     private static Config config;
 
@@ -88,5 +88,27 @@ public class MergerLoader {
 
         // Write the block descriptor on disk
         blockDescriptor.saveDescriptorOnDisk(descriptorChan);
+    }
+
+    public void pushDocumentIdChannel(int i, FileChannel fileChannel) {
+        documentsIdChannels[i] = fileChannel;
+    }
+
+    public void pushFrequencyChannel(int i, FileChannel fileChannel) {
+        frequencyChannels[i] = fileChannel;
+    }
+
+    public void cleanup() {
+        try {
+            for (FileChannel fileChannel : documentsIdChannels) {
+                fileChannel.close();
+            }
+
+            for (FileChannel fileChannel : frequencyChannels) {
+                fileChannel.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
