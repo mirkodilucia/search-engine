@@ -67,6 +67,7 @@ public class Merger2 {
         long vocabularySize = 0;
         long vocabularyMemoryOffset = 0;
 
+        // open file channels for vocabulary writes, docid and frequency writes, and block descriptor writes
         try (
                 FileChannel vocabularyChannel =
                         FileChannelUtils.openFileChannel(config.getPathToVocabulary(),
@@ -79,12 +80,12 @@ public class Merger2 {
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel frequencyChan =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexDocs(),
+                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexFreqs(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel descriptorChan =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexDocs(),
+                        FileChannelUtils.openFileChannel(config.getBlockDescriptorsPath(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
