@@ -205,7 +205,7 @@ public class VocabularyEntry
     }
 
     public void calculateInverseDocumentFrequency(){
-        this.inverseDocumentFrequency = Math.log10(DocumentCollectionSize.getCollectionSize()/(double)this.documentFrequency);
+        this.inverseDocumentFrequency = Math.log10(DocumentCollectionSize.getCollectionSize(documentId - 1)/(double)this.documentFrequency);
     }
 
     public long writeEntry(long postionindex, FileChannel channel){
@@ -326,7 +326,7 @@ public class VocabularyEntry
 
         double k1 = 1.5;
         double b = 0.75;
-        double avgDocLen = (double) DocumentCollectionSize.getTotalDocumentLen()/DocumentCollectionSize.getCollectionSize();
+        double avgDocLen = (double) DocumentCollectionSize.getTotalDocumentLen()/DocumentCollectionSize.getCollectionSize(documentId - 1);
 
         this.maxBM25 = (inverseDocumentFrequency * BM25Tf)  / ( BM25Tf + k1 * (1 - b + b * (double)BM25Dl/avgDocLen));
 

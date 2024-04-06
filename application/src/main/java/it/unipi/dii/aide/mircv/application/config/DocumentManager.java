@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.application.config;
 
-import it.unipi.dii.aide.mircv.application.data.PlainDocument;
+import it.unipi.dii.aide.mircv.application.data.InitialDocument;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 
 import java.util.ArrayList;
@@ -11,14 +11,14 @@ public class DocumentManager {
     private static Config configuration;
     private static DocumentManager INSTANCE = null;
     private final ArrayList<String> filePaths;
-    private final ArrayList<PlainDocument> documents;
+    private final ArrayList<InitialDocument> documents;
 
     private DocumentManager() {
         filePaths = new ArrayList<>();
 
         documents = new ArrayList<>();
 
-        for (PlainDocument doc : documents) {
+        for (InitialDocument doc : documents) {
             process(doc);
             doc.writeFileString();
 
@@ -27,13 +27,13 @@ public class DocumentManager {
         System.out.println("Loaded " + documents.size() + " documents");
     }
 
-    public PlainDocument load(String path) {
+    public InitialDocument load(String path) {
         String plainText = FileUtils.readFile(path);
         String uuid = UUID.randomUUID().toString();
-        return new PlainDocument(configuration, uuid, plainText);
+        return new InitialDocument(configuration, uuid, plainText);
     }
 
-    public PlainDocument process(PlainDocument doc) {
+    public InitialDocument process(InitialDocument doc) {
         doc.cleanText();
         doc.tokenize();
 

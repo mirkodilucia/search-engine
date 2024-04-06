@@ -7,7 +7,7 @@ import it.unipi.dii.aide.mircv.application.preprocessor.Stemmer;
 
 import java.util.ArrayList;
 
-public class PlainDocument {
+public class InitialDocument {
 
     private final Stemmer stemmer;
     private final Config config;
@@ -17,7 +17,7 @@ public class PlainDocument {
     private String[] relevantTokens;
     private String[] stems;
 
-    public PlainDocument(Config config, String docId, String plainText) {
+    public InitialDocument(Config config, String docId, String plainText) {
         this.config = config;
         stemmer = Stemmer.with(config);
 
@@ -48,5 +48,23 @@ public class PlainDocument {
 
     public void setTokens(ArrayList<String> tokens1) {
         this.tokens = tokens1.toArray(new String[0]);
+    }
+
+    /**
+     * Perform the preprocessing of a InitialDocument, transforming it in a document formed by
+     * its PID and the list of its tokens
+     * @return the processed document
+     */
+    public FinalDocument processDocument() {
+        this.cleanText();
+        this.tokenize();
+
+        if(config.isStemStopRemovalEnabled()) {
+            removeStopwords();
+            stem();
+        }
+
+        // Return the processed document
+        return new FinalDocument(docId, tokens);
     }
 }

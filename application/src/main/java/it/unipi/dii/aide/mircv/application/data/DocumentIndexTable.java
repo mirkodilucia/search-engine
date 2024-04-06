@@ -26,7 +26,7 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
     }
 
     public void load() {
-        long numDocuments = DocumentCollectionSize.getCollectionSize();
+        long numDocuments = DocumentCollectionSize.getCollectionSize(documentId - 1);
 
         for(int i = 0; i < numDocuments; i++) {
             DocumentIndexEntry entry = new DocumentIndexEntry(configuration.getDocumentIndexPath());

@@ -112,4 +112,8 @@ public class DocumentIndexEntry {
     public int getDocumentId() {
         return documentId;
     }
+
+    public int getDocumentLenght() {
+        return documentLength;
+    }
 }

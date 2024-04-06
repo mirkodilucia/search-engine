@@ -16,7 +16,7 @@ import java.util.*;
 public class MergerLoaderMock {
 
     private static HashMap<String, PostingList> index = new LinkedHashMap<>();
-    private static ArrayList<PlainDocument> testDocuments = new ArrayList<>();
+    private static ArrayList<InitialDocument> testDocuments = new ArrayList<>();
     private static DocumentIndexTable documentIndex;
     private static Vocabulary vocabulary;
 
@@ -24,12 +24,12 @@ public class MergerLoaderMock {
         documentIndex = DocumentIndexTable.with(config);
         vocabulary = Vocabulary.with(config.getPathToVocabulary());
 
-        PlainDocument d1 = new PlainDocument(config, "document1", "fruit apricot apple fruit salad");
+        InitialDocument d1 = new InitialDocument(config, "document1", "fruit apricot apple fruit salad");
         ArrayList<String> tokens1 = new ArrayList<>(Arrays.asList("fruit", "apricot", "apple", "fruit", "salad"));
         d1.setTokens(tokens1);
         testDocuments.add(d1);
 
-        PlainDocument d2 = new PlainDocument(config, "document2", "apple adam eve");
+        InitialDocument d2 = new InitialDocument(config, "document2", "apple adam eve");
         ArrayList<String> tokens2 = new ArrayList<>(Arrays.asList("apple", "adam", "eve"));
         d2.setTokens(tokens2);
         testDocuments.add(d2);

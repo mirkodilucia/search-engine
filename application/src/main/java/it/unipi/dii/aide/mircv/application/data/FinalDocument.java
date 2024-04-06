@@ -1,10 +1,13 @@
 package it.unipi.dii.aide.mircv.application.data;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The basic TextDocument, formed by an identifier (pid) and the text payload.
+ * The basic FinalDocument, formed by an identifier (pid) and the text payload.
  */
-public class TextDocument {
+public class FinalDocument {
 
     /**
      * the identifier of the document
@@ -12,18 +15,21 @@ public class TextDocument {
     private String pid;
 
     /**
-     * The text payload of the document, encoded in UTF-8
+     * Array with all the processed terms
      */
-    private String text;
+    private ArrayList<String> tokens;
+
+    public FinalDocument() {
+    }
 
     /**
-     * Creates a new TextDocument with the given identifier and payload
+     * Creates a new FinalDocument with the given identifier and payload
      * @param pid the document's identifier
      * @param text the document's payload
      */
-    public TextDocument(String pid, String text) {
+    public FinalDocument(String pid, String[] text) {
         this.pid = pid;
-        this.text = text;
+        this.tokens = new ArrayList<>(List.of(text));
     }
 
     /**
@@ -46,16 +52,16 @@ public class TextDocument {
      * gets the document's text
      * @return the text payload of the document
      */
-    public String getText() {
-        return text;
+    public ArrayList<String> getTokens() {
+        return tokens;
     }
 
     /**
      * sets the document's text
      * @param text the document's payload
      */
-    public void setText(String text) {
-        this.text = text;
+    public void setTokens(String[] text) {
+        this.tokens = new ArrayList<>(List.of(text));
     }
 
     /**
@@ -63,6 +69,6 @@ public class TextDocument {
      * @return the formatted string
      */
     public String toString() {
-        return pid + '\t' + text + '\n';
+        return pid + '\t' + String.join(",", tokens) + '\n';
     }
 }

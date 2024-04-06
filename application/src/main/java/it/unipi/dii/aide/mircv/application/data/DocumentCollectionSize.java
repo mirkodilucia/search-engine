@@ -41,7 +41,7 @@ public class DocumentCollectionSize {
         }
     }
 
-        public static long getCollectionSize() {
+    public static long getCollectionSize(int i) {
         return collectionSize;
     }
 
@@ -56,5 +56,11 @@ public class DocumentCollectionSize {
     public static void updateVocabularySize(long vocSize, String collectionStatisticsPath) {
         vocabularySize = vocSize;
         writeFile(collectionStatisticsPath);
+    }
+
+    public static boolean updateStatistics(int documentId, int documentsLength, String collectionStatisticsPath) {
+        collectionSize = documentId;
+        totalDocumentLen = documentsLength;
+        return writeFile(collectionStatisticsPath);
     }
 }

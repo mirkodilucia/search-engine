@@ -159,4 +159,12 @@ public class Config implements Serializable {
     public void setCollectionStatisticsPath(String collectionStatisticsPath) {
         this.collectionStatisticsPath = collectionStatisticsPath;
     }
+
+    public boolean isStemStopRemovalEnabled() {
+        return this.removeStopwords;
+    }
+
+    public boolean isDebugEnabled() {
+        return this.debugDir != null;
+    }
 }

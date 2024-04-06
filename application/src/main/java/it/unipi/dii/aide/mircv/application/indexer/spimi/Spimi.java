@@ -17,22 +17,13 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.InvalidPathException;
 import java.io.IOException;
 import java.util.stream.Collectors;
-import java.io.*;
 import java.io.BufferedReader;
-import java.io.IOException;
 
 import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
-public class Spimi {
+public class Spimi implements SpimiListener {
 
     private static long MEMORY_LIMIT = 0;
 
@@ -42,7 +33,11 @@ public class Spimi {
     private long numPostings = 0;
 
     //configuration
-    private Config config;
+    private final Config config;
+
+    boolean allDocumentsProcessed = false;
+    int documentsLength = 0;
+    int documentId = 1;
 
     private Spimi(Config config) {
         this.config = config;
@@ -56,13 +51,27 @@ public class Spimi {
         int numIndexes = 0;
 
         try (BufferedReader bufferReader = initBuffer(config.isCompressionEnabled())) {
-            boolean allDocumentsProcessed = false;
-            int documentId = 1;
-            int documentsLength = 0;
             boolean writeResult = false;
 
+            while (!allDocumentsProcessed) {
+                HashMap<String, PostingList> index = spimiIteration(bufferReader, documentId);
+                writeResult = saveIndexToDisk(index, config.isDebugEnabled());
 
+                if (!writeResult) {
+                    System.out.println("Couldn't write index to disk.");
+                    cleanup();
+                    return -1;
+                }
+            }
 
+            if(!DocumentCollectionSize.updateStatistics(documentId - 1,
+                    documentsLength,
+                    config.getCollectionStatisticsPath())){
+                System.out.println("Couldn't update collection statistics.");
+                return 0;
+            }
+
+            return numIndexes;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -70,26 +79,58 @@ public class Spimi {
         return numIndexes;
     }
 
-    private HashMap<String, PostingList> spimiIteration(BufferedReader bufferedReader) throws IOException {
-        boolean allDocumentsProcessed = false;
+    private HashMap<String, PostingList> spimiIteration(BufferedReader bufferedReader,
+                                                        int documentId) throws IOException {
+
         HashMap<String, PostingList> index = new HashMap<>();
-            while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
-                String line;
+        while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+            String line;
 
-                if ((line = bufferedReader.readLine()) == null) {
-                    // TODO: Impostare il listener
-                    allDocumentsProcessed = true;
-                    break;
-                }
+            if ((line = bufferedReader.readLine()) == null) {
+                onSpimiFinished();
+                break;
+            }
 
-                if (line.isBlank()) {
+            if (line.isBlank()) {
+                continue;
+            }
+
+            String[] fields = line.split("\t");
+
+            InitialDocument intialDocument = new InitialDocument(config, fields[0], fields[1].replaceAll("[^\\x00-\\x7F]", ""));
+            FinalDocument finalDocument = intialDocument.processDocument();
+            if (finalDocument.getTokens().isEmpty())
+                continue;
+
+            int documentsLength = finalDocument.getTokens().size();
+            DocumentIndexEntry documentIndexEntry = new DocumentIndexEntry(
+                    finalDocument.getPid(),
+                    documentId,
+                    documentsLength
+            );
+
+            // Send the document to the indexer
+            this.updateDocumentLength(documentIndexEntry.getDocumentLenght());
+            documentIndexEntry.writeFile();
+            // TODO: if (config.isDebugEnabled()) documentIndexEntry.debugWriteToDisk("docIndex.txt");
+
+            for (String term: finalDocument.getTokens()) {
+                if (term.isBlank() || term.isEmpty()) {
                     continue;
                 }
 
-                String[] fields = line.split("\t");
+                PostingList postingList;
+                if (!index.containsKey(term)) {
+                    postingList = new PostingList(config, term);
+                    index.put(term, postingList);
+                    continue;
+                }
 
-                TextDocument document = new TextDocument(fields[0], fields[1].replaceAll("[^\\x00-\\x7F]", ""));
+                postingList = index.get(term);
+                updateOrAddPosting(documentId, postingList);
+                postingList.updateBM25Parameters(documentsLength, postingList.getPostings().size());
             }
+        }
         return index;
     }
 
@@ -191,8 +232,6 @@ public class Spimi {
             numPostings = 0;
             return true;
 
-
-
         } catch (InvalidPathException e) {
             System.out.println("Path Error " + e);
             return false;
@@ -202,13 +241,38 @@ public class Spimi {
         }
     }
 
+    /**
+     * Function that searched for a given docid in a posting list.
+     * If the document is already present it updates the term frequency for that
+     * specific document, if that's not the case creates a new pair (docid,freq)
+     * in which frequency is set to 1 and adds this pair to the posting list
+     *
+     * @param docId:       docid of a certain document
+     * @param postingList: posting list of a given term
+     **/
+    protected void updateOrAddPosting(int docId, PostingList postingList) {
+        if (!postingList.getPostings().isEmpty()) {
+            // last document inserted:
+            Posting posting = postingList.getPostings().get(postingList.getPostings().size() - 1);
+            //If the docId is the same I update the posting
+            if (docId == posting.getDocId()) {
+                posting.setFrequency(posting.getFrequency() + 1);
+                return;
+            }
+        }
 
+        // the document has not been processed (docIds are incremental):
+        // create new pair and add it to the posting list
+        postingList.getPostings().add(new Posting(docId, 1));
+
+        //increment the number of postings
+        numPostings++;
+    }
 
     /**
      * cleaning directories containing partial data structures and document Index file
      */
     private void cleanup(){
-
         FileUtils.deleteFolder(config.getDocumentIndexPath());
         FileUtils.deleteFolder(config.getFrequencyFolder());
         FileUtils.deleteFolder(config.getPartialVocabularyFolder());
@@ -220,4 +284,22 @@ public class Spimi {
         return new Spimi(config);
     }
 
+    @Override
+    public void updateDocumentId(String pid) {
+        documentId++;
+
+        if((documentId % 1000000) == 0){
+            System.out.println("at docid: "+ documentId);
+        }
+    }
+
+    @Override
+    public void updateDocumentLength(int length) {
+        documentsLength += length;
+    }
+
+    @Override
+    public void onSpimiFinished() {
+        this.allDocumentsProcessed = true;
+    }
 }
