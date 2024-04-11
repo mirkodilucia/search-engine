@@ -12,6 +12,11 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
         super();
     }
 
+    /**
+     * Method used to instantiate the singleton object
+     *
+     * @return the singleton object
+     */
     public static DocumentIndexTable with(Config config) {
         configuration = config;
 
@@ -26,7 +31,7 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
     }
 
     public void load() {
-        long numDocuments = DocumentCollectionSize.getCollectionSize(documentId - 1);
+        long numDocuments = DocumentCollectionSize.getCollectionSize();
 
         for(int i = 0; i < numDocuments; i++) {
             DocumentIndexEntry entry = new DocumentIndexEntry(configuration.getDocumentIndexPath());

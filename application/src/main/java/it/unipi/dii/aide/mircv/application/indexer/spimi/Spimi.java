@@ -33,13 +33,13 @@ public class Spimi implements SpimiListener {
     private long numPostings = 0;
 
     //configuration
-    private final Config config;
+    protected final Config config;
 
     boolean allDocumentsProcessed = false;
     int documentsLength = 0;
     int documentId = 1;
 
-    private Spimi(Config config) {
+    protected Spimi(Config config) {
         this.config = config;
         numIndexes = 0;
         DocumentIndexEntry.reset();

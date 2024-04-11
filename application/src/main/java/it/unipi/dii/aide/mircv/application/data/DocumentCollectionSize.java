@@ -41,7 +41,7 @@ public class DocumentCollectionSize {
         }
     }
 
-    public static long getCollectionSize(int i) {
+    public static long getCollectionSize() {
         return collectionSize;
     }
 
