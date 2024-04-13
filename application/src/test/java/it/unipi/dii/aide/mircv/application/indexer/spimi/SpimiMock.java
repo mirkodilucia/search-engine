@@ -94,6 +94,41 @@ public class SpimiMock extends Spimi {
         }
     }
 
+    public  HashMap<String, PostingList> executeSpimiInMemory(ArrayList<FinalDocument> testDocuments) {
+        HashMap<String, PostingList> index = new HashMap<>();
+        int docId = 0;
+        int documentLength = 0;
+
+        for (FinalDocument doc : testDocuments) {
+
+            for (String token : doc.getTokens())
+            {
+                PostingList posting;
+                // create new posting list if term wasn't present yet
+                if (!index.containsKey(token)) {
+                    posting = new PostingList(config, token);
+                    index.put(token, posting);
+                }
+                else {
+                    //if already present get the posting list
+                    posting = index.get(token);
+                }
+                documentLength += doc.getTokens().size();
+                updateOrAddPosting(docId, posting);
+                posting.updateBM25Parameters(documentLength, posting.getPostings().size());
+                posting.debugSaveToDisk("docSpimiMock", "freqSpimiMock", posting.getPostings().size());
+
+            }
+            docId++;
+        }
+        index = index.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        return index;
+    }
+
 
 
 
