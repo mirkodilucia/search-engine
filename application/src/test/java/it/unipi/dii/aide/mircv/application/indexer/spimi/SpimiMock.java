@@ -3,13 +3,10 @@ package it.unipi.dii.aide.mircv.application.indexer.spimi;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.*;
 import it.unipi.dii.aide.mircv.application.indexer.FileChannelUtils;
-import it.unipi.dii.aide.mircv.application.indexer.spimi.Spimi;
 
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class SpimiMock extends Spimi {
 
-       protected SpimiMock(Config config) {
+    protected SpimiMock(Config config) {
         super(config);
     }
 
@@ -37,9 +34,11 @@ public class SpimiMock extends Spimi {
         return documentIndexTable;
     }
 
+    public static SpimiMock with(Config config) {
+        return new SpimiMock(config);
+    }
+
     public Vocabulary buildVocabulary(HashMap<String, PostingList> index) {
-
-
         try (
                 FileChannel docsFchan = FileChannelUtils.openFileChannel(config.getPartialIndexDocsPath(0),
                         StandardOpenOption.WRITE,
@@ -52,7 +51,6 @@ public class SpimiMock extends Spimi {
                         StandardOpenOption.CREATE);
         ) {
             Vocabulary vocabulary = Vocabulary.with(config.getPartialVocabularyPath(0));
-
 
             int countPostings = 0;
             for (PostingList postingList : index.values()) {
@@ -128,8 +126,4 @@ public class SpimiMock extends Spimi {
 
         return index;
     }
-
-
-
-
 }

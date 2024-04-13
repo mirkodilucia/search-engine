@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class VocabularyEntry
 {
-    private static String BLOCK_DESCRIPTORS_PATH = "../test/data/blockDescriptorsTest";
+    private static String BLOCK_DESCRIPTORS_PATH;
     private String term;
     private int documentFrequency;
     private double inverseDocumentFrequency;
@@ -179,7 +179,9 @@ public class VocabularyEntry
         this.maxTfIdf = maxTfIdf;
     }
 
-    public VocabularyEntry(String blockDescriptorsPath){}
+    public VocabularyEntry(String blockDescriptorsPath){
+        BLOCK_DESCRIPTORS_PATH = blockDescriptorsPath;
+    }
     public VocabularyEntry(String term, String blockDescriptorsPath){
         BLOCK_DESCRIPTORS_PATH = blockDescriptorsPath;
         this.term = term;

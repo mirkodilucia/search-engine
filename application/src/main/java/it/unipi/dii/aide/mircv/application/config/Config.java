@@ -95,6 +95,7 @@ public class Config implements Serializable {
     public String getDocumentIndexPath() {
         return this.documentIndexPath;
     }
+    public void setDocumentIndexPath(String documentIndexPath) { this.documentIndexPath = documentIndexPath; }
 
     public String getRawCollectionPath() {
         return this.rawCollectionPath;
@@ -166,5 +167,18 @@ public class Config implements Serializable {
 
     public boolean isDebugEnabled() {
         return this.debugDir != null;
+    }
+
+    public void setDocumentFreqPath(String documentFrequencyPath, String documentFrequencyFileName) {
+        this.frequencyDir = documentFrequencyPath;
+        this.frequencyFileName = documentFrequencyFileName;
+    }
+
+    public void setDocumentIdFolder(String documentIdFolder) {
+        this.docIdsDir = documentIdFolder;
+    }
+
+    public void setDocumetIdsFileName(String documentIndex) {
+        this.docIdsFileName = documentIndex;
     }
 }

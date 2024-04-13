@@ -26,7 +26,7 @@ public class BlockDescriptorTest {
     @BeforeAll
     static void setTestPaths() {
         config = new Config();
-        VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptorsTest");
+        VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptor/blockDescriptorsTest");
     }
 
     // Test for a single descriptor block
@@ -39,7 +39,7 @@ public class BlockDescriptorTest {
             list.getPostings().add(posting);
         }
         // update block information
-        VocabularyEntry voc = new VocabularyEntry("../test/data/blockDescriptorsTest");
+        VocabularyEntry voc = new VocabularyEntry("../test/data/blockDescriptor/blockDescriptorsTest");
         voc.updateValues(list);
         voc.computeBlocksInformation();
 
@@ -48,7 +48,7 @@ public class BlockDescriptorTest {
 
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get("../test/data/blockDescriptorsTest"),
+                        Paths.get("../test/data/blockDescriptor/blockDescriptorsTest"),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -86,7 +86,7 @@ public class BlockDescriptorTest {
             list.getPostings().add(posting);
         }
         // update block information
-        VocabularyEntry voc = new VocabularyEntry("test");
+        VocabularyEntry voc = new VocabularyEntry("../test/data/blockDescriptor/blockDescriptorsTest");
         voc.updateValues(list);
         voc.computeBlocksInformation();
 
@@ -105,7 +105,7 @@ public class BlockDescriptorTest {
         Iterator<Posting> plIterator = list.getPostings().iterator();
         try (
                 FileChannel descriptorChan = (FileChannel) Files.newByteChannel(
-                        Paths.get("../test/data/blockDescriptorsTest"),
+                        Paths.get("../test/data/blockDescriptor/blockDescriptorsTest"),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -174,6 +174,6 @@ public class BlockDescriptorTest {
     // Removing the file created during tests
     @AfterAll
     static void removeFile() {
-        FileUtils.removeFile("src/test/data/blockDescriptorsTest");
+        FileUtils.removeFile("../test/data/blockDescriptor/blockDescriptorsTest");
     }
 }

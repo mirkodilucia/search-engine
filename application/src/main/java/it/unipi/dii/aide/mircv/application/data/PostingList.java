@@ -190,15 +190,15 @@ public class PostingList {
 
     // Method to write the posting list as plain text in debug files
     public void debugSaveToDisk(String docidsPath, String freqsPath, int maxPostingsPerBlock) {
-        FileUtils.createFolder("data/debug");
-        FileUtils.createFolder("data/debug/" + docidsPath);
-        FileUtils.createFolder("data/debug/" + freqsPath);
-        FileUtils.createFolder("data/debug/completeList.txt");
+        //FileUtils.createFolder("../test/data/debug");
+        //FileUtils.createFolder("../test/data/debug/" + docidsPath);
+        //FileUtils.createFolder("../test/data/debug/" + freqsPath);
+        //FileUtils.createFolder("../test/data/debug/completeList.txt");
 
         try {
-            BufferedWriter writerDocids = new BufferedWriter(new FileWriter("data/debug/" + docidsPath, true));
-            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter("data/debug/" + freqsPath, true));
-            BufferedWriter all = new BufferedWriter(new FileWriter("data/debug/completeList.txt", true));
+            BufferedWriter writerDocids = new BufferedWriter(new FileWriter("../test/data/debug/" + docidsPath, true));
+            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter("../test/data/debug/" + freqsPath, true));
+            BufferedWriter all = new BufferedWriter(new FileWriter("../test/data/debug/completeList.txt", true));
             String[] postingInfo = toStringPosting();
             int postingsPerBlock = 0;
             for (Posting p : postings) {
