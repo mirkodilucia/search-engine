@@ -12,6 +12,7 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
         super();
     }
 
+
     /**
      * Method used to instantiate the singleton object
      *
@@ -30,7 +31,7 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
         DocumentIndexEntry entry = new DocumentIndexEntry(documentId, docidId, docLen);
     }
 
-    public void load() {
+    public boolean load() {
         long numDocuments = DocumentCollectionSize.getCollectionSize();
 
         for(int i = 0; i < numDocuments; i++) {
@@ -38,7 +39,10 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
             if (entry.readFile((long) i * DocumentIndexEntry.ENTRY_SIZE)) {
                 this.put(entry.getDocumentId(), entry);
             }
+            else
+                return false;
         }
+        return true;
 
     }
 }

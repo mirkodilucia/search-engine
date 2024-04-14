@@ -70,14 +70,14 @@ public class CommandLine {
         String[] documents = new String[]{};
         if (CommandParser.isConjunctiveMode(queryParams)) {
             String mode = askForScoringFunction();
-            //documents = QueryProcesser.processConjuntiveQuery(queryParams[0], k, scoringFunction);
+            //documents = QueryProcesser.processConjunctiveQuery(queryParams[0], k, scoringFunction);
             showDocumentsResults(documents);
             return true;
         }
 
         if (CommandParser.isDisjunctiveMode(queryParams)) {
             String mode = askForScoringFunction();
-            //documents = QueryProcesser.processDisjuntiveQuery(queryParams[0], k, scoringFunction);
+            //documents = QueryProcesser.processDisjunctiveQuery(queryParams[0], k, scoringFunction);
             showDocumentsResults(documents);
             return true;
         }
