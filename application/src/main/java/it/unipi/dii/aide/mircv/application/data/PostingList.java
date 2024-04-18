@@ -157,7 +157,7 @@ public class PostingList {
     }
 
     // Method to retrieve the first posting with docid greater or equal than the specified docid
-    public Posting nextGEQ(int docId, Config config) {
+    public Posting selectPostingScoreIterator(int docId, Config config) {
         boolean blockChanged = false;
         while (currentBlock == null || currentBlock.getMaxDocid() < docId) {
             if (!blocksIterator.hasNext()) {

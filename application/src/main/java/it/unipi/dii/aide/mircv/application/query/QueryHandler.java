@@ -147,9 +147,9 @@ public class QueryHandler {
         }
         PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;
         if(config.MaxScoreEnabled())
-            priorityQueue = DAAT.scoreConjunctiveQuery(queryPosting, kDoc, scoringFunction);
+            priorityQueue = DAAT.scoreDisonjunctiveQuery(queryPosting, kDoc, scoringFunction);
         else
-            priorityQueue = MaxScore.scoreConjunctiveQuery(queryPosting, kDoc, scoringFunction);
+            priorityQueue = MaxScore.scoreDisjunctiveQuery(queryPosting, kDoc, scoringFunction);
 
         return retrieveKPid(priorityQueue, kDoc);
     }
