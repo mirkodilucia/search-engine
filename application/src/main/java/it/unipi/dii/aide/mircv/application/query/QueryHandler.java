@@ -2,13 +2,14 @@ package it.unipi.dii.aide.mircv.application.query;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.*;
-import it.unipi.dii.aide.mircv.application.preprocessor.PreProcessor;
+import it.unipi.dii.aide.mircv.application.query.scorer.DAAT;
+import it.unipi.dii.aide.mircv.application.query.scorer.MaxScore;
+import it.unipi.dii.aide.mircv.application.query.scorer.Mode;
+import it.unipi.dii.aide.mircv.application.query.scorer.ScoreFunction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.stream.Collectors;
 
 public class QueryHandler {
 
@@ -26,10 +27,20 @@ public class QueryHandler {
         this.config = config;
 
         documentIndex = DocumentIndexTable.with(config);
-
     }
 
+    public static QueryHandler with(Config config) {
+        return new QueryHandler(config);
+    }
 
+    public boolean setup() {
+        // load the document index
+        if (!documentIndex.load())
+            return false;
+
+        return !documentIndex.isEmpty();
+
+    }
 
     /**
      * load from disk the posting lists of the query tokens related to the conjunctive query type
@@ -114,32 +125,18 @@ public class QueryHandler {
      */
     public String[] processConjunctiveQuery(String query, int kDoc, String scoringFunction)
     {
-        FinalDocument queryDoc = new InitialDocument(config, "0", query).processDocument();
-        ArrayList<PostingList> queryPosting = getConjunctiveQueryPosting(queryDoc);
 
-        if (queryPosting == null|| queryPosting.isEmpty()) {
-            return null;
-        }
-        PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;
-        if(config.MaxScoreEnabled())
-            priorityQueue = DAAT.scoreConjunctiveQuery(queryPosting, kDoc, scoringFunction);
-        else
-            priorityQueue = MaxScore.scoreConjunctiveQuery(queryPosting, kDoc, scoringFunction);
-
-        return retrieveKPid(priorityQueue, kDoc);
     }
 
     /**
      * Processes a disjunctive query, computing the score for each document and returning the top-k documents
-     * @param query The query string
-     * @param kDoc number of documents to retrieve
-     * @param scoringFunction specifies which scoring function should be used to process the query ("tfidf" or "bm25")
+     * @param queryParam The query string
+     * @param k number of documents to retrieve
+     * @param scoreFunction specifies which scoring function should be used to process the query ("tfidf" or "bm25")
      * @return an array with the top-k document pids
      */
-
-    public String[] processDisjunctiveQuery(String query, int kDoc, String scoringFunction)
-    {
-        FinalDocument queryDoc = new InitialDocument(config, "0", query).processDocument();
+    public String[] processQuery(String queryParam, int k, Mode mode, ScoreFunction scoreFunction) {
+        FinalDocument queryDoc = new InitialDocument(config, "0", queryParam).processDocument();
         ArrayList<PostingList> queryPosting = getConjunctiveQueryPosting(queryDoc);
 
         if (queryPosting == null|| queryPosting.isEmpty()) {
@@ -147,27 +144,10 @@ public class QueryHandler {
         }
         PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;
         if(config.MaxScoreEnabled())
-            priorityQueue = DAAT.scoreDisonjunctiveQuery(queryPosting, kDoc, scoringFunction);
+            priorityQueue = DAAT.with(config, mode, scoreFunction).scoreQuery(queryPosting, k);
         else
-            priorityQueue = MaxScore.scoreDisjunctiveQuery(queryPosting, kDoc, scoringFunction);
+            priorityQueue = MaxScore.with(config, mode, scoreFunction).scoreQuery(queryPosting, k);
 
-        return retrieveKPid(priorityQueue, kDoc);
+        return retrieveKPid(priorityQueue, k);
     }
-
-    public boolean setup() {
-
-        // load the document index
-        if (!documentIndex.load())
-            return false;
-
-        return !documentIndex.isEmpty();
-
-
-    }
-
-
-
-
-
-
 }

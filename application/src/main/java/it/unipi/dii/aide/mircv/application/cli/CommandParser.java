@@ -32,7 +32,7 @@ public class CommandParser {
     }
 
     public static boolean isConjunctiveMode(String[] queryParams) {
-        return queryParams[1].equals("c");
+        return queryParams[1].equals("c") ;
     }
 
     public static boolean isDisjunctiveMode(String[] queryParams) {

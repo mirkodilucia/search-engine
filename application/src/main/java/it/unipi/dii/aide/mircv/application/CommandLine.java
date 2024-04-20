@@ -2,15 +2,33 @@ package it.unipi.dii.aide.mircv.application;
 
 import java.util.Scanner;
 import it.unipi.dii.aide.mircv.application.cli.CommandParser;
+import it.unipi.dii.aide.mircv.application.config.Config;
+import it.unipi.dii.aide.mircv.application.config.ConfigLoader;
+import it.unipi.dii.aide.mircv.application.query.QueryHandler;
+import it.unipi.dii.aide.mircv.application.query.scorer.Mode;
+import it.unipi.dii.aide.mircv.application.query.scorer.ScoreFunction;
 
 public class CommandLine {
 
+    /**
+     * integer defining the top documents to return
+     */
+    private static final int k = 10;
+
+    private static Config config;
     private static Scanner scanner;
+    private static QueryHandler queryHandler;
 
     public static void main(String[] args) {
         System.out.println("****** SEARCH ENGINE ******");
         System.out.println("Starting...");
         //check if setup of data structures was successful
+
+        config = ConfigLoader.load();
+
+        queryHandler = QueryHandler.with(config);
+        queryHandler.setup();
+
         //boolean setupSuccess = QueryProcesser.setupProcesser();
 
         /*
@@ -69,15 +87,15 @@ public class CommandLine {
     private static boolean processQuery(String[] queryParams) {
         String[] documents = new String[]{};
         if (CommandParser.isConjunctiveMode(queryParams)) {
-            String mode = askForScoringFunction();
-            //documents = QueryProcesser.processConjunctiveQuery(queryParams[0], k, scoringFunction);
+            ScoreFunction scoreFunction = askForScoringFunction();
+            documents = queryHandler.processQuery(queryParams[0], k, Mode.CONJUNCTIVE, scoreFunction);
             showDocumentsResults(documents);
             return true;
         }
 
         if (CommandParser.isDisjunctiveMode(queryParams)) {
-            String mode = askForScoringFunction();
-            //documents = QueryProcesser.processDisjunctiveQuery(queryParams[0], k, scoringFunction);
+            ScoreFunction scoreFunction = askForScoringFunction();
+            documents = queryHandler.processQuery(queryParams[0], k, Mode.DISJUNCTIVE, scoreFunction);
             showDocumentsResults(documents);
             return true;
         }
@@ -98,16 +116,16 @@ public class CommandLine {
         }
     }
 
-    private static String askForScoringFunction() {
+    private static ScoreFunction askForScoringFunction() {
         System.out.println("Which scoring function would you like to apply?\nType tfidf or bm25");
         String response = scanner.nextLine();
 
         if (CommandParser.isTfIdfScoring(response)) {
-            return "tfidf";
+            return ScoreFunction.TFIDF;
         }
 
         if (CommandParser.isBM25Scoring(response)) {
-            return "bm25";
+            return ScoreFunction.BM25;
         }
 
         System.out.println("Invalid scoring function. Please try again.");
