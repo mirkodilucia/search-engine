@@ -16,8 +16,8 @@ public class MaxScore extends Scorer {
         super(config, mode, scoreFunction);
     }
 
-    public static DAAT with(Config config, Mode mode, ScoreFunction scoreFunction) {
-        return null;
+    public static MaxScore with(Config config, Mode mode, ScoreFunction scoreFunction) {
+        return new MaxScore(config, mode, scoreFunction);
     }
 
     /**

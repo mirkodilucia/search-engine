@@ -28,7 +28,6 @@ public class DAAT extends Scorer {
             postingList.next(config);
         }
 
-
     }
 
 

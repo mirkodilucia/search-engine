@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
     <removeStopwords>true</removeStopwords>
+    <maxScoreEnabled>true</maxScoreEnabled>
     <datasetPath>resources/dataset/</datasetPath>
     <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
     <stopwordsPath>resources/stopwords.dat</stopwordsPath>

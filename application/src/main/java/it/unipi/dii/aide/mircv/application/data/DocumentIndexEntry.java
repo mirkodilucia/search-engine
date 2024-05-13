@@ -14,7 +14,8 @@ public class DocumentIndexEntry {
     public static final int ENTRY_SIZE = DOC_ID_SIZE + 4 + 4;
     private static String DOCUMENT_INDEX_PATH;
 
-    private String pid;
+    private String pId;
+
     private int documentId;
     private int documentLength;
     private static long memoryOffset = 0;
@@ -23,8 +24,8 @@ public class DocumentIndexEntry {
         DOCUMENT_INDEX_PATH = documentIndexPath;
     }
 
-    public DocumentIndexEntry(String pid, int documentId, int documentLength) {
-        this.pid = pid;
+    public DocumentIndexEntry(String pId, int documentId, int documentLength) {
+        this.pId = pId;
         this.documentId = documentId;
         this.documentLength = documentLength;
     }
@@ -50,8 +51,8 @@ public class DocumentIndexEntry {
 
             CharBuffer cb = CharBuffer.allocate(DOC_ID_SIZE);
 
-            for (int i = 0; i < this.pid.length(); i++) {
-                cb.put(i, this.pid.charAt(i));
+            for (int i = 0; i < this.pId.length(); i++) {
+                cb.put(i, this.pId.charAt(i));
             }
 
             mbb.put(StandardCharsets.UTF_8.encode(cb));
@@ -85,7 +86,7 @@ public class DocumentIndexEntry {
             if (cb.toString().split("\0").length == 0)
                 return true;
 
-            this.pid = cb.toString().split("\0")[0];
+            this.pId = cb.toString().split("\0")[0];
 
             // Instantiate the buffer for reading other information
             mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset + DOC_ID_SIZE, ENTRY_SIZE - DOC_ID_SIZE);
@@ -106,7 +107,11 @@ public class DocumentIndexEntry {
 
     @Override
     public String toString() {
-        return "document:" + this.documentId + ":pid:" + this.pid + ":len:" + this.documentLength;
+        return "document:" + this.documentId + ":pid:" + this.pId + ":len:" + this.documentLength;
+    }
+
+    public String getPId() {
+        return pId;
     }
 
     public int getDocumentId() {

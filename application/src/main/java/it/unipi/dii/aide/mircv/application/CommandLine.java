@@ -26,9 +26,6 @@ public class CommandLine {
 
         config = ConfigLoader.load();
 
-        queryHandler = QueryHandler.with(config);
-        queryHandler.setup();
-
         //boolean setupSuccess = QueryProcesser.setupProcesser();
 
         /*
@@ -88,6 +85,10 @@ public class CommandLine {
         String[] documents = new String[]{};
         if (CommandParser.isConjunctiveMode(queryParams)) {
             ScoreFunction scoreFunction = askForScoringFunction();
+
+            queryHandler = QueryHandler.with(config, Mode.CONJUNCTIVE, scoreFunction);
+            queryHandler.setup();
+
             documents = queryHandler.processQuery(queryParams[0], k, Mode.CONJUNCTIVE, scoreFunction);
             showDocumentsResults(documents);
             return true;
@@ -95,6 +96,10 @@ public class CommandLine {
 
         if (CommandParser.isDisjunctiveMode(queryParams)) {
             ScoreFunction scoreFunction = askForScoringFunction();
+
+            queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE, scoreFunction);
+            queryHandler.setup();
+
             documents = queryHandler.processQuery(queryParams[0], k, Mode.DISJUNCTIVE, scoreFunction);
             showDocumentsResults(documents);
             return true;

@@ -5,7 +5,9 @@ import java.io.Serializable;
 public class Config implements Serializable {
 
     private boolean removeStopwords;
+    private boolean maxScoreEnabled;
     private String datasetPath;
+
     private String rawCollectionPath;
     private String compressedCollectionPath;
     private String stopwordsPath;
@@ -180,5 +182,22 @@ public class Config implements Serializable {
 
     public void setDocumetIdsFileName(String documentIndex) {
         this.docIdsFileName = documentIndex;
+    }
+
+    public void setMaxScoreEnabled(boolean maxScoreEnabled) {
+        this.maxScoreEnabled = maxScoreEnabled;
+    }
+
+    public boolean isMaxScoreEnabled() {
+        return this.maxScoreEnabled;
+    }
+
+    public void setCompression(boolean compression) {
+        this.compressionEnabled = compression;
+    }
+
+
+    public void setStemStopRemoval(boolean stemStopRemoval) {
+        this.removeStopwords = stemStopRemoval;
     }
 }

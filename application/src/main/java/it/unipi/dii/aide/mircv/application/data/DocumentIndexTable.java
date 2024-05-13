@@ -43,7 +43,6 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
                 return false;
         }
         return true;
-
     }
 
     public int getDocumentLength(int docId) {
