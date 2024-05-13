@@ -5,6 +5,7 @@ import it.unipi.dii.aide.mircv.application.data.Posting;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
 import it.unipi.dii.aide.mircv.application.data.Vocabulary;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -30,15 +31,133 @@ public class MaxScore extends Scorer {
         }
     }
 
-    //TODO:get non essential skipping
 
+    /** method to process with MaxScore algorithm a list of posting list of the query terms
+     * @param queryPostings: list of postings of query terms
+     * @param k: number of top k documents to be returned
+     * @return returns a priority queue (of at most K elements) in the format <SCORE (Double), DOCID (Integer)> ordered by increasing score value
+     */
+    public PriorityQueue<Map.Entry<Double, Integer>> scoreQuery(ArrayList<PostingList> queryPostings, int k)
+    {
+        initializeList(queryPostings);
+
+        PriorityQueue<Map.Entry<Double, Integer>> topKDocuments = new PriorityQueue<>(k, Map.Entry.comparingByKey());
+
+        ArrayList<Map.Entry<PostingList, Double>> sortedLists = sortPostingListsByTerms(queryPostings);
+
+        double threshold = -1;
+
+        boolean newThresholdFound = true;
+
+        int firstEssentialPostingListIndex = 0;
+
+        while(true)
+        {
+            double partialScore, documentUpperBound;
+            double nonEssentialPartialScoreUpperBound = 0;
+
+            if(newThresholdFound)
+            {
+                firstEssentialPostingListIndex = getFirstEssentialPostingListIndex(sortedLists, threshold);
+
+                if(firstEssentialPostingListIndex == -1)
+                    break;
+            }
+
+            int nextDoc = findNextDoc(sortedLists, firstEssentialPostingListIndex);
+
+            if(nextDoc == -1)
+                break;
+
+            if(this.MODE == Mode.CONJUNCTIVE)
+            {
+                nextDoc = movePostingScoreIterator(sortedLists, nextDoc);
+                if(nextDoc == -1)
+                    break;
+            }
+
+            partialScore = getPartialScore(sortedLists, firstEssentialPostingListIndex, nextDoc);
+
+            for(int i=0; i<firstEssentialPostingListIndex; i++)
+            {
+                if(sortedLists.get(i) != null)
+                    nonEssentialPartialScoreUpperBound += sortedLists.get(i).getValue();
+            }
+
+            documentUpperBound = partialScore + nonEssentialPartialScoreUpperBound;
+
+            if(documentUpperBound > threshold)
+            {
+                double nonEssentialScores = getNonEssentialPartialScore(sortedLists, firstEssentialPostingListIndex, nextDoc);
+
+                documentUpperBound = documentUpperBound - nonEssentialPartialScoreUpperBound + nonEssentialScores;
+
+                // check if the document can enter the MinHeap
+                if(documentUpperBound > threshold)
+                {
+                    if (topKDocuments.size() == k)
+                    {
+                        topKDocuments.poll();
+                    }
+
+                    topKDocuments.add(new AbstractMap.SimpleEntry<>(documentUpperBound, nextDoc));
+
+                    if(topKDocuments.size() == k)
+                    {
+                        threshold = documentUpperBound;
+                    }
+                }
+
+                // check if current threshold has been updated or not
+                newThresholdFound = (threshold == documentUpperBound);
+
+
+            }
+        }
+        clean(queryPostings);
+        return topKDocuments;
+    }
+
+
+
+
+    /**
+     * method to score the documents in the posting lists given as input for NON essential
+     *
+     */
+    private double getNonEssentialPartialScore(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstNonEssentialPostingListIndex, int documentToProcess)
+    {
+        double nonEssentialPartialScore = 0;
+
+        for(int i=0; i<firstNonEssentialPostingListIndex; i++)
+        {
+            PostingList currentPostingList = sortedLists.get(i).getKey();
+            Posting currentPosting = currentPostingList.getCurrentPosting();
+
+
+            if(currentPosting != null)
+            {
+                if(currentPosting.getDocId() == documentToProcess)
+                {
+                    double idf = Vocabulary.with(config.getPathToVocabulary()).get(currentPostingList.getTerm()).getInverseDocumentFrequency();
+                    nonEssentialPartialScore += this.scoreDocument(config, currentPosting, idf);
+                    currentPostingList.next(config);
+                }
+
+            }
+
+        }
+
+        return nonEssentialPartialScore;
+
+    }
 
     /**
      * given as input the posting lists sorted by term upper bound, the index of the first essential posting list,
      * and the docid of the document to be processed with DAAT, get the partial score of the document in the essential posting lists
      * @return partial score given by essential posting lists for doc with docid equal to docToProcess
      */
-    private double getPartialScore(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstEssentialPostingListIndex, int documentToProcess, String scoringFunction)
+    private double getPartialScore(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstEssentialPostingListIndex, int documentToProcess)
     {
         double partialScore = 0;
 
@@ -195,8 +314,6 @@ public class MaxScore extends Scorer {
 
         return new ArrayList<>(sortedPostingLists);
     }
-
-
 
 
 }
