@@ -41,6 +41,18 @@ public class DocumentCollectionSize {
         }
     }
 
+    public static void setCollectionSize(long collectionSize) {
+        DocumentCollectionSize.collectionSize = collectionSize;
+    }
+
+    public static void setVocabularySize(long vocabularySize) {
+        DocumentCollectionSize.vocabularySize = vocabularySize;
+    }
+
+    public static void setTotalDocumentLen(long totalDocumentLen) {
+        DocumentCollectionSize.totalDocumentLen = totalDocumentLen;
+    }
+
     public static long getCollectionSize() {
         return collectionSize;
     }

@@ -127,7 +127,10 @@ public class PostingList {
 
     // Method to open the posting list
     public void openList() {
-        blocks = Vocabulary.with(config.getPathToVocabulary()).get(term).readBlocks();
+        Vocabulary v = Vocabulary.with(config.getPathToVocabulary());
+        v.readFromDisk();
+        blocks = v.get(term).readBlocks();
+
         if (blocks == null) {
             return;
         }

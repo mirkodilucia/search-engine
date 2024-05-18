@@ -3,10 +3,11 @@ package it.unipi.dii.aide.mircv.application.query;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.application.data.Vocabulary;
+import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
 import it.unipi.dii.aide.mircv.application.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.application.query.scorer.Mode;
 import it.unipi.dii.aide.mircv.application.query.scorer.ScoreFunction;
-import it.unipi.dii.aide.mircv.application.utils.FileUtils;
+import it.unipi.dii.aide.mircv.application.data.DocumentCollectionSize;
 import it.unipi.dii.aide.mircv.application.query.scorer.MaxScore;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
 import org.junit.jupiter.api.AfterAll;
@@ -32,25 +33,30 @@ public class QueryHandlerTest
     @BeforeAll
     public static void setup() {
         config = new Config();
-        config.setPathToVocabulary("../test/data/queryHandler/vocabulary.txt");
+        config.setPathToVocabulary("../test/data/queryHandler/vocabulary");
         config.setPathToBlockDescriptors("../test/data/queryHandler/blockDescriptors");
         config.setDocumentIndexPath("../test/data/queryHandler/documentIndex");
         config.setPathToInvertedIndexDocs("../test/data/queryHandler/invertedIndexDocs");
         config.setPathToInvertedIndexFreq("../test/data/queryHandler/invertedIndexFreqs");
 
         docIndex = DocumentIndexTable.with(config);
+        VocabularyEntry.setBlockDescriptorsPath("../test/data/queryHandler/blockDescriptors");
     }
 
     @BeforeEach
-    public void initVocab(){
+    public void init() {
+        DocumentCollectionSize.setTotalDocumentLen(61);
+        DocumentCollectionSize.setCollectionSize(8);
+
         Vocabulary.unsetInstance();
         Vocabulary v = Vocabulary.with(config.getPathToVocabulary());
-        v.readFromDisk();
 
-        boolean success = v.readFromDisk();
-        assertTrue(success);
+        boolean vocabularyLoaded = v.readFromDisk();
+        assertTrue(vocabularyLoaded);
+
+        boolean tableLoaded = docIndex.load();
+        assertTrue(tableLoaded);
     }
-
 
     public Object[] reformatQueue(PriorityQueue<Map.Entry<Double, Integer>> queue) {
         //arraylist storing the result
@@ -60,7 +66,14 @@ public class QueryHandlerTest
         Object[] queueArray = queue.toArray();
 
         //populate array list
-        for (Object o : queueArray) returnList.add((AbstractMap.SimpleEntry<Double, Integer>) o);
+        try {
+            for (int i = 0; i < queueArray.length; i++)
+                returnList.add((AbstractMap.SimpleEntry<Double, Integer>) queueArray[i]);
+
+        }catch (ClassCastException e){
+            e.printStackTrace();
+        }
+
 
         //sort arraylist since there is no guarantee of order of priority queue after making it an array
         returnList.sort(Map.Entry.comparingByKey());
@@ -123,11 +136,11 @@ public class QueryHandlerTest
 
     @AfterAll
     static void cleanup() {
-        FileUtils.removeFile(config.getPathToVocabulary());
-        FileUtils.removeFile(config.getDocumentIndexPath());
-        FileUtils.removeFile(config.getPathToInvertedIndexDocs());
-        FileUtils.removeFile(config.getPathToInvertedIndexFreqs());
-        FileUtils.removeFile(config.getBlockDescriptorsPath());
+        //FileUtils.removeFile(config.getPathToVocabulary());
+        //FileUtils.removeFile(config.getDocumentIndexPath());
+        //FileUtils.removeFile(config.getPathToInvertedIndexDocs());
+        //FileUtils.removeFile(config.getPathToInvertedIndexFreqs());
+        //FileUtils.removeFile(config.getBlockDescriptorsPath());
     }
 
     public static Stream<Arguments> getBM25Parameters() {
@@ -159,15 +172,15 @@ public class QueryHandlerTest
 
         //postings for query "another example"
         ArrayList<PostingList> queryPostingsAnotherExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config), new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "another")}).toList());
 
         //postings for query "example"
         ArrayList<PostingList> queryPostingsExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example")}).toList());
 
         //postings for query "simple example"
         ArrayList<PostingList> queryPostingsSimpleExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config), new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
 
         return Stream.of(Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
                 Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25),
@@ -205,15 +218,15 @@ public class QueryHandlerTest
 
         //postings for query "another example"
         ArrayList<PostingList> queryPostingsAnotherExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config), new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "another")}).toList());
 
         //postings for query "example"
         ArrayList<PostingList> queryPostingsExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example")}).toList());
 
         //postings for query "simple example"
         ArrayList<PostingList> queryPostingsSimpleExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config), new PostingList(config)}).toList());
+                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
 
         return Stream.of(Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjTfidf),
                 Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisTfidf),

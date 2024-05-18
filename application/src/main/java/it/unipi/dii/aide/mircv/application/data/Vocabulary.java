@@ -76,7 +76,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position,VOCABULARY_PATH);
+            position = entry.readFromDisk(position, VOCABULARY_PATH);
 
             if(position == 0)
                 return  true;
@@ -102,8 +102,6 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
      * @return the vocabulary entry of given term, null if term is not in vocabulary
      **/
     public VocabularyEntry findEntry(String term){
-
-
         VocabularyEntry entry = new VocabularyEntry(); //entry to be returned
 
         long start = 0; //index of first element of vocabulary portion on which search is performed
@@ -147,7 +145,6 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
     /** needed for testing purposes
      */
     public static void clearCache() {
-
         entries.clear();
     }
 

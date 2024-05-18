@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv.application.data;
 
 
+import it.unipi.dii.aide.mircv.application.compression.UnaryCompressor;
 import it.unipi.dii.aide.mircv.application.compression.VariableByteCompressor;
 import it.unipi.dii.aide.mircv.application.config.Config;
 
@@ -140,8 +141,9 @@ public class BlockDescriptor {
                 freqBuffer.get(compressedFreqs, 0, freqSize);
 
                 // Decompressing docids and frequencies
-                int[] decompressedDocids = VariableByteCompressor.decode(compressedDocids);//, numPostings);
-                int[] decompressedFreqs = VariableByteCompressor.decode(compressedFreqs);//, numPostings);
+                int[] decompressedDocids = VariableByteCompressor.decode(compressedDocids, numPostings);//, numPostings);
+                int[] decompressedFreqs = UnaryCompressor.decode(compressedFreqs, numPostings);//, numPostings);
+                //int[] decompressedFreqs = VariableByteCompressor.decode(compressedFreqs, numPostings);//, numPostings);
 
                 // Populating the array list of postings with decompressed information
                 for (int i = 0; i < numPostings; i++) {

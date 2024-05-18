@@ -72,12 +72,13 @@ public class UnaryCompressor {
 
     /**
      * Method to decompress an array of bytes int an array of totNums integers using Unary compression algorithm
-     * @param toBeDecompressed: array of bytes to be decompressed
-     * @param totNums: total number of integers to be decompressed
+     * @param compressedFreqs: array of bytes to be decompressed
+     * @param numPostings: total number of integers to be decompressed
      * @return an array containing the decompressed integers
      */
-    public static int[] integerArrayDecompression(byte[] toBeDecompressed, int totNums){
-        int[] decompressedArray = new int[totNums];
+
+    public static int[] decode(byte[] compressedFreqs, int numPostings) {
+        int[] decompressedArray = new int[numPostings];
 
         int toBeReadedByte = 0;
         int toBeReadedBit = 0;
@@ -85,7 +86,7 @@ public class UnaryCompressor {
         int onesCounter = 0;
 
         // process each bit
-        for(int i=0; i<toBeDecompressed.length*8; i++){
+        for(int i=0; i<compressedFreqs.length*8; i++){
 
             // create a byte b where only the bit (i%8)-th is set
             byte b = 0b00000000;
@@ -94,7 +95,7 @@ public class UnaryCompressor {
             //System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
 
             // check if in the byte to be read the bit (i%8)-th is set to 1 or 0
-            if((toBeDecompressed[toBeReadedByte] & b)==0){
+            if((compressedFreqs[toBeReadedByte] & b)==0){
                 // i-th bit is set to 0
 
                 // writing the decompressed number in the array of the results
@@ -103,7 +104,7 @@ public class UnaryCompressor {
                 // the decompression of a new integer ends with this bit
                 nextInteger++;
 
-                if(nextInteger==totNums)
+                if(nextInteger==numPostings)
                     break;
 
                 // resetting the counter of ones for next integer
@@ -128,5 +129,4 @@ public class UnaryCompressor {
 
         return decompressedArray;
     }
-
 }

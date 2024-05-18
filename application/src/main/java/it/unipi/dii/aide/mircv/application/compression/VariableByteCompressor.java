@@ -32,32 +32,34 @@ public class VariableByteCompressor {
     }
 
     // Method to decode a byte array into an array of integers using Variable Byte compression
-    public static int[] decode(byte[] bytes) {
-        // Allocate space for the decoded numbers
-        int[] numbers = new int[bytes.length];
-        int i = 0;
+    public static int[] decode(byte[] bytes, int length) {
+        int[] decompressedArray = new int[length];
 
-        // Iterate through each byte in the input array
-        for (byte b : bytes) {
-            int number = 0;
-            int j = 0;
+        // integer that I'm processing
+        int decompressedNumber = 0;
 
-            // Decode the byte using Variable Byte compression
-            while (b < 0) {
-                number += (b % 128) * Math.pow(128, j);
-                b += 128;
-                j++;
+        // count of the processed numbers (used also as a pointer in the output array)
+        int alreadyDecompressed = 0;
+
+        for(byte elem: bytes){
+            if((elem & 0xff) < 128)
+                // not the termination byte, shift the actual number and insert the new byte
+                decompressedNumber = 128 * decompressedNumber + elem;
+            else{
+                // termination byte, remove the 1 at the MSB and then append the byte to the number
+                decompressedNumber = 128 * decompressedNumber + ((elem - 128) & 0xff);
+
+                // save the number in the output array
+                decompressedArray[alreadyDecompressed] = decompressedNumber;
+
+                // increase the number of processed numbers
+                alreadyDecompressed ++;
+
+                //reset the variable for the next number to decompress
+                decompressedNumber = 0;
             }
-
-            // Add the decoded number to the result array
-            number += b * Math.pow(128, j);
-            numbers[i] = number;
-            i++;
         }
 
-        // Create a result array with the actual size and copy the decoded numbers
-        int[] result = new int[i];
-        System.arraycopy(numbers, 0, result, 0, i);
-        return result;
+        return decompressedArray;
     }
 }

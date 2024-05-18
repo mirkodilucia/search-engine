@@ -1,9 +1,11 @@
 package it.unipi.dii.aide.mircv.application.data;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import it.unipi.dii.aide.mircv.application.config.Config;
 
-public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
+public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntry> {
 
     private static DocumentIndexTable INSTANCE = null;
     private static Config configuration;
@@ -25,10 +27,6 @@ public class DocumentIndexTable extends HashMap<Integer, DocumentIndexEntry> {
             INSTANCE = new DocumentIndexTable();
         }
         return INSTANCE;
-    }
-
-    public void addEntry(String documentId, int docidId, int docLen) {
-        DocumentIndexEntry entry = new DocumentIndexEntry(documentId, docidId, docLen);
     }
 
     public boolean load() {

@@ -22,7 +22,7 @@ public class VariableByteCompressorTest
         public void decode()
         {
             byte[] input = {1, 2, 3, 4, 5};
-            int[] actualResult = VariableByteCompressor.decode(input);
+            int[] actualResult = VariableByteCompressor.decode(input, 5);
 
             int[] expectedResult = {1, 2, 3, 4, 5};
             Assert.assertArrayEquals(expectedResult, actualResult);
