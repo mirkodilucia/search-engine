@@ -4,6 +4,7 @@ import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.Posting;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
 import it.unipi.dii.aide.mircv.application.data.Vocabulary;
+import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -64,19 +65,19 @@ public class MaxScore extends Scorer {
                     break;
             }
 
-            int nextDoc = findNextDoc(sortedLists, firstEssentialPostingListIndex);
+            int nextDocToProcess = findNextDoc(sortedLists, firstEssentialPostingListIndex);
 
-            if(nextDoc == -1)
+            if(nextDocToProcess == -1)
                 break;
 
             if(this.MODE == Mode.CONJUNCTIVE)
             {
-                nextDoc = movePostingScoreIterator(sortedLists, nextDoc);
-                if(nextDoc == -1)
+                nextDocToProcess = movePostingScoreIterator(sortedLists, nextDocToProcess);
+                if(nextDocToProcess == -1)
                     break;
             }
 
-            partialScore = getPartialScore(sortedLists, firstEssentialPostingListIndex, nextDoc);
+            partialScore = getPartialScore(sortedLists, firstEssentialPostingListIndex, nextDocToProcess);
 
             for(int i=0; i<firstEssentialPostingListIndex; i++)
             {
@@ -88,7 +89,7 @@ public class MaxScore extends Scorer {
 
             if(documentUpperBound > threshold)
             {
-                double nonEssentialScores = getNonEssentialPartialScore(sortedLists, firstEssentialPostingListIndex, nextDoc);
+                double nonEssentialScores = getNonEssentialPartialScoreWithSkipping(sortedLists, firstEssentialPostingListIndex, nextDocToProcess);
 
                 documentUpperBound = documentUpperBound - nonEssentialPartialScoreUpperBound + nonEssentialScores;
 
@@ -100,56 +101,50 @@ public class MaxScore extends Scorer {
                         topKDocuments.poll();
                     }
 
-                    topKDocuments.add(new AbstractMap.SimpleEntry<>(documentUpperBound, nextDoc));
+                    topKDocuments.add(new AbstractMap.SimpleEntry<>(documentUpperBound, nextDocToProcess));
 
                     if(topKDocuments.size() == k)
                     {
                         threshold = documentUpperBound;
                     }
                 }
-
-                // check if current threshold has been updated or not
-                newThresholdFound = (threshold == documentUpperBound);
-
-
             }
+
+            // check if current threshold has been updated or not
+            newThresholdFound = (threshold == documentUpperBound);
+
         }
         clean(queryPostings);
         return topKDocuments;
     }
 
 
-
-
     /**
      * method to score the documents in the posting lists given as input for NON essential
      *
-     */
-    private double getNonEssentialPartialScore(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstNonEssentialPostingListIndex, int documentToProcess)
-    {
+    */
+
+    private double getNonEssentialPartialScoreWithSkipping(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstNonEssentialPostingListIndex, int documentToProcess) {
         double nonEssentialPartialScore = 0;
 
-        for(int i=0; i<firstNonEssentialPostingListIndex; i++)
-        {
-            PostingList currentPostingList = sortedLists.get(i).getKey();
-            Posting currentPosting = currentPostingList.getCurrentPosting();
+        for (int i=0; i<firstNonEssentialPostingListIndex; i++) {
+            Map.Entry<PostingList, Double> postingListDoubleEntry = sortedLists.get(i);
 
-
-            if(currentPosting != null)
-            {
-                if(currentPosting.getDocId() == documentToProcess)
-                {
-                    double idf = Vocabulary.with(config.getPathToVocabulary()).get(currentPostingList.getTerm()).getInverseDocumentFrequency();
-                    nonEssentialPartialScore += this.scoreDocument(config, currentPosting, idf);
-                    currentPostingList.next(config);
-                }
-
+            if (postingListDoubleEntry.getKey().getCurrentPosting() != null &&
+                postingListDoubleEntry.getKey().getCurrentPosting().getDocId() == documentToProcess) {
+                postingListDoubleEntry.getKey().next(config);
+                continue;
             }
 
+            Posting posting = postingListDoubleEntry.getKey().selectPostingScoreIterator(documentToProcess, config);
+            if (posting != null && posting.getDocId() == documentToProcess) {
+                double idf = Vocabulary.with(config.getPathToVocabulary()).get(postingListDoubleEntry.getKey().getTerm()).getInverseDocumentFrequency();
+                nonEssentialPartialScore += this.scoreDocument(config, posting, idf);
+                postingListDoubleEntry.getKey().next(config);
+            }
         }
 
         return nonEssentialPartialScore;
-
     }
 
     /**
@@ -178,7 +173,6 @@ public class MaxScore extends Scorer {
                     partialScore += this.scoreDocument(config, currentPosting, idf);
                     currentPostingList.next(config); //TODO: check if this is correct
                 }
-
             }
 
         }
@@ -190,7 +184,7 @@ public class MaxScore extends Scorer {
     /** An essential posting list is a posting list whose term upper bound
      * summed up to the term upper bounds of the preceding posting lists is >= current threshold
     */
-    private int getFirstEssentialPostingListIndex(ArrayList<Map.Entry<PostingList, Double>> sortedLists, double Threshold)
+    private int getFirstEssentialPostingListIndex(ArrayList<Map.Entry<PostingList, Double>> sortedLists, double currentThreshold)
     {
       double sum = 0;
 
@@ -201,7 +195,7 @@ public class MaxScore extends Scorer {
 
           sum = sum + sortedLists.get(i).getValue();
 
-          if(sum > Threshold)
+          if(sum > currentThreshold)
               return i;
 
       }
@@ -225,29 +219,26 @@ public class MaxScore extends Scorer {
                 continue;
             }
 
-            if (currentPosting != null) {
-                if (MODE == Mode.CONJUNCTIVE) {
-                    if (next == -1 || currentPosting.getDocId() > next) {
-                        next = currentPosting.getDocId();
-                    }
-                } else {
-                    if (next == -1 || currentPosting.getDocId() < next) {
-                        next = currentPosting.getDocId();
-                    }
+            if (MODE == Mode.CONJUNCTIVE) {
+                if (next == -1 || currentPosting.getDocId() > next) {
+                    next = currentPosting.getDocId();
+                }
+            } else {
+                if (next == -1 || currentPosting.getDocId() < next) {
+                    next = currentPosting.getDocId();
                 }
             }
-
         }
         return next;
     }
 
     /** method to move the iterators of postingsToScore to the given docid
      * @param sortedLists: posting lists that must be moved towards the given docid
-     * @param docidToProcess: docid to which the iterators must be moved to
+     * @param docIdToProcess: docid to which the iterators must be moved to
      * @return -1 if there is at least a list for which there is no docid > docidToProcess
      */
-    private int movePostingScoreIterator(ArrayList<Map.Entry<PostingList,Double>> sortedLists, int docidToProcess){
-        int next = docidToProcess;
+    private int movePostingScoreIterator(ArrayList<Map.Entry<PostingList,Double>> sortedLists, int docIdToProcess){
+        int next = docIdToProcess;
 
         for (int i = 0; i < sortedLists.size(); i++) {
             PostingList currentPostingList = sortedLists.get(i).getKey();
@@ -301,15 +292,18 @@ public class MaxScore extends Scorer {
 
         for (PostingList postingList : queryPostings) {
             double termUpperBound = 0;
+            Vocabulary vocabulary = Vocabulary.with(config.getPathToVocabulary());
+            VocabularyEntry entry = vocabulary.get(postingList.getTerm());
+
             if (SCORE_FUNCTION == ScoreFunction.BM25) {
-                termUpperBound = Vocabulary.with(config.getPathToVocabulary()).get(postingList.getTerm()).getMaxBM25Tf();
+                termUpperBound = entry.getMaxBM25Tf();
             }
 
             if (SCORE_FUNCTION == ScoreFunction.TFIDF) {
-                termUpperBound = Vocabulary.with(config.getPathToVocabulary()).get(postingList.getTerm()).getMaxTfIdf();
+                termUpperBound = entry.getMaxTfIdf();
             }
 
-            sortedPostingLists.add(Map.entry(postingList, termUpperBound));
+            sortedPostingLists.add(new AbstractMap.SimpleEntry<>(postingList, termUpperBound));
         }
 
         return new ArrayList<>(sortedPostingLists);

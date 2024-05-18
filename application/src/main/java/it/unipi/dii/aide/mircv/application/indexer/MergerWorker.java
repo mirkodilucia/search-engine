@@ -50,6 +50,11 @@ public class MergerWorker {
             finalList.appendPostings(intermediatePostingList.getPostings());
         }
 
+        // compute the inverse document frequency
+        vocabularyEntry.calculateInverseDocumentFrequency();
+        // compute the term upper bounds
+        vocabularyEntry.computeUpperBounds();
+
         return finalList;
     }
 

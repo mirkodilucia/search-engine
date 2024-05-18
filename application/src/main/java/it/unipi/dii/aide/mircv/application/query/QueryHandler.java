@@ -11,6 +11,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public class QueryHandler {
 
@@ -85,14 +86,11 @@ public class QueryHandler {
     public String[] retrieveKPid(PriorityQueue<Map.Entry<Double, Integer>> priorityQueue, int k) {
         String[] output = new String[k];
 
-        int queueSize = priorityQueue.size()-1;
-        for (int i = 0; i < queueSize; i++) {
+        int queueSize = priorityQueue.size() - 1;
+        for (int i = queueSize; i > 0; i--) {
             if (priorityQueue.peek() == null)
                 break;
-            //TODO: check if the document id(int) is correct or pid(string)
             output[i] = documentIndex.get(priorityQueue.poll().getValue()).getPId();
-            i--;
-
         }
         return output;
     }
@@ -105,10 +103,10 @@ public class QueryHandler {
      * @return an array with the top-k document pids
      */
     public String[] processQuery(String queryParam, int k, Mode mode, ScoreFunction scoreFunction) {
-        FinalDocument queryDoc = new InitialDocument(config, "0", queryParam).processDocument();
+        FinalDocument queryDoc = new InitialDocument(config, "query", queryParam).processDocument();
         ArrayList<PostingList> queryPosting = getQueryPosting(queryDoc);
 
-        if (queryPosting == null|| queryPosting.isEmpty()) {
+        if (queryPosting == null || queryPosting.isEmpty()) {
             return null;
         }
         PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;

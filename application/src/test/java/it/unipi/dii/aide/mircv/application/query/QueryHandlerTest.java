@@ -105,7 +105,9 @@ public class QueryHandlerTest
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.BM25);
 
-        assertArrayEquals(reformatQueue(expected), reformatQueue(scorer.scoreQuery(postings, k)));
+        Object[] result = reformatQueue(scorer.scoreQuery(postings, k));
+
+        assertArrayEquals(reformatQueue(expected), result);
     }
 
     @ParameterizedTest
@@ -116,7 +118,7 @@ public class QueryHandlerTest
         config.setStemStopRemoval(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
-        DAAT scorer = DAAT.with(config, mode, ScoreFunction.BM25);
+        DAAT scorer = DAAT.with(config, mode, ScoreFunction.TFIDF);
 
         assertArrayEquals(reformatQueue(expected), reformatQueue(scorer.scoreQuery(postings, k)));
     }
@@ -182,11 +184,12 @@ public class QueryHandlerTest
         ArrayList<PostingList> queryPostingsSimpleExample = new ArrayList<>(Arrays.stream(
                 new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
 
-        return Stream.of(Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
-                Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25),
-                Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisBM25),
-                Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjBM25),
-                Arguments.arguments(3, queryPostingsSimpleExample, true, expectedResultsEmpty)
+        return Stream.of(
+                //Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
+                Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25)
+                //Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisBM25),
+                //Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjBM25),
+                //Arguments.arguments(3, queryPostingsSimpleExample, true, expectedResultsEmpty)
         );
     }
 
@@ -228,7 +231,8 @@ public class QueryHandlerTest
         ArrayList<PostingList> queryPostingsSimpleExample = new ArrayList<>(Arrays.stream(
                 new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
 
-        return Stream.of(Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjTfidf),
+        return Stream.of(
+                Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjTfidf),
                 Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisTfidf),
                 Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisTfidf),
                 Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjTfidf),

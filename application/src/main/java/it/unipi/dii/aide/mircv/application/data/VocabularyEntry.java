@@ -20,7 +20,7 @@ public class VocabularyEntry
     private static String BLOCK_DESCRIPTORS_PATH;
     private String term;
     private int documentFrequency;
-    private double inverseDocumentFrequency;
+    private double inverseDocumentFrequency = 0;
     private int maxTermFrequency;
     private int BM25Dl=1; // document length
     private int BM25Tf=0; // term frequency
