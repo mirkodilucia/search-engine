@@ -19,8 +19,8 @@ public class Main {
     public static void main(String[] args) {
         config = ConfigLoader.load();
 
-        DocumentManager dp = DocumentManager.with(config);
-        dp.initialize();
+        //DocumentManager dp = DocumentManager.with(config);
+        //dp.initialize();
 
         int numIndexes = Spimi.with(config).executeSpimi();
         if(numIndexes <= 0){

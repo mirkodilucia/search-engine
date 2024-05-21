@@ -33,7 +33,7 @@ public class DocumentIndexEntry {
         this.documentId = documentId;
         this.documentLength = documentLength;
 
-        DOCUMENT_INDEX_PATH = config.getDocumentIndexPath();
+        DOCUMENT_INDEX_PATH = config.getDocumentIndexPath() + "/documentIndex";
     }
 
     public static void reset() {

@@ -15,13 +15,11 @@ public class DocumentManager {
 
     private DocumentManager() {
         filePaths = new ArrayList<>();
-
         documents = new ArrayList<>();
 
         for (InitialDocument doc : documents) {
             process(doc);
             doc.writeFileString();
-
         }
 
         System.out.println("Loaded " + documents.size() + " documents");
@@ -39,7 +37,6 @@ public class DocumentManager {
 
         if (configuration.getRemoveStopwords()) {
             doc.removeStopwords();
-
         }
 
         doc.stem();
