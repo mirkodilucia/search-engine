@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.application.data;
 
+import it.unipi.dii.aide.mircv.application.config.Config;
+
 import java.nio.channels.FileChannel;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -13,6 +15,7 @@ public class DocumentIndexEntry {
     public static final int DOC_ID_SIZE = 64;
     public static final int ENTRY_SIZE = DOC_ID_SIZE + 4 + 4;
     private static String DOCUMENT_INDEX_PATH;
+    private Config config;
 
     private String pId;
 
@@ -24,10 +27,13 @@ public class DocumentIndexEntry {
         DOCUMENT_INDEX_PATH = documentIndexPath;
     }
 
-    public DocumentIndexEntry(String pId, int documentId, int documentLength) {
+    public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
+        this.config = config;
         this.pId = pId;
         this.documentId = documentId;
         this.documentLength = documentLength;
+
+        DOCUMENT_INDEX_PATH = config.getDocumentIndexPath();
     }
 
     public static void reset() {

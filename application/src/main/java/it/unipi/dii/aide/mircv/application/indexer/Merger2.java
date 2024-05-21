@@ -10,10 +10,10 @@ import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.nio.MappedByteBuffer;
+import java.util.Map;
 
 public class Merger2 {
 
-    private static int numIndexes;
     private static VocabularyEntry[] nextTerms;
     private final long[] vocabularyEntryMemoryOffset;
     private static Merger2 instance = null;
@@ -21,13 +21,12 @@ public class Merger2 {
     private int docsMemOffset;
     private int freqsMemOffset;
 
-
     private final Config config;
     private final MergerLoader loader;
 
-    private Merger2(Config config, MergerLoader loader, int numIndexes) {
+    private Merger2(Config config, int numIndexes) {
         this.config = config;
-        this.loader = loader;
+        this.loader = new MergerLoader(config, numIndexes);
 
         nextTerms = new VocabularyEntry[numIndexes];
         vocabularyEntryMemoryOffset = new long[numIndexes];
@@ -218,15 +217,15 @@ public class Merger2 {
                 // Write the block descriptor on disk
                 blockDescriptor.saveDescriptorOnDisk(descriptorChan);
 
-                docsMemOffset += nPostingsToBeWritten * 4L;
-                freqsMemOffset += nPostingsToBeWritten * 4L;
+                docsMemOffset += (int) (nPostingsToBeWritten * 4L);
+                freqsMemOffset += (int) (nPostingsToBeWritten * 4L);
                 break;
             }
         }
     }
 
-    public static Merger2 with(Config config, MergerLoader loader, int numIndexes) {
-        instance = new Merger2(config, loader, numIndexes);
+    public static Merger2 with(Config config, int numIndexes) {
+        instance = new Merger2(config, numIndexes);
         return instance;
     }
 }

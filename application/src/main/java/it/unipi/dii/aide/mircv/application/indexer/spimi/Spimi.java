@@ -104,6 +104,7 @@ public class Spimi implements SpimiListener {
 
             int documentsLength = finalDocument.getTokens().size();
             DocumentIndexEntry documentIndexEntry = new DocumentIndexEntry(
+                    config,
                     finalDocument.getPid(),
                     documentId,
                     documentsLength

@@ -3,6 +3,8 @@ package it.unipi.dii.aide.mircv.application;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.config.ConfigLoader;
 import it.unipi.dii.aide.mircv.application.config.DocumentManager;
+import it.unipi.dii.aide.mircv.application.indexer.Merger2;
+import it.unipi.dii.aide.mircv.application.indexer.MergerLoader;
 import it.unipi.dii.aide.mircv.application.indexer.spimi.Spimi;
 
 import java.io.BufferedWriter;
@@ -26,7 +28,8 @@ public class Main {
             return;
         }
 
-        //Merger2.with(config, numIndexes).merge();
+        Merger2 merger2 = Merger2.with(config, numIndexes);
+        merger2.mergeIndexes(numIndexes, config.isCompressionEnabled(), config.isDebugEnabled());
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("data/indexerStatistics.tsv", true));) {
             long docidSize = Files.size(Paths.get(config.getPathToInvertedIndexDocs()));
@@ -40,5 +43,6 @@ public class Main {
         }catch(Exception e){
             e.printStackTrace();
         }
+
     }
 }

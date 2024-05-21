@@ -3,6 +3,7 @@
         <complexType>
             <sequence>
                 <element type="boolean" name="removeStopwords"/>
+                <element type="boolean" name="maxScoreEnabled"/>
                 <element type="string" name="datasetPath"/>
 
                 <element type="string" name="compressedCollectionPath"/>

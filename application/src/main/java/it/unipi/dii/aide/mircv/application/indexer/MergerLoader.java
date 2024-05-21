@@ -18,10 +18,10 @@ public class MergerLoader {
 
     private static Config config;
 
-    public MergerLoader(Config configuration, FileChannel[] documentsIdChannels, FileChannel[] frequencyChannels) {
+    public MergerLoader(Config configuration, int numIndexes) {
         config = configuration;
-        this.documentsIdChannels = documentsIdChannels;
-        this.frequencyChannels = frequencyChannels;
+        this.documentsIdChannels = new FileChannel[numIndexes];
+        this.frequencyChannels = new FileChannel[numIndexes];
     }
 
         private MappedByteBuffer loadDocumentsIdChannels(VocabularyEntry term, int index) throws IOException {

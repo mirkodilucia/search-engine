@@ -3,7 +3,7 @@
     <removeStopwords>true</removeStopwords>
     <maxScoreEnabled>true</maxScoreEnabled>
     <datasetPath>resources/dataset/</datasetPath>
-    <compressedCollectionPath>resources/data/collection.tar.gz</compressedCollectionPath>
+    <compressedCollectionPath>data/collection.tar.gz</compressedCollectionPath>
     <stopwordsPath>resources/stopwords.dat</stopwordsPath>
 
     <vocabularyPath>data/vocabulary</vocabularyPath>
