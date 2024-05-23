@@ -25,7 +25,7 @@ public class SpimiMock extends Spimi {
 
            int docCounter =0;
            for (FinalDocument doc : testDocuments) {
-               DocumentIndexEntry entry = new DocumentIndexEntry(doc.getPid(), docCounter, doc.getTokens().size());
+               DocumentIndexEntry entry = new DocumentIndexEntry(config, doc.getPid(), docCounter, doc.getTokens().size());
                documentIndexTable.put(docCounter, entry);
                docCounter++;
 

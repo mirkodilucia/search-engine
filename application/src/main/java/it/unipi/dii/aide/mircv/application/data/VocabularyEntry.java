@@ -210,10 +210,10 @@ public class VocabularyEntry
         this.inverseDocumentFrequency = Math.log10(DocumentCollectionSize.getCollectionSize()/(double)this.documentFrequency);
     }
 
-    public long writeEntry(long postionindex, FileChannel channel){
+    public long writeEntry(long postionIndex, FileChannel channel){
         //Mappedbuffer
         try {
-            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, postionindex, ENTRY_SIZE);
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, postionIndex, ENTRY_SIZE);
 
             // Buffer not created
             if (buffer == null)
@@ -251,7 +251,7 @@ public class VocabularyEntry
             buffer.putLong(blockOffset);
 
             // return position for which we have to start writing on file
-            return postionindex + ENTRY_SIZE;
+            return postionIndex + ENTRY_SIZE;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

@@ -1,6 +1,8 @@
 package it.unipi.dii.aide.mircv.application.utils;
 
+import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +56,14 @@ public class FileUtils {
 
     public static void deleteFolder(String path) {
         try {
+            // Delete all files in folder
+            File[] allContents = new File(path).listFiles();
+            if (allContents != null) {
+                for (File file : allContents) {
+                    if (file.isDirectory()) continue;
+                    Files.deleteIfExists(file.toPath());
+                }
+            }
             Files.deleteIfExists(Paths.get(path));
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +72,9 @@ public class FileUtils {
 
     public static void createFolder(String folderPath) {
         try {
-            Files.createDirectory(Paths.get(folderPath));
+            Path path = Paths.get(folderPath);
+            if (!Files.exists(path))
+                Files.createDirectory(path);
         } catch (Exception e) {
             e.printStackTrace();
         }

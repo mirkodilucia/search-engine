@@ -19,9 +19,9 @@
 
     <rawCollectionPath>data/sampled_collection</rawCollectionPath>
     <documentIndexPath>data/index</documentIndexPath>
-    <frequencyFileName>data/frequencies</frequencyFileName>
+    <frequencyFileName>frequencies</frequencyFileName>
     <vocabularyFileName>data/vocabulary</vocabularyFileName>
-    <docIdsFileName>data/docids</docIdsFileName>
+    <docIdsFileName>docids</docIdsFileName>
     <compressionEnabled>true</compressionEnabled>
     <debugDir>debugDir</debugDir>
 </Config>

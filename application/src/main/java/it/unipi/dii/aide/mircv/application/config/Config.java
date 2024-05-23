@@ -47,11 +47,11 @@ public class Config implements Serializable {
     }
 
     private String getPathToPartialIndexesDocs() {
-        return this.getDocumentIdFolder() + this.getDocumentIdFileName();
+        return this.getDocumentIdFolder() + "/" + this.getDocumentIdFileName();
     }
 
     private String getPathToPartialIndexesFreqs() {
-        return this.getFrequencyFolder() + this.getFrequencyFileName();
+        return this.getFrequencyFolder()  + "/" + this.getFrequencyFileName();
     }
 
     private String getPathToPartialVocabularies() {
@@ -87,7 +87,7 @@ public class Config implements Serializable {
     }
 
     public String getPartialVocabularyPath(int i) {
-        return this.getPartialVocabularyFolder() + "vocabulary_" + i;
+        return this.getPartialVocabularyFolder() + "/" + "vocabulary_" + i;
     }
 
     public boolean isCompressionEnabled() {

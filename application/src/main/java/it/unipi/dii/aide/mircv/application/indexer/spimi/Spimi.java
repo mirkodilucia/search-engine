@@ -274,10 +274,10 @@ public class Spimi implements SpimiListener {
      * cleaning directories containing partial data structures and document Index file
      */
     private void cleanup(){
-        FileUtils.deleteFolder(config.getDocumentIndexPath());
-        FileUtils.deleteFolder(config.getFrequencyFolder());
-        FileUtils.deleteFolder(config.getPartialVocabularyFolder());
-        FileUtils.removeFile(config.getDocumentIndexPath());
+        FileUtils.removeFile(config.getDocumentIndexPath() + "/documentIndex");
+        //FileUtils.deleteFolder(config.getDocumentIndexPath());
+        //FileUtils.deleteFolder(config.getFrequencyFolder());
+        //FileUtils.deleteFolder(config.getPartialVocabularyFolder());
     }
 
     //obtain spimi instance with configuration
