@@ -86,11 +86,12 @@ public class QueryHandler {
     public String[] retrieveKPid(PriorityQueue<Map.Entry<Double, Integer>> priorityQueue, int k) {
         String[] output = new String[k];
 
-        int queueSize = priorityQueue.size() - 1;
-        for (int i = queueSize; i > 0; i--) {
+        int i = priorityQueue.size() - 1;
+        while (i >= 0) {
             if (priorityQueue.peek() == null)
                 break;
             output[i] = documentIndex.get(priorityQueue.poll().getValue()).getPId();
+            i--;
         }
         return output;
     }
