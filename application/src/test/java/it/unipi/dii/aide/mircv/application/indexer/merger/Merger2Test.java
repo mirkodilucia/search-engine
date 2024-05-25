@@ -11,6 +11,7 @@ public class Merger2Test {
     public void mergeIndexesTest() {
         Config config = new Config();
         config.setStopwordsPath("../resources/stopwords.dat");
+        config.setDocumentFreqPath("../test/data/mergeIndex", "documentFreqsTest");
         config.setPathToInvertedIndexDocs("../test/data/mergeIndex/invertedIndexDocsTest");
         config.setPathToInvertedIndexFreq("../test/data/mergeIndex/invertedIndexFreqTest");
         config.setPathToBlockDescriptors("../test/data/mergeIndex/blockDescriptorsTest");
@@ -18,8 +19,7 @@ public class Merger2Test {
         config.setPathToVocabulary("../test/data/mergeIndex/mergeIndexesTest");
         config.setCollectionStatisticsPath("../test/data/mergeIndex/mergeIndexesTest");
 
-        MergerLoader mergerLoader = MergerLoaderMock.load(config);
-        Merger2 merger = Merger2.with(config, mergerLoader, 1);
+        Merger2 merger = Merger2.with(config, 1);
 
         try {
             merger.mergeIndexes(1, false, true);

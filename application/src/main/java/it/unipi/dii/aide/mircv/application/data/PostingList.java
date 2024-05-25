@@ -199,9 +199,9 @@ public class PostingList {
         //FileUtils.createFolder("../test/data/debug/completeList.txt");
 
         try {
-            BufferedWriter writerDocids = new BufferedWriter(new FileWriter("./data/debug/" + docidsPath, true));
-            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter("./data/debug/" + freqsPath, true));
-            BufferedWriter all = new BufferedWriter(new FileWriter("./data/debug/completeList.txt", true));
+            BufferedWriter writerDocids = new BufferedWriter(new FileWriter("../test/data/debug/" + docidsPath, true));
+            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter("../test/data/debug/" + freqsPath, true));
+            BufferedWriter all = new BufferedWriter(new FileWriter("../test/data/debug/completeList.txt", true));
             String[] postingInfo = toStringPosting();
             int postingsPerBlock = 0;
             for (Posting p : postings) {

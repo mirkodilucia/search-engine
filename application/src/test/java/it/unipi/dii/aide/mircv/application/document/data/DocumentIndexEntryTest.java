@@ -1,24 +1,31 @@
 package it.unipi.dii.aide.mircv.application.document.data;
 
+import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DocumentIndexEntryTest {
+
+    private static Config config;
+
+    @BeforeAll
+    static void init() {
+        config = new Config();
+    }
 
     @BeforeEach
     void updatePath() {
         DocumentIndexEntry.setTestPath();
         DocumentIndexEntry.reset();
+
     }
 
     @Test
     void writeReadFromZero() {
-        DocumentIndexEntry entry1 = new DocumentIndexEntry("test1", 0, 10);
+        DocumentIndexEntry entry1 = new DocumentIndexEntry(config, "test1", 0, 10);
 
         long offset1 = entry1.writeFile();
         assertEquals(0, offset1);
@@ -31,8 +38,8 @@ class DocumentIndexEntryTest {
 
     @Test
     void writeReadSubsequent() {
-        DocumentIndexEntry entry1 = new DocumentIndexEntry("test1", 0, 10);
-        DocumentIndexEntry entry2 = new DocumentIndexEntry("test2", 1, 15);
+        DocumentIndexEntry entry1 = new DocumentIndexEntry(config, "test1", 0, 10);
+        DocumentIndexEntry entry2 = new DocumentIndexEntry(config, "test2", 1, 15);
 
         long offset1 = entry1.writeFile();
         assertEquals(0, offset1);

@@ -39,7 +39,7 @@ public class Merger2 {
                 nextTerms[i] = new VocabularyEntry();
                 vocabularyEntryMemoryOffset[i] = 0;
 
-                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.getPartialVocabularyPath(i) + "_" + i);
+                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.getPathToVocabulary());
                 if (ret == -1 || ret == 0) {
                     nextTerms[i] = null;
                 }

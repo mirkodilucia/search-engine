@@ -65,8 +65,8 @@ public class MergerLoaderMock {
         index.put("fruit", pl4);
         index.put("salad", pl5);
 
-        documentIndex.put(0, new DocumentIndexEntry("document1", 0, 5));
-        documentIndex.put(1, new DocumentIndexEntry("document2", 1, 3));
+        documentIndex.put(0, new DocumentIndexEntry(config, "document1", 0, 5));
+        documentIndex.put(1, new DocumentIndexEntry(config, "document2", 1, 3));
 
         VocabularyEntry vocabularyEntry1 = new VocabularyEntry("adam", 1, 0, 0, 1, 5, 4, 4);
         VocabularyEntry e1 = new VocabularyEntry("apple", 1, 140, 140, 1, 5, 4, 4);
@@ -115,7 +115,7 @@ public class MergerLoaderMock {
             int[] docids = new int[1];
             int[] freqs = new int[1];
 
-            MergerLoader loader = new MergerLoader(config, documentsId, frequencyChannels);
+            MergerLoader loader = new MergerLoader(config, 1);
 
             Iterator<Posting> plIterator = pl.getPostings().iterator();
             while (plIterator.hasNext()) {

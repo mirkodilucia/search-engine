@@ -74,8 +74,8 @@ public class SpimiTest {
         index.put("fruit", pl4);
         index.put("salad", pl5);
 
-        documentIndex.put(0,new DocumentIndexEntry("document1",0,5));
-        documentIndex.put(1,new DocumentIndexEntry("document2",1,3));
+        documentIndex.put(0,new DocumentIndexEntry(config, "document1",0,5));
+        documentIndex.put(1,new DocumentIndexEntry(config, "document2",1,3));
 
         VocabularyEntry e = new VocabularyEntry("adam");
         e.setDocumentFrequency(1);
