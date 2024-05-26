@@ -35,9 +35,6 @@ public class CachePerformance {
     private static long totQueries = 0;
     private static ScoreFunction SCORING_FUNCTION = ScoreFunction.TFIDF;
 
-
-
-
     private static void perfomanceQueries()
     {
         QueryHandler queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE, SCORING_FUNCTION);
@@ -173,16 +170,12 @@ public class CachePerformance {
         try (
                 BufferedWriter statBuffer = new BufferedWriter(new FileWriter(STAT_PATH, true));
         ) {
-
             double avgNoCache = (double) timeNoCache / (double) totQueries;
-
             double avgCache = (double) timeCache / (double) totQueries;
 
             statBuffer.write("AVG time: " + '\t' + avgNoCache);
             statBuffer.write('\n');
             statBuffer.write("AVG time with caching: " + '\t' + avgCache);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }

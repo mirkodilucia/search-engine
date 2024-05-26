@@ -11,18 +11,15 @@ import it.unipi.dii.aide.mircv.application.query.scorer.ScoreFunction;
 import it.unipi.dii.aide.mircv.application.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.application.query.scorer.MaxScore;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
-
 
 public class Performances
 {
@@ -33,25 +30,20 @@ public class Performances
     private static final boolean maxScore = false;
     private static final boolean isTrecEvalTest = false;
 
-
     private boolean storeResults (String topicId, PriorityQueue<Map.Entry<Double, Integer>> priorityQueue)
     {
         String results;
         int i = priorityQueue.size();
         DocumentIndexTable documentIndex = DocumentIndexTable.with(config);
 
-        try(BufferedWriter statisticsBuffer = new BufferedWriter(new FileWriter(TREC_EVAL_RESULTS_PATH, true)))
-        {
-            while (priorityQueue.peek() != null)
-            {
+        try (BufferedWriter statisticsBuffer = new BufferedWriter(new FileWriter(TREC_EVAL_RESULTS_PATH, true))) {
+            while (priorityQueue.peek() != null) {
                 Map.Entry<Double, Integer> entry = priorityQueue.poll();
                 results = topicId + "\tQ0\t" + documentIndex.get(entry.getValue()) + "\t" + i + "\t" + entry.getKey() + "\t" + "RUN-1\n";
                 statisticsBuffer.write(results);
                 i--;
             }
-
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -88,6 +80,7 @@ public class Performances
                     System.out.println("all queries processed");
                     break;
                 }
+
                 if (line.isBlank())
                     continue;
 
@@ -112,14 +105,11 @@ public class Performances
 
                 long start = System.currentTimeMillis();
 
-                if (!maxScore)
-                {
+                if (!maxScore) {
                     DAAT scorerDAAT;
                     scorerDAAT = DAAT.with(config, Mode.DISJUNCTIVE, ScoreFunction.BM25);
                     priorityQueue = scorerDAAT.scoreQuery(queryPostings, k);
-                }
-                else
-                {
+                } else {
                     MaxScore scorerMaxScore;
                     scorerMaxScore = MaxScore.with(config, Mode.DISJUNCTIVE, ScoreFunction.BM25);
                     priorityQueue = scorerMaxScore.scoreQuery(queryPostings, k);
@@ -143,10 +133,7 @@ public class Performances
             }
             standardDeviation = Math.sqrt(standardDeviation / nQueries);
             System.out.println("Query mean response time is: " + sumResponseTime / nQueries + " milliseconds, with a standard deviation of " + standardDeviation);
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Performance test failed");
         }
