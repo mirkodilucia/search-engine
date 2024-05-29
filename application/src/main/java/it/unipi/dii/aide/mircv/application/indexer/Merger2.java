@@ -10,7 +10,6 @@ import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.nio.MappedByteBuffer;
-import java.util.Map;
 
 public class Merger2 {
 
@@ -59,9 +58,9 @@ public class Merger2 {
         }
     }
 
-    public void mergeIndexes(int numIndexes,
-                             boolean compressionMode,
-                             boolean debugMode) {
+    public boolean mergeIndexes(int numIndexes,
+                                boolean compressionMode,
+                                boolean debugMode) {
 
         long vocabularySize = 0;
         long vocabularyMemoryOffset = 0;
@@ -90,14 +89,15 @@ public class Merger2 {
                                 StandardOpenOption.CREATE);
         ) {
 
+            MergerWorker worker = MergerWorker.with(config, numIndexes, nextTerms);
             while(true) {
-                String termToProcess = MergerWorker.with(config).getMinimumTerm(nextTerms, numIndexes);
+                String termToProcess = worker.getMinimumTerm();
 
                 if (termToProcess == null)
                     break;
 
-                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess);
-                PostingList mergedPostingList = MergerWorker.with(config).processTerm(loader, nextTerms, vocabularyEntry, termToProcess);
+                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.getPathToVocabulary());
+                PostingList mergedPostingList = worker.processTerm(loader, vocabularyEntry, termToProcess);
 
                 if(mergedPostingList == null){
                     throw new Exception("ERROR: the merged posting list for the term " + termToProcess + " is null");
@@ -138,12 +138,15 @@ public class Merger2 {
         } catch (Exception ex) {
             loader.cleanup();
             ex.printStackTrace();
+            return false;
         }
 
+        return true;
     }
 
     private static int getnPostingsToBeWritten(int i, int maxNumPostings, PostingList mergedPostingList) {
-        return (Math.min((mergedPostingList.getPostings().size() - i * maxNumPostings), maxNumPostings));
+        int alreadyWrittenPostings = i * maxNumPostings;
+        return (Math.min((mergedPostingList.getPostings().size() - alreadyWrittenPostings), maxNumPostings));
     }
 
     private void processCompressedPostingList(

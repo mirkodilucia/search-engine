@@ -15,8 +15,8 @@ public class MergerWorkerTest
         nextTerms[0] = new VocabularyEntry("term", "../test/data/getMinimumTermTest");
         int numIndexes = 1;
         Config config = new Config();
-        MergerWorker mergerWorker = MergerWorker.with(config);
-        String result = mergerWorker.getMinimumTerm(nextTerms, numIndexes);
+        MergerWorker mergerWorker = MergerWorker.with(config, numIndexes, nextTerms);
+        String result = mergerWorker.getMinimumTerm();
         assert result.equals("term");
     }
 
@@ -27,8 +27,8 @@ public class MergerWorkerTest
         nextTerms[1] = new VocabularyEntry("apple", "../test/data/getMinimumTermTest");
         int numIndexes = 1;
         Config config = new Config();
-        MergerWorker mergerWorker = MergerWorker.with(config);
-        String result = mergerWorker.getMinimumTerm(nextTerms, numIndexes);
+        MergerWorker mergerWorker = MergerWorker.with(config, numIndexes, nextTerms);
+        String result = mergerWorker.getMinimumTerm();
         assert result.equals("Apple");
     }
 
@@ -43,14 +43,14 @@ public class MergerWorkerTest
         config.setPathToInvertedIndexFreq("../test/data/processTerm/invertedIndexFreqTest");
         config.setPathToBlockDescriptors("../test/data/processTerm/blockDescriptorsTest");
 
-        MergerWorker mergerWorker = MergerWorker.with(config);
+        MergerWorker mergerWorker = MergerWorker.with(config, 1, nextTerms);
 
         VocabularyEntry vocabularyEntry = new VocabularyEntry("term", "../test/data/processTermTest");
         PostingList result = null;
 
         try {
             MergerLoader mergerLoader = MergerLoaderMock.load(config);
-            result = mergerWorker.processTerm(mergerLoader, nextTerms, vocabularyEntry, "term");
+            result = mergerWorker.processTerm(mergerLoader, vocabularyEntry, "term");
 
             assert result.getTerm().equals("term");
         } catch (Exception e) {

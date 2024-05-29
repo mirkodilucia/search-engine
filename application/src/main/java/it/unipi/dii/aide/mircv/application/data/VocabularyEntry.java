@@ -47,12 +47,12 @@ public class VocabularyEntry
 
     }
 
-    public VocabularyEntry(String adam,
+    public VocabularyEntry(String term,
                            int documentFrequency, int memoryOffset,
                            int frequencyOffset, int maxTermFrequency,
                            int BM25Dl, int docIdSize, int docidOffset) {
 
-        this.term = adam;
+        this.term = term;
         this.documentFrequency = documentFrequency;
         this.inverseDocumentFrequency = memoryOffset;
         this.maxTermFrequency = maxTermFrequency;
@@ -266,6 +266,8 @@ public class VocabularyEntry
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE)) {
 
+            long size = fChan.size();
+
             // instantiation of MappedByteBuffer for the PID read
             MappedByteBuffer buffer = fChan.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
 
@@ -311,7 +313,6 @@ public class VocabularyEntry
             blockOffset = buffer.getLong();
 
             return memoryOffset + ENTRY_SIZE;
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

@@ -127,4 +127,8 @@ public class DocumentIndexEntry {
     public int getDocumentLenght() {
         return documentLength;
     }
+
+    public void setDocumentLength(int length) {
+        this.documentLength = length;
+    }
 }
