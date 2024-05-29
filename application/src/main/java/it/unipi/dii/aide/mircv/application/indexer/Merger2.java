@@ -173,7 +173,7 @@ public class Merger2 {
 
             if (postingsInBlock == nPostingsToBeWritten) {
                 // TODO: controlla che la encode vada bene
-                byte[] compressedDocs = VariableByteCompressor.encode(docids);
+                byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docids);
                 byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
 
                 // Write compressed posting lists to disk

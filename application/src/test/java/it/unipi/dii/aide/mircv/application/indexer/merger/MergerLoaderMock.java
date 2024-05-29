@@ -120,7 +120,7 @@ public class MergerLoaderMock {
             Iterator<Posting> plIterator = pl.getPostings().iterator();
             while (plIterator.hasNext()) {
                 Posting currPosting = plIterator.next();
-                byte[] compressedDocs = VariableByteCompressor.encode(docids);
+                byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docids);
                 byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
 
                 loader.writeCompressedPostingListsToDisk(currPosting, documentsId[0], frequencyChannels[0], descriptorChan,
