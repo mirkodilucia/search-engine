@@ -11,7 +11,7 @@ public class VariableByteCompressorTest
         public void encode()
         {
             int[] input = {1, 2, 3, 4, 5};
-            byte[] actualResult = VariableByteCompressor.encode(input);
+            byte[] actualResult = VariableByteCompressor.integerArrayCompression(input);
 
             byte[] expectedResult = {1, 2, 3, 4, 5};
             Assert.assertArrayEquals(expectedResult, actualResult);
