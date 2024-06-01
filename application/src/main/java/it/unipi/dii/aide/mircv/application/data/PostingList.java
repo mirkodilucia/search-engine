@@ -127,7 +127,7 @@ public class PostingList {
 
     // Method to open the posting list
     public void openList() {
-        Vocabulary v = Vocabulary.with(config.getPathToVocabulary());
+        Vocabulary v = Vocabulary.with(config);
         v.readFromDisk();
         blocks = v.get(term).readBlocks();
 
@@ -188,7 +188,7 @@ public class PostingList {
     public void closeList() {
         postings.clear();
         blocks.clear();
-        Vocabulary.with(config.getPathToVocabulary()).remove(term);
+        Vocabulary.with(config).remove(term);
     }
 
     // Method to write the posting list as plain text in debug files

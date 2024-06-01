@@ -14,7 +14,7 @@ public class DocumentIndexEntry {
 
     public static final int DOC_ID_SIZE = 64;
     public static final int ENTRY_SIZE = DOC_ID_SIZE + 4 + 4;
-    private static String DOCUMENT_INDEX_PATH;
+    private static String DOCUMENT_INDEX_FILE;
     private Config config;
 
     private String pId;
@@ -23,29 +23,25 @@ public class DocumentIndexEntry {
     private int documentLength;
     private static long memoryOffset = 0;
 
-    public DocumentIndexEntry(String documentIndexPath){
-        DOCUMENT_INDEX_PATH = documentIndexPath;
+    public DocumentIndexEntry(Config config){
+        DOCUMENT_INDEX_FILE = config.invertedIndexConfig.getDocumentIndexFile();
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
+        this(config);
+
         this.config = config;
         this.pId = pId;
         this.documentId = documentId;
         this.documentLength = documentLength;
-
-        DOCUMENT_INDEX_PATH = config.getDocumentIndexPath() + "/documentIndex";
     }
 
     public static void reset() {
         memoryOffset = 0;
     }
 
-    public static void setTestPath() {
-        DOCUMENT_INDEX_PATH = "../test/data/documentIndex";
-    }
-
     public long writeFile(){
-        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_PATH),
+        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_FILE),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))) {
@@ -78,7 +74,7 @@ public class DocumentIndexEntry {
     }
 
     public boolean readFile(long memoryOffset) {
-        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_PATH),
+        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_FILE),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))) {

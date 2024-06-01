@@ -107,8 +107,8 @@ public class BlockDescriptor {
      * @return ArrayList containing block's postings.
      */
     public ArrayList<Posting> getBlockPostings(Config config) {
-        String invertedIndexDocsPath = config.getPathToInvertedIndexDocs();
-        String invertedIndexFreqsPath = config.getPathToInvertedIndexFreqs();
+        String invertedIndexDocsPath = config.invertedIndexConfig.getInvertedIndexDocs();
+        String invertedIndexFreqsPath = config.invertedIndexConfig.getInvertedIndexFreqsDir();
 
         try (
                 // Opening file channels for docid and frequency files

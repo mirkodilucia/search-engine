@@ -4,200 +4,118 @@ import java.io.Serializable;
 
 public class Config implements Serializable {
 
-    private boolean removeStopwords;
-    private boolean maxScoreEnabled;
-    private String datasetPath;
-
-    private String rawCollectionPath;
-    private String compressedCollectionPath;
-    private String stopwordsPath;
-    private String documentIndexPath;
-    private String vocabularyPath;
-    private String invertedIndexFreqs;
-    private String invertedIndexDocs;
-    private String partialVocabularyDir;
-    private String frequencyFileName;
-    private String docIdsFileName;
-    private String vocabularyFileName;
-    private String frequencyDir;
-    private String docIdsDir;
-    private String collectionStatisticsPath;
-    private String blockDescriptorsPath;
-    private String flagsFilePath;
     private String testDir;
 
     private String debugDir;
-    private boolean compressionEnabled;
+    private boolean debugEnabled;
 
+    public DatasetConfig datasetConfig;
 
-    public String getPathToVocabulary() {
-        return vocabularyPath;
-    }
+    public PreprocessConfig preprocessConfig;
 
-    public String getPathToInvertedIndexDocs() {
-        return this.invertedIndexDocs;
-    }
+    public VocabularyConfig vocabularyConfig;
+    public InvertedIndexConfig invertedIndexConfig;
 
-    public String getPathToInvertedIndexFreqs() {
-        return invertedIndexFreqs;
-    }
+    public ScorerConfig scorerConfig;
 
-    public String getPathToBlockDescriptors() {
-        return blockDescriptorsPath;
-    }
+    public CollectionConfig collectionConfig;
 
-    private String getPathToPartialIndexesDocs() {
-        return this.getDocumentIdFolder() + "/" + this.getDocumentIdFileName();
-    }
+    public Config(
+        DatasetConfig datasetConfig,
+        PreprocessConfig preprocessConfig,
+        VocabularyConfig vocabularyConfig,
+        InvertedIndexConfig invertedIndexConfig,
+        ScorerConfig scorerConfig,
+        CollectionConfig collectionConfig,
+        String testDir,
+        String debugDir,
+        boolean debugEnabled
+    ) {
+        this.datasetConfig = datasetConfig;
+        this.preprocessConfig = preprocessConfig;
+        this.vocabularyConfig = vocabularyConfig;
+        this.invertedIndexConfig = invertedIndexConfig;
+        this.scorerConfig = scorerConfig;
+        this.collectionConfig = collectionConfig;
 
-    private String getPathToPartialIndexesFreqs() {
-        return this.getFrequencyFolder()  + "/" + this.getFrequencyFileName();
-    }
-
-    private String getPathToPartialVocabularies() {
-        return this.getPartialVocabularyFolder() + this.getVocabularyFileName();
-    }
-
-    public String getBlockDescriptorsPath() {
-        return blockDescriptorsPath;
-    }
-
-    public String getDocumentIdFolder() {
-        return docIdsDir;
-    }
-
-    public String getDocumentIdFileName() {
-        return docIdsFileName;
-    }
-
-    public String getFrequencyFolder() {
-        return frequencyDir;
-    }
-
-    public String getFrequencyFileName() {
-        return frequencyFileName;
-    }
-
-    public String getPartialVocabularyFolder() {
-        return partialVocabularyDir;
-    }
-
-    public String getVocabularyFileName() {
-        return vocabularyFileName;
-    }
-
-    public String getPartialVocabularyPath(int i) {
-        return this.getPartialVocabularyFolder() + "/" + "vocabulary_" + i;
+        this.testDir = testDir;
+        this.debugDir = debugDir;
+        this.debugEnabled = debugEnabled;
     }
 
     public boolean isCompressionEnabled() {
-        return this.compressionEnabled;
+        return vocabularyConfig.isCompressionEnabled();
     }
 
-    public String getDocumentIndexPath() {
-        return this.documentIndexPath;
-    }
-    public void setDocumentIndexPath(String documentIndexPath) { this.documentIndexPath = documentIndexPath; }
-
-    public String getRawCollectionPath() {
-        return this.rawCollectionPath;
-    }
-
-    public String getStopwordsPath() {
-        return this.stopwordsPath;
-    }
-
-    public String getCollectionStatisticsPath() {
-        return this.collectionStatisticsPath;
-    }
-
-    public String getPartialIndexDocsPath(int i) {
-        return this.getPathToPartialIndexesDocs() + "_" + i;
-    }
-
-    public String getPartialIndexFreqsPath(int i) {
-        return this.getPathToPartialIndexesFreqs() + "_" + i;
-    }
-
-    public void setStopwordsPath(String stopwordsPath) {
-        this.stopwordsPath = stopwordsPath;
-    }
-
-    public void setRemoveStopword(boolean removeStopwords) {
-        this.removeStopwords = removeStopwords;
-    }
-
-    public boolean getRemoveStopwords() {
-        return this.removeStopwords;
+    public boolean isDebugEnabled() {
+        return this.debugEnabled;
     }
 
     public String getDebugFolder() {
         return this.debugDir;
     }
 
-    public String getPathToCompressedCollection() {
-        return this.compressedCollectionPath;
+
+
+    // Getters and Setters
+
+    public String getTestDir() {
+        return testDir;
     }
 
-    public void setPathToInvertedIndexDocs(String invertedIndexDocs) {
-        this.invertedIndexDocs = invertedIndexDocs;
+    public void setTestDir(String testDir) {
+        this.testDir = testDir;
     }
 
-    public void setPathToInvertedIndexFreq(String invertedIndexFreqs) {
-        this.invertedIndexFreqs = invertedIndexFreqs;
+    public String getDebugDir() {
+        return debugDir;
     }
 
-    public void setPathToBlockDescriptors(String blockDescriptorsPath) {
-        this.blockDescriptorsPath = blockDescriptorsPath;
+    public void setDebugDir(String debugDir) {
+        this.debugDir = debugDir;
     }
 
-    public void setPartialIndexesPath(String partialVocabularyDir) {
-        this.partialVocabularyDir = partialVocabularyDir;
+    public void setDebugEnabled(boolean debugEnabled) {
+        this.debugEnabled = debugEnabled;
     }
 
-    public void setPathToVocabulary(String vocabularyPath) {
-        this.vocabularyPath = vocabularyPath;
+    public PreprocessConfig getPreprocessConfig() {
+        return preprocessConfig;
     }
 
-    public void setCollectionStatisticsPath(String collectionStatisticsPath) {
-        this.collectionStatisticsPath = collectionStatisticsPath;
+    public void setPreprocessConfig(PreprocessConfig preprocessConfig) {
+        this.preprocessConfig = preprocessConfig;
     }
 
-    public boolean isStemStopRemovalEnabled() {
-        return this.removeStopwords;
+    public VocabularyConfig getVocabularyConfig() {
+        return vocabularyConfig;
     }
 
-    public boolean isDebugEnabled() {
-        return this.debugDir != null;
+    public void setVocabularyConfig(VocabularyConfig vocabularyConfig) {
+        this.vocabularyConfig = vocabularyConfig;
     }
 
-    public void setDocumentFreqPath(String documentFrequencyPath, String documentFrequencyFileName) {
-        this.frequencyDir = documentFrequencyPath;
-        this.frequencyFileName = documentFrequencyFileName;
+    public InvertedIndexConfig getInvertedIndexConfig() {
+        return invertedIndexConfig;
     }
 
-    public void setDocumentIdFolder(String documentIdFolder) {
-        this.docIdsDir = documentIdFolder;
+    public void setInvertedIndexConfig(InvertedIndexConfig invertedIndexConfig) {
+        this.invertedIndexConfig = invertedIndexConfig;
     }
 
-    public void setDocumetIdsFileName(String documentIndex) {
-        this.docIdsFileName = documentIndex;
+    public ScorerConfig getScorerConfig() {
+        return scorerConfig;
     }
 
-    public void setMaxScoreEnabled(boolean maxScoreEnabled) {
-        this.maxScoreEnabled = maxScoreEnabled;
+    public void setScorerConfig(ScorerConfig scorerConfig) {
+        this.scorerConfig = scorerConfig;
     }
 
-    public boolean isMaxScoreEnabled() {
-        return this.maxScoreEnabled;
+    public CollectionConfig getCollectionConfig() {
+        return collectionConfig;
     }
 
-    public void setCompression(boolean compression) {
-        this.compressionEnabled = compression;
-    }
-
-
-    public void setStemStopRemoval(boolean stemStopRemoval) {
-        this.removeStopwords = stemStopRemoval;
+    public void setCollectionConfig(CollectionConfig collectionConfig) {
+        this.collectionConfig = collectionConfig;
     }
 }

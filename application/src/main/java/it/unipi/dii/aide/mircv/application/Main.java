@@ -32,10 +32,10 @@ public class Main {
         merger2.mergeIndexes(numIndexes, config.isCompressionEnabled(), config.isDebugEnabled());
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("data/indexerStatistics.tsv", true));) {
-            long docidSize = Files.size(Paths.get(config.getPathToInvertedIndexDocs()));
-            long freqSize = Files.size(Paths.get(config.getPathToInvertedIndexFreqs()));
-            long vocabularySize = Files.size(Paths.get(config.getVocabularyFileName()));
-            long docIndexSize = Files.size(Paths.get(config.getDocumentIndexPath()));
+            long docidSize = Files.size(Paths.get(config.invertedIndexConfig.getInvertedIndexDocs()));
+            long freqSize = Files.size(Paths.get(config.invertedIndexConfig.getInvertedIndexFreqsFile()));
+            long vocabularySize = Files.size(Paths.get(config.vocabularyConfig.getPathToVocabularyFile()));
+            long docIndexSize = Files.size(Paths.get(config.invertedIndexConfig.getDocumentIndexFile()));
 
             long fullTime = 0; //stop - start;
             String stats = Arrays.toString(args) + '\t' + fullTime + '\t' + docidSize + '\t' + freqSize + '\t' + vocabularySize + '\t' + docIndexSize + '\n';

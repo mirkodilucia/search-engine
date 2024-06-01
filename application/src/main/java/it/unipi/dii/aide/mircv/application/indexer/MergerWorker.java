@@ -79,7 +79,7 @@ public class MergerWorker {
                 vocEntryMemOffset[i] += VocabularyEntry.ENTRY_SIZE;
 
                 // read next vocabulary entry from the i-th vocabulary
-                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], config.getPartialVocabularyPath(i));
+                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
 
                 // check if errors occurred while reading the vocabulary entry
                 if(ret == -1 || ret == 0){

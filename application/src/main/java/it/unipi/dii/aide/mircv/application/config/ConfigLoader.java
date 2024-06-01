@@ -30,9 +30,15 @@ public class ConfigLoader {
             }
 
             xStream.alias("Config", Config.class);
+            xStream.alias("datasetConfig", DatasetConfig.class);
+            xStream.alias("preprocessConfig", PreprocessConfig.class);
+            xStream.alias("vocabularyConfig", VocabularyConfig.class);
+            xStream.alias("invertedIndexConfig", InvertedIndexConfig.class);
+            xStream.alias("scorerConfig", ScorerConfig.class);
+            xStream.alias("collectionConfig", CollectionConfig.class);
+
             Object configuration = xStream.fromXML(inputXML);
             return (Config) configuration;
-
         } catch (IOException e) {
             System.err.println("Unable to load configuration file: " + e.getLocalizedMessage());
         }

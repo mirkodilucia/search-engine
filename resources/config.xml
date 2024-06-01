@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
-    <removeStopwords>true</removeStopwords>
-    <maxScoreEnabled>true</maxScoreEnabled>
-    <datasetPath>resources/dataset/</datasetPath>
-    <compressedCollectionPath>data/collection.tar.gz</compressedCollectionPath>
-    <stopwordsPath>resources/stopwords.dat</stopwordsPath>
-
-    <vocabularyPath>data/vocabulary</vocabularyPath>
-    <invertedIndexDocs>data/invertedIndexDocs</invertedIndexDocs>
-    <invertedIndexFreqs>data/invertedIndexFreqs</invertedIndexFreqs>
-    <partialVocabularyDir>data/partial_vocabulary</partialVocabularyDir>
-    <frequencyDir>data/partial_frequencies</frequencyDir>
-    <docIdsDir>data/partial_docids</docIdsDir>
-    <collectionStatisticsPath>config/collectionStatistics</collectionStatisticsPath>
-    <blockDescriptorsPath>data/blockDescriptors</blockDescriptorsPath>
-    <flagsFilePath>data/flags</flagsFilePath>
-    <testDir>data/test</testDir>
-
-    <rawCollectionPath>data/sampled_collection</rawCollectionPath>
-    <documentIndexPath>data/index</documentIndexPath>
-    <frequencyFileName>frequencies</frequencyFileName>
-    <vocabularyFileName>data/vocabulary</vocabularyFileName>
-    <docIdsFileName>docids</docIdsFileName>
-    <compressionEnabled>true</compressionEnabled>
     <debugDir>debugDir</debugDir>
+    <testDir>data/test</testDir>
+    <debugEnabled>true</debugEnabled>
+
+    <datasetConfig>
+        <datasetPath>resources/dataset/</datasetPath>
+    </datasetConfig>
+        <preprocessConfig>
+            <removeStopwords>true</removeStopwords>
+            <stemmerEnabled>true</stemmerEnabled>
+            <stopwordsPath>resources/stopwords.dat</stopwordsPath>
+        </preprocessConfig>
+        <vocabularyConfig>
+            <vocabularyPath>data/vocabulary</vocabularyPath>
+            <partialVocabularyDir>data/partial_vocabulary</partialVocabularyDir>
+            <compressionEnabled>true</compressionEnabled>
+            <blockDescriptorsPath>data/blockDescriptors</blockDescriptorsPath>
+        </vocabularyConfig>
+        <invertedIndexConfig>
+            <blockDescriptorPath>data/blockDescriptors</blockDescriptorPath>
+            <documentIndexPath>data/index/documentIndex</documentIndexPath>
+            <invertedIndexFreqs>data/frequencies/invertedIndexFreqs</invertedIndexFreqs>
+            <invertedIndexDocs>data/invertedIndexDocs</invertedIndexDocs>
+            <partialInvertedFrequenciesPath>data/partial_frequencies</partialInvertedFrequenciesPath>
+            <partialInvertedIndexDocumentsPath>data/partial_docids</partialInvertedIndexDocumentsPath>
+        </invertedIndexConfig>
+        <scorerConfig>
+            <maxScoreEnabled>true</maxScoreEnabled>
+        </scorerConfig>
+        <collectionConfig>
+            <rawCollectionPath>resources/dataset/collection.tar.gz</rawCollectionPath>
+            <compressedCollectionPath>resources/dataset/collection.tar.gz</compressedCollectionPath>
+            <collectionStatisticsPath>data/collection_statistics</collectionStatisticsPath>
+        </collectionConfig>
 </Config>

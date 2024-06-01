@@ -35,7 +35,7 @@ public class DocumentManager {
         doc.cleanText();
         doc.tokenize();
 
-        if (configuration.getRemoveStopwords()) {
+        if (configuration.preprocessConfig.isRemoveStopwordsEnabled()) {
             doc.removeStopwords();
         }
 
@@ -53,24 +53,24 @@ public class DocumentManager {
     }
 
     public void initialize() {
-        FileUtils.removeFile(configuration.getDocumentIndexPath());
-        FileUtils.removeFile(configuration.getVocabularyFileName());
-        FileUtils.removeFile(configuration.getPathToInvertedIndexDocs());
-        FileUtils.removeFile(configuration.getPathToInvertedIndexFreqs());
-        FileUtils.removeFile(configuration.getBlockDescriptorsPath());
+        FileUtils.removeFile(configuration.invertedIndexConfig.getDocumentIndexFile());
+        FileUtils.removeFile(configuration.vocabularyConfig.getPathToVocabularyFile());
+        FileUtils.removeFile(configuration.invertedIndexConfig.getDocumentIndexFile());
+        FileUtils.removeFile(configuration.invertedIndexConfig.getInvertedIndexFreqsFile());
+        FileUtils.removeFile(configuration.invertedIndexConfig.getBlockDescriptorFile());
 
-        FileUtils.deleteFolder(configuration.getPartialVocabularyFolder());
-        FileUtils.deleteFolder(configuration.getDocumentIdFolder());
-        FileUtils.deleteFolder(configuration.getFrequencyFolder());
+        FileUtils.deleteFolder(configuration.vocabularyConfig.getPartialVocabularyDir());
+        FileUtils.deleteFolder(configuration.invertedIndexConfig.getDocumentIndexDir());
+        FileUtils.deleteFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsDir());
         FileUtils.deleteFolder(configuration.getDebugFolder());
 
-        FileUtils.createFolder(configuration.getPartialVocabularyFolder());
-        FileUtils.createFolder(configuration.getDocumentIdFolder());
-        FileUtils.createFolder(configuration.getFrequencyFolder());
-        FileUtils.createFolder(configuration.getPathToInvertedIndexDocs());
-        FileUtils.createFolder(configuration.getPathToInvertedIndexFreqs());
-        FileUtils.createFolder(configuration.getVocabularyFileName());
-        FileUtils.createFolder(configuration.getDocumentIndexPath());
+        FileUtils.createFolder(configuration.vocabularyConfig.getPathToVocabularyDir());
+        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexDir());
+        FileUtils.createFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsDir());
+        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexFile());
+        FileUtils.createFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsFile());
+        FileUtils.createFolder(configuration.vocabularyConfig.getPathToVocabularyFile());
+        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexFile());
 
         FileUtils.createFolder(configuration.getDebugFolder());
     }

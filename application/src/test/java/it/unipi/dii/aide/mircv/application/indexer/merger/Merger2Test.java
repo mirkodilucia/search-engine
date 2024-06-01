@@ -13,18 +13,22 @@ public class Merger2Test {
     public void mergeIndexesTest() {
         Config config = new Config();
         config.setStopwordsPath("../resources/stopwords.dat");
+        config.setDocumentIndexPath("../test/data/mergeIndex/documentIndexTest");
         config.setDocumentFreqPath("../test/data/mergeIndex", "documentFreqsTest");
         config.setPathToInvertedIndexDocs("../test/data/mergeIndex/invertedIndexDocsTest");
         config.setPathToInvertedIndexFreq("../test/data/mergeIndex/invertedIndexFreqTest");
         config.setPathToBlockDescriptors("../test/data/mergeIndex/blockDescriptorsTest");
         config.setPartialIndexesPath("../test/data/mergeIndex/mergeIndexesTest");
-        config.setPathToVocabulary("../test/data/mergeIndex/mergeIndexesTest");
-        config.setCollectionStatisticsPath("../test/data/mergeIndex/mergeIndexesTest");
+        config.setDocumentIdFolder("../test/data/mergeIndex/documentIdTest");
+        config.setDocumentFreqPath("../test/data/mergeIndex", "documentFreqsTest");
+        config.setPathToVocabulary("../test/data/mergeIndex/mergeIndexesTest/vocabulary_0");
+        config.setCollectionStatisticsPath("../test/data/mergeIndex/mergeIndexesTest/statistics");
 
-        Merger2 merger = Merger2.with(config, 0);
+        config.setCompression(false);
+        Merger2 merger = Merger2.with(config, 1);
 
         try {
-            merger.mergeIndexes(1, false, true);
+            merger.mergeIndexes(1, config.isCompressionEnabled(), true);
         } catch (Exception e) {
             e.printStackTrace();
         }

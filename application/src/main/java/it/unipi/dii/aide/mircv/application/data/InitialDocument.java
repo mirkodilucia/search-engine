@@ -43,7 +43,7 @@ public class InitialDocument {
 
     public void writeFileString() {
         String fileData = this.docId + ";" + String.join(",", this.stems);
-        FileUtils.writeFile(config.getRawCollectionPath() + "/" + docId, fileData);
+        FileUtils.writeFile(config.collectionConfig.getRawCollectionPath() + "/" + docId, fileData);
     }
 
     public void setTokens(ArrayList<String> tokens1) {
@@ -59,7 +59,7 @@ public class InitialDocument {
         this.cleanText();
         this.tokenize();
 
-        if(config.isStemStopRemovalEnabled()) {
+        if(config.preprocessConfig.isStemmerEnabled()) {
             removeStopwords();
             stem();
         }

@@ -72,7 +72,7 @@ public class Stemmer {
         }
 
         try {
-            stopwords.addAll(FileUtils.readStopwordLines(configuration.getStopwordsPath()));
+            stopwords.addAll(FileUtils.readStopwordLines(configuration.preprocessConfig.getStopwordsPath()));
         } catch (Exception e) {
             e.printStackTrace();
         }

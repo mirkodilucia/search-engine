@@ -22,7 +22,7 @@ public class MergerLoaderMock {
 
     public static MergerLoader load(Config config) {
         documentIndex = DocumentIndexTable.with(config);
-        vocabulary = Vocabulary.with(config.getPathToVocabulary());
+        vocabulary = Vocabulary.with(config);
 
         InitialDocument d1 = new InitialDocument(config, "document1", "fruit apricot apple fruit salad");
         ArrayList<String> tokens1 = new ArrayList<>(Arrays.asList("fruit", "apricot", "apple", "fruit", "salad"));
@@ -100,8 +100,6 @@ public class MergerLoaderMock {
                                 StandardOpenOption.CREATE);
         ) {
             BlockDescriptor blockDescriptor = new BlockDescriptor();
-            blockDescriptor.setDocidOffset(1 * 4L);
-            blockDescriptor.setFreqOffset(1 * 4L);
 
             vocabularyEntry1.computeBlocksInformation();
             int maxNumPostings = vocabularyEntry1.getMaxNumberOfPostingsInBlock();

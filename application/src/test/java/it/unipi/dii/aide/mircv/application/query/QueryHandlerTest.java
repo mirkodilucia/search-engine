@@ -49,7 +49,7 @@ public class QueryHandlerTest
         DocumentCollectionSize.setCollectionSize(8);
 
         Vocabulary.unsetInstance();
-        Vocabulary v = Vocabulary.with(config.getPathToVocabulary());
+        Vocabulary v = Vocabulary.with(config);
 
         boolean vocabularyLoaded = v.readFromDisk();
         assertTrue(vocabularyLoaded);

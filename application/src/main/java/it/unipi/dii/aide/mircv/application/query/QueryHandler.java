@@ -27,7 +27,7 @@ public class QueryHandler {
     private Mode MODE;
 
     private QueryHandler(Config config, Mode mode, ScoreFunction scoreFunction) {
-        vocabulary = Vocabulary.with(config.getPathToVocabulary());
+        vocabulary = Vocabulary.with(config);
 
         this.config = config;
 
@@ -111,7 +111,7 @@ public class QueryHandler {
             return null;
         }
         PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;
-        if(config.isMaxScoreEnabled())
+        if(config.scorerConfig.isMaxScoreEnabled())
             priorityQueue = DAAT.with(config, mode, scoreFunction).scoreQuery(queryPosting, k);
         else
             priorityQueue = MaxScore.with(config, mode, scoreFunction).scoreQuery(queryPosting, k);

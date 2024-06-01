@@ -68,7 +68,7 @@ public class VocabularyEntry
         return docidOffset;
     }
 
-    public void setDocidOffset(long docidOffset) {
+    public void setDocIdOffset(long docidOffset) {
         this.docidOffset = docidOffset;
     }
 
@@ -210,8 +210,7 @@ public class VocabularyEntry
         this.inverseDocumentFrequency = Math.log10(DocumentCollectionSize.getCollectionSize()/(double)this.documentFrequency);
     }
 
-    public long writeEntry(long postionIndex, FileChannel channel){
-        //Mappedbuffer
+    public long writeEntry(long postionIndex, FileChannel channel) {
         try {
             MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, postionIndex, ENTRY_SIZE);
 

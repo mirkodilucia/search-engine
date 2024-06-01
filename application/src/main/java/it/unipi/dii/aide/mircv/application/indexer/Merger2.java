@@ -38,16 +38,16 @@ public class Merger2 {
                 nextTerms[i] = new VocabularyEntry();
                 vocabularyEntryMemoryOffset[i] = 0;
 
-                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.getPathToVocabulary());
+                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
                 if (ret == -1 || ret == 0) {
                     nextTerms[i] = null;
                 }
 
-                loader.pushDocumentIdChannel(i,  FileChannelUtils.openFileChannel(config.getPartialIndexDocsPath(i),
+                loader.pushDocumentIdChannel(i,  FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE));
-                loader.pushFrequencyChannel(i, FileChannelUtils.openFileChannel(config.getPartialIndexFreqsPath(i),
+                loader.pushFrequencyChannel(i, FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexFrequenciessPath(i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE));
@@ -68,22 +68,22 @@ public class Merger2 {
         // open file channels for vocabulary writes, docid and frequency writes, and block descriptor writes
         try (
                 FileChannel vocabularyChannel =
-                        FileChannelUtils.openFileChannel(config.getPathToVocabulary(),
+                        FileChannelUtils.openFileChannel(config.vocabularyConfig.getPathToVocabularyFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel documentIdChannel =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexDocs(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getDocumentIndexFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel frequencyChan =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexFreqs(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getInvertedIndexFreqsFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel descriptorChan =
-                        FileChannelUtils.openFileChannel(config.getBlockDescriptorsPath(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getBlockDescriptorFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
@@ -96,7 +96,7 @@ public class Merger2 {
                 if (termToProcess == null)
                     break;
 
-                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.getPathToVocabulary());
+                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.vocabularyConfig.getPathToVocabularyFile());
                 PostingList mergedPostingList = worker.processTerm(loader, vocabularyEntry, termToProcess);
 
                 if(mergedPostingList == null){
@@ -134,7 +134,7 @@ public class Merger2 {
             }
 
             loader.cleanup();
-            DocumentCollectionSize.updateVocabularySize(vocabularySize, config.getCollectionStatisticsPath());
+            DocumentCollectionSize.updateVocabularySize(vocabularySize, config.collectionConfig.getCollectionStatisticsPath());
         } catch (Exception ex) {
             loader.cleanup();
             ex.printStackTrace();

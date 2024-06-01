@@ -42,7 +42,7 @@ public class MergerWithouCompression {
 
     private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config){
         // get vocabulary from disk
-        Vocabulary v = Vocabulary.with(config.getPathToVocabulary());
+        Vocabulary v = Vocabulary.with(config);
         v.readFromDisk();
 
         ArrayList<ArrayList<Posting>> mergedLists = new ArrayList<>(v.size());
@@ -144,7 +144,7 @@ public class MergerWithouCompression {
                     if (docsBuffer != null && freqsBuffer != null) {
                         //create vocabulary entry
                         VocabularyEntry vocEntry = new VocabularyEntry(postingList.getTerm(), config.getPathToVocabulary());
-                        vocEntry.setDocidOffset(docsBuffer.position());
+                        vocEntry.setDocIdOffset(docsBuffer.position());
                         vocEntry.setFrequencyOffset(docsBuffer.position());
 
                         // write postings to file
@@ -160,7 +160,7 @@ public class MergerWithouCompression {
                         vocEntry.setDocIdSize(numPostings*4);
                         vocEntry.setFrequencySize(numPostings*4);
 
-                        vocEntry.setDocidOffset(docidOffset);
+                        vocEntry.setDocIdOffset(docidOffset);
                         vocEntry.setFrequencyOffset(freqOffset);
 
                         vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);

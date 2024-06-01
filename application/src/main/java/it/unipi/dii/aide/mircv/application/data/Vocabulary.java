@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.data;
 
+import it.unipi.dii.aide.mircv.application.config.Config;
 import org.junit.platform.commons.util.LruCache;
 
 import java.util.LinkedHashMap;
@@ -27,9 +28,9 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
     /**
      * singleton pattern
      */
-    public static Vocabulary with(String path){
+    public static Vocabulary with(Config config){
         if(instance == null){
-            instance = new Vocabulary(path);
+            instance = new Vocabulary(config.vocabularyConfig.getPathToVocabularyFile());
         }
         return instance;
     }

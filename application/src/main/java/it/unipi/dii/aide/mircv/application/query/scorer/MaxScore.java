@@ -138,7 +138,11 @@ public class MaxScore extends Scorer {
 
             Posting posting = postingListDoubleEntry.getKey().selectPostingScoreIterator(documentToProcess, config);
             if (posting != null && posting.getDocId() == documentToProcess) {
-                double idf = Vocabulary.with(config.getPathToVocabulary()).get(postingListDoubleEntry.getKey().getTerm()).getInverseDocumentFrequency();
+                Vocabulary vocabulary = Vocabulary.with(config);
+                double idf = vocabulary
+                        .get(postingListDoubleEntry.getKey().getTerm())
+                        .getInverseDocumentFrequency();
+
                 nonEssentialPartialScore += this.scoreDocument(config, posting, idf);
                 postingListDoubleEntry.getKey().next(config);
             }
@@ -169,7 +173,8 @@ public class MaxScore extends Scorer {
             {
                 if(currentPosting.getDocId() ==  documentToProcess)
                 {
-                    double idf = Vocabulary.with(config.getPathToVocabulary()).get(currentPostingList.getTerm()).getInverseDocumentFrequency();
+                    Vocabulary vocabulary = Vocabulary.with(config);
+                    double idf = vocabulary.get(currentPostingList.getTerm()).getInverseDocumentFrequency();
                     partialScore += this.scoreDocument(config, currentPosting, idf);
                     currentPostingList.next(config); //TODO: check if this is correct
                 }
@@ -292,7 +297,7 @@ public class MaxScore extends Scorer {
 
         for (PostingList postingList : queryPostings) {
             double termUpperBound = 0;
-            Vocabulary vocabulary = Vocabulary.with(config.getPathToVocabulary());
+            Vocabulary vocabulary = Vocabulary.with(config);
             VocabularyEntry entry = vocabulary.get(postingList.getTerm());
 
             if (SCORE_FUNCTION == ScoreFunction.BM25) {

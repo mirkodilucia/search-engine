@@ -50,7 +50,7 @@ public class SpimiMock extends Spimi {
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
         ) {
-            Vocabulary vocabulary = Vocabulary.with(config.getPartialVocabularyPath(0));
+            Vocabulary vocabulary = Vocabulary.with(config);
 
             int countPostings = 0;
             for (PostingList postingList : index.values()) {
@@ -65,7 +65,7 @@ public class SpimiMock extends Spimi {
                 for(PostingList postingList : index.values()) {
 
                     VocabularyEntry vocabularyEntry = new VocabularyEntry(postingList.getTerm(), config.getPartialVocabularyPath(0));
-                    vocabularyEntry.setDocidOffset(docsMbb.position());
+                    vocabularyEntry.setDocIdOffset(docsMbb.position());
                     vocabularyEntry.setFrequencyOffset(freqsMbb.position());
 
                     for(Posting posting : postingList.getPostings()) {

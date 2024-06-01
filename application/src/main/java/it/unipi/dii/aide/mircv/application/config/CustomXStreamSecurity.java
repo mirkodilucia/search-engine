@@ -12,7 +12,7 @@ public class CustomXStreamSecurity implements TypePermission {
 
     @Override
     public boolean allows(Class type) {
-        return type.equals(Config.class);
+        return true;
 
     }
 }

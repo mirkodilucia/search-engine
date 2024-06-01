@@ -106,7 +106,8 @@ public class DAAT extends Scorer {
             Posting posting = postingList.getCurrentPosting();
             if (posting != null && posting.getDocId() == documentId) {
                 // Call Scoorer Algorithm
-                score += this.scoreDocument(config, posting, Vocabulary.with(config.getPathToVocabulary()).getIdf(postingList.getTerm()));
+                Vocabulary vocabulary = Vocabulary.with(config);
+                score += this.scoreDocument(config, posting, vocabulary.getIdf(postingList.getTerm()));
                 postingList.next(config);
             }
         }

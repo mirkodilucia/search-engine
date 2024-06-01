@@ -14,7 +14,6 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         super();
     }
 
-
     /**
      * Method used to instantiate the singleton object
      *
@@ -33,7 +32,7 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         long numDocuments = DocumentCollectionSize.getCollectionSize();
 
         for(int i = 0; i < numDocuments; i++) {
-            DocumentIndexEntry entry = new DocumentIndexEntry(configuration.getDocumentIndexPath());
+            DocumentIndexEntry entry = new DocumentIndexEntry(configuration);
             if (entry.readFile((long) i * DocumentIndexEntry.ENTRY_SIZE)) {
                 this.put(entry.getDocumentId(), entry);
             }

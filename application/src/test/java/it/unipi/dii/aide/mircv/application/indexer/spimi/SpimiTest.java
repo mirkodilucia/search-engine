@@ -31,7 +31,7 @@ public class SpimiTest {
         config.setDocumentFreqPath("../test/data/spimi/", "testDocumentFreqs_0");
 
         documentIndex = DocumentIndexTable.with(config);
-        vocabulary = Vocabulary.with(config.getPartialVocabularyPath(0));
+        vocabulary = Vocabulary.with(config);
 
         FinalDocument d1 = new FinalDocument();
         d1.setPid("document1");
@@ -79,7 +79,7 @@ public class SpimiTest {
 
         VocabularyEntry e = new VocabularyEntry("adam");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(0);
+        e.setDocIdOffset(0);
         e.setFrequencyOffset(0);
         e.setMaxTermFrequency(1);
         e.setBM25Dl(5);
@@ -88,7 +88,7 @@ public class SpimiTest {
 
         VocabularyEntry e1 = new VocabularyEntry("apple");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(140);
+        e.setDocIdOffset(140);
         e.setFrequencyOffset(140);
         e.setMaxTermFrequency(1);
         e.setBM25Dl(5);
@@ -97,7 +97,7 @@ public class SpimiTest {
 
         VocabularyEntry e2 = new VocabularyEntry("apricot");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(280);
+        e.setDocIdOffset(280);
         e.setFrequencyOffset(280);
         e.setMaxTermFrequency(1);
         e.setBM25Dl(5);
@@ -106,7 +106,7 @@ public class SpimiTest {
 
         VocabularyEntry e3 = new VocabularyEntry("eve");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(420);
+        e.setDocIdOffset(420);
         e.setFrequencyOffset(420);
         e.setMaxTermFrequency(1);
         e.setBM25Dl(3);
@@ -115,7 +115,7 @@ public class SpimiTest {
 
         VocabularyEntry e4 = new VocabularyEntry("fruit");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(560);
+        e.setDocIdOffset(560);
         e.setFrequencyOffset(560);
         e.setMaxTermFrequency(2);
         e.setBM25Dl(5);
@@ -124,7 +124,7 @@ public class SpimiTest {
 
         VocabularyEntry e5 = new VocabularyEntry("salad");
         e.setDocumentFrequency(1);
-        e.setDocidOffset(700);
+        e.setDocIdOffset(700);
         e.setFrequencyOffset(700);
         e.setMaxTermFrequency(1);
         e.setBM25Dl(5);
