@@ -47,8 +47,8 @@ public class QueryHandlerTest
         Vocabulary.unsetInstance();
         Vocabulary v = Vocabulary.with(config);
 
-        v.put("example", new VocabularyEntry("example", config.invertedIndexConfig.getBlockDescriptorFile()));
-        v.put("another", new VocabularyEntry("another", config.invertedIndexConfig.getBlockDescriptorFile()));
+        boolean vocabularyLoaded = v.readFromDisk();
+        assertTrue(vocabularyLoaded);
 
         boolean tableLoaded = docIndex.load();
         assertTrue(tableLoaded);
