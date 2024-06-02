@@ -69,7 +69,7 @@ public class MergerWithouCompression {
 
         // try to open a file channel to the file of the inverted index
         try (FileChannel fChan = (FileChannel) Files.newByteChannel(
-                Paths.get(config.getDocumentIndexPath()),
+                Paths.get(config.invertedIndexConfig.getDocumentIndexFile()),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))
@@ -116,16 +116,16 @@ public class MergerWithouCompression {
             int i = intermediateIndexes.indexOf(intermediateIndex);
 
             try (
-                    FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialIndexDocsPath(i)),
+                    FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.invertedIndexConfig.getPartialIndexDocumentsPath(i)),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE
                     );
-                    FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialIndexFreqsPath(i)),
+                    FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.invertedIndexConfig.getPartialIndexFrequenciessPath(i)),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE);
-                    FileChannel vocabularyFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialVocabularyPath(i)),
+                    FileChannel vocabularyFchan = (FileChannel) Files.newByteChannel(Paths.get(config.vocabularyConfig.getPathToPartialVocabularyDir(i)),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE)
@@ -143,7 +143,7 @@ public class MergerWithouCompression {
                     // check if MappedByteBuffers are correctly instantiated
                     if (docsBuffer != null && freqsBuffer != null) {
                         //create vocabulary entry
-                        VocabularyEntry vocEntry = new VocabularyEntry(postingList.getTerm(), config.getPathToVocabulary());
+                        VocabularyEntry vocEntry = new VocabularyEntry(postingList.getTerm(), config.vocabularyConfig.getPathToVocabularyFile());
                         vocEntry.setDocIdOffset(docsBuffer.position());
                         vocEntry.setFrequencyOffset(docsBuffer.position());
 

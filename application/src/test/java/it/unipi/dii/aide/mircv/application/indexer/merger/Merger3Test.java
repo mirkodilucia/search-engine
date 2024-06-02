@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.indexer.merger;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
 import org.junit.Test;
@@ -8,12 +9,7 @@ public class Merger3Test {
 
     @Test
     public void initializeMerger() {
-        Config config = new Config();
-        config.setDocumentIdFolder("../test/data/initializeMerger/documentIdTest");
-        config.setDocumentFreqPath("../test/data/initializeMerger", "documentFreqsTest");
-        config.setPathToVocabulary("../test/data/initializeMerger");
-        config.setPartialIndexesPath("../test/data/initializeMerger");
-
+        Config config = ConfigUtils.getConfig("merger3Test");
         Merger3 merger = Merger3.with(config, 1);
 
         assert(merger != null);
@@ -21,11 +17,8 @@ public class Merger3Test {
 
     @Test
     public void initializeMergerWithConfig() {
-        Config config = new Config();
-        config.setDocumentIdFolder("../test/data/initializeMergerWithConfig/documentIdTest");
-        config.setDocumentFreqPath("../test/data/initializeMergerWithConfig", "documentFreqsTest");
-        config.setPathToVocabulary("../test/data/initializeMergerWithConfig");
-        config.setPartialIndexesPath("../test/data/initializeMergerWithConfig");
+        Config config = ConfigUtils.getConfig("merger3Test");
+
         Merger3 merger = Merger3.with(config, 1);
 
         VocabularyEntry vocabularyEntry = merger.getNextTerms(0);
@@ -35,11 +28,7 @@ public class Merger3Test {
 
     @Test
     public void mergerGetMinimumTerm() {
-        Config config = new Config();
-        config.setDocumentIdFolder("../test/data/mergerGetMinimumTerm/documentIdTest");
-        config.setDocumentFreqPath("../test/data/mergerGetMinimumTerm", "documentFreqsTest");
-        config.setPathToVocabulary("../test/data/mergerGetMinimumTerm/vocabulary");
-        config.setPartialIndexesPath("../test/data/mergerGetMinimumTerm");
+        Config config = ConfigUtils.getConfig("merger3Test");
 
         Merger3 merger = Merger3.with(config, 3);
         String vocabularyEntry = merger.getMinimumTerm();
@@ -48,17 +37,7 @@ public class Merger3Test {
 
     @Test
     public void mergeIndexes() {
-        Config config = new Config();
-
-        config.setPathToInvertedIndexDocs("../test/data/merger/mergeIndexes/documents");
-        config.setPathToInvertedIndexFreq("../test/data/merger/mergeIndexes/frequency");
-        config.setPartialVocabularyDir("../test/data/merger/mergeIndexes/vocabulary");
-
-        config.setDocumentIdFolder("../test/data/merger/mergeIndexes/documentIdTest");
-        config.setPathToVocabulary("../test/data/merger/mergeIndexes/vocabulary_test");
-
-        config.setPartialIndexesPath("../test/data/merger/mergeIndexes/partialIndexes");
-        config.setPathToBlockDescriptors("../test/data/merger/mergeIndexes/blockDescriptors");
+        Config config = ConfigUtils.getConfig("merger3Test");
 
         Merger3 merger = Merger3.with(config, 3);
         boolean result = merger.mergeIndexes(false, false);

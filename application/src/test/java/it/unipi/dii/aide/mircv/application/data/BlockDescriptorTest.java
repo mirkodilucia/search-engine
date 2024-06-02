@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.data;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class BlockDescriptorTest {
     // Setting up test paths before running the tests
     @BeforeAll
     static void setTestPaths() {
-        config = new Config();
+        config = ConfigUtils.getConfig("blockDescriptorTest");
         VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptor/blockDescriptorsTest");
     }
 

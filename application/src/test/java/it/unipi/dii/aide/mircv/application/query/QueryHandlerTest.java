@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv.application.query;
 
-import it.unipi.dii.aide.mircv.application.config.Config;
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
+import it.unipi.dii.aide.mircv.application.config.*;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.application.data.Vocabulary;
 import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
@@ -32,12 +33,7 @@ public class QueryHandlerTest
 
     @BeforeAll
     public static void setup() {
-        config = new Config();
-        config.setPathToVocabulary("../test/data/queryHandler/vocabulary");
-        config.setPathToBlockDescriptors("../test/data/queryHandler/blockDescriptors");
-        config.setDocumentIndexPath("../test/data/queryHandler/documentIndex");
-        config.setPathToInvertedIndexDocs("../test/data/queryHandler/invertedIndexDocs");
-        config.setPathToInvertedIndexFreq("../test/data/queryHandler/invertedIndexFreqs");
+        config = ConfigUtils.getConfig("queryHandler");
 
         docIndex = DocumentIndexTable.with(config);
         VocabularyEntry.setBlockDescriptorsPath("../test/data/queryHandler/blockDescriptors");
@@ -51,8 +47,8 @@ public class QueryHandlerTest
         Vocabulary.unsetInstance();
         Vocabulary v = Vocabulary.with(config);
 
-        boolean vocabularyLoaded = v.readFromDisk();
-        assertTrue(vocabularyLoaded);
+        v.put("example", new VocabularyEntry("example", config.invertedIndexConfig.getBlockDescriptorFile()));
+        v.put("another", new VocabularyEntry("another", config.invertedIndexConfig.getBlockDescriptorFile()));
 
         boolean tableLoaded = docIndex.load();
         assertTrue(tableLoaded);
@@ -85,9 +81,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testMaxScoreTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected ){
-        config.setMaxScoreEnabled(true);
-        config.setCompression(true);
-        config.setStemStopRemoval(false);
+        config.scorerConfig.setMaxScoreEnabled(true);
+        config.vocabularyConfig.setCompressionEnabled(true);
+        config.preprocessConfig.setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.TFIDF);
@@ -98,9 +94,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testMaxScoreBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.setMaxScoreEnabled(true);
-        config.setCompression(true);
-        config.setStemStopRemoval(false);
+        config.scorerConfig.setMaxScoreEnabled(true);
+        config.vocabularyConfig.setCompressionEnabled(true);
+        config.preprocessConfig.setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.BM25);
@@ -113,9 +109,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testDAATTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.setMaxScoreEnabled(false);
-        config.setCompression(true);
-        config.setStemStopRemoval(false);
+        config.scorerConfig.setMaxScoreEnabled(false);
+        config.vocabularyConfig.setCompressionEnabled(true);
+        config.preprocessConfig.setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.TFIDF);
@@ -126,9 +122,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testDAATBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.setMaxScoreEnabled(false);
-        config.setCompression(true);
-        config.setStemStopRemoval(false);
+        config.scorerConfig.setMaxScoreEnabled(false);
+        config.vocabularyConfig.setCompressionEnabled(true);
+        config.preprocessConfig.setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.BM25);
@@ -138,11 +134,8 @@ public class QueryHandlerTest
 
     @AfterAll
     static void cleanup() {
-        //FileUtils.removeFile(config.getPathToVocabulary());
-        //FileUtils.removeFile(config.getDocumentIndexPath());
-        //FileUtils.removeFile(config.getPathToInvertedIndexDocs());
-        //FileUtils.removeFile(config.getPathToInvertedIndexFreqs());
-        //FileUtils.removeFile(config.getBlockDescriptorsPath());
+        //config.cleanUpVocabulary();
+        //config.cleanUpInvertedIndex();
     }
 
     public static Stream<Arguments> getBM25Parameters() {
@@ -185,11 +178,11 @@ public class QueryHandlerTest
                 new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
 
         return Stream.of(
-                //Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
-                Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25)
-                //Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisBM25),
-                //Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjBM25),
-                //Arguments.arguments(3, queryPostingsSimpleExample, true, expectedResultsEmpty)
+                Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
+                Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25),
+                Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisBM25),
+                Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjBM25),
+                Arguments.arguments(3, queryPostingsSimpleExample, true, expectedResultsEmpty)
         );
     }
 

@@ -4,7 +4,7 @@ public class PreprocessConfig {
 
     private final String stopwordsPath;
     private final boolean removeStopwords;
-    private final boolean stemmerEnabled;
+    private boolean stemmerEnabled;
 
     public PreprocessConfig(String stopwordsPath, boolean removeStopwords, boolean stemmerEnabled) {
         this.stopwordsPath = stopwordsPath;
@@ -22,5 +22,9 @@ public class PreprocessConfig {
 
     public boolean isStemmerEnabled() {
         return stemmerEnabled;
+    }
+
+    public void setStemStopRemovalEnabled(boolean stemmerEnabled) {
+        this.stemmerEnabled = stemmerEnabled;
     }
 }

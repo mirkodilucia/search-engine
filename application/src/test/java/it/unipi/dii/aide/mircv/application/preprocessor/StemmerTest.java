@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.preprocessor;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import org.junit.Test;
 
@@ -8,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StemmerTest {
 
     static Config setup() {
-        Config config = new Config();
-        config.setRemoveStopword(true);
-        config.setStopwordsPath("../resources/stopwords.dat");
+        Config config = ConfigUtils.getConfig("stemmerTest");
         return config;
     }
 

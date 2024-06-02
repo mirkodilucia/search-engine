@@ -84,17 +84,17 @@ public class MergerLoaderMock {
 
         try (
                 FileChannel documentIdChannel =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexDocs(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getInvertedIndexDocs(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel frequencyChan =
-                        FileChannelUtils.openFileChannel(config.getPathToInvertedIndexFreqs(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getInvertedIndexFreqsFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel descriptorChan =
-                        FileChannelUtils.openFileChannel(config.getPathToBlockDescriptors(),
+                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getBlockDescriptorFile(),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);

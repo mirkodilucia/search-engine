@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.indexer.merger;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.VocabularyEntry;
 import it.unipi.dii.aide.mircv.application.data.PostingList;
@@ -11,10 +12,11 @@ public class MergerWorkerTest
 {
     @Test
     public void testGetMinimumTerm() {
+        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
         nextTerms[0] = new VocabularyEntry("term", "../test/data/getMinimumTermTest");
         int numIndexes = 1;
-        Config config = new Config();
         MergerWorker mergerWorker = MergerWorker.with(config, numIndexes, nextTerms);
         String result = mergerWorker.getMinimumTerm();
         assert result.equals("term");
@@ -22,11 +24,12 @@ public class MergerWorkerTest
 
     @Test
     public void testGetMinimumTermWithMultipleTerm() {
+        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+
         VocabularyEntry[] nextTerms = new VocabularyEntry[2];
         nextTerms[0] = new VocabularyEntry("Apple", "../test/data/getMinimumTermTest");
         nextTerms[1] = new VocabularyEntry("apple", "../test/data/getMinimumTermTest");
         int numIndexes = 1;
-        Config config = new Config();
         MergerWorker mergerWorker = MergerWorker.with(config, numIndexes, nextTerms);
         String result = mergerWorker.getMinimumTerm();
         assert result.equals("Apple");
@@ -34,14 +37,10 @@ public class MergerWorkerTest
 
     @Test
     public void processTermTest() {
+        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
         nextTerms[0] = new VocabularyEntry("term", "../test/data/processTermTest");
-
-        Config config = new Config();
-        config.setStopwordsPath("../resources/stopwords.dat");
-        config.setPathToInvertedIndexDocs("../test/data/processTerm/invertedIndexDocsTest");
-        config.setPathToInvertedIndexFreq("../test/data/processTerm/invertedIndexFreqTest");
-        config.setPathToBlockDescriptors("../test/data/processTerm/blockDescriptorsTest");
 
         MergerWorker mergerWorker = MergerWorker.with(config, 1, nextTerms);
 

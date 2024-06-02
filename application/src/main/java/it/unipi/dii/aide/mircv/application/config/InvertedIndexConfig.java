@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.application.config;
 
+import it.unipi.dii.aide.mircv.application.utils.FileUtils;
+
 public class InvertedIndexConfig {
 
     private final String blockDescriptorPath;
@@ -58,5 +60,14 @@ public class InvertedIndexConfig {
 
     public String getDocumentIndexDir() {
         return this.documentIndexPath;
+    }
+
+    public void cleanUp() {
+        FileUtils.removeFile(documentIndexPath);
+        FileUtils.removeFile(invertedIndexFreqs);
+        FileUtils.removeFile(invertedIndexDocs);
+        FileUtils.removeFile(partialInvertedFrequenciesPath);
+        FileUtils.removeFile(partialInvertedIndexDocumentsPath);
+        FileUtils.removeFile(blockDescriptorPath);
     }
 }

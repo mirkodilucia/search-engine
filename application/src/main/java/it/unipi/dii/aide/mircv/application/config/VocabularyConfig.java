@@ -1,5 +1,9 @@
 package it.unipi.dii.aide.mircv.application.config;
 
+import it.unipi.dii.aide.mircv.application.utils.FileUtils;
+
+import java.io.File;
+
 public class VocabularyConfig {
 
     private final String vocabularyPath;
@@ -8,7 +12,7 @@ public class VocabularyConfig {
 
     private String blockDescriptorsPath;
 
-    private final boolean compressionEnabled;
+    private boolean compressionEnabled;
 
 
     public String getPathToVocabularyFile() {
@@ -43,5 +47,14 @@ public class VocabularyConfig {
 
     public String getPartialVocabularyDir() {
         return partialVocabularyDir;
+    }
+
+    public void setCompressionEnabled(boolean compressionEnabled) {
+        this.compressionEnabled = compressionEnabled;
+    }
+
+    public void cleanUp() {
+        FileUtils.removeFile(partialVocabularyDir);
+        //FileUtils.removeFile(vocabularyPath);
     }
 }

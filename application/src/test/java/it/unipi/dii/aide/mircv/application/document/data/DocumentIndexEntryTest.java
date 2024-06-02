@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.document.data;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
@@ -13,14 +14,12 @@ class DocumentIndexEntryTest {
 
     @BeforeAll
     static void init() {
-        config = new Config();
+        config = ConfigUtils.getConfig("documentIndexTest");
     }
 
     @BeforeEach
     void updatePath() {
-        DocumentIndexEntry.setTestPath();
         DocumentIndexEntry.reset();
-
     }
 
     @Test
@@ -30,7 +29,7 @@ class DocumentIndexEntryTest {
         long offset1 = entry1.writeFile();
         assertEquals(0, offset1);
 
-        DocumentIndexEntry readEntry1 = new DocumentIndexEntry("../test/data/documentIndex");
+        DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config);
         assertTrue(readEntry1.readFile(offset1));
 
         assertEquals(entry1.toString(), readEntry1.toString());
@@ -46,9 +45,9 @@ class DocumentIndexEntryTest {
         long offset2 = entry2.writeFile();
         assertEquals(72, offset2);
 
-        DocumentIndexEntry readEntry1 = new DocumentIndexEntry("../test/data/documentIndex");
+        DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config);
         assertTrue(readEntry1.readFile(offset1));
-        DocumentIndexEntry readEntry2 = new DocumentIndexEntry("../test/data/documentIndex");
+        DocumentIndexEntry readEntry2 = new DocumentIndexEntry(config);
         assertTrue(readEntry2.readFile(offset2));
 
         assertEquals(entry1.toString(), readEntry1.toString());

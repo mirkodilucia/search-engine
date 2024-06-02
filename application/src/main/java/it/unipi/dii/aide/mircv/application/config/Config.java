@@ -118,4 +118,12 @@ public class Config implements Serializable {
     public void setCollectionConfig(CollectionConfig collectionConfig) {
         this.collectionConfig = collectionConfig;
     }
+
+    public void cleanUpVocabulary() {
+        this.vocabularyConfig.cleanUp();
+    }
+
+    public void cleanUpInvertedIndex() {
+        this.invertedIndexConfig.cleanUp();
+    }
 }

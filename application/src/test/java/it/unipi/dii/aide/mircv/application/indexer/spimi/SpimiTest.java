@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.application.indexer.spimi;
 
+import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.data.*;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 import org.junit.Test;
@@ -23,12 +24,7 @@ public class SpimiTest {
     private static Config config;
 
     private void init() {
-        config = new Config();
-        config.setDocumentIdFolder("../test/data/spimi/");
-        config.setDocumetIdsFileName("documentIndex");
-        config.setPartialIndexesPath("../test/data/spimi/");
-        config.setDocumentIndexPath("../test/data/spimi/documentIndex");
-        config.setDocumentFreqPath("../test/data/spimi/", "testDocumentFreqs_0");
+        config = ConfigUtils.getConfig("spimi");
 
         documentIndex = DocumentIndexTable.with(config);
         vocabulary = Vocabulary.with(config);
@@ -174,7 +170,6 @@ public class SpimiTest {
         index = null;
         testDocuments = null;
 
-        FileUtils.removeFile(config.getDocumentIndexPath());
-        FileUtils.removeFile(config.getFrequencyFolder() + config.getPartialIndexFreqsPath(0));
+
     }
 }
