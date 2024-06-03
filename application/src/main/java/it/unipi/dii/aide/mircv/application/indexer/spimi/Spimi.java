@@ -49,6 +49,8 @@ public class Spimi implements SpimiListener {
 
     public int executeSpimi() {
         int numIndexes = 0;
+        DocumentIndexEntry.resetOffset();
+
 
         try (BufferedReader bufferReader = initBuffer(config.isCompressionEnabled())) {
             boolean writeResult = false;
@@ -62,6 +64,7 @@ public class Spimi implements SpimiListener {
                     cleanup();
                     return -1;
                 }
+                index.clear();
             }
 
             if(!DocumentCollectionSize.updateStatistics(documentId - 1,
@@ -72,12 +75,13 @@ public class Spimi implements SpimiListener {
                 return 0;
             }
 
-            return numIndexes;
+
         }catch (Exception e){
             e.printStackTrace();
+            return 0;
         }
-
         return numIndexes;
+
     }
 
     private HashMap<String, PostingList> spimiIteration(BufferedReader bufferedReader,
@@ -125,12 +129,15 @@ public class Spimi implements SpimiListener {
                 if (!index.containsKey(term)) {
                     postingList = new PostingList(config, term);
                     index.put(term, postingList);
-                    continue;
                 }
 
                 postingList = index.get(term);
                 updateOrAddPosting(documentId, postingList);
                 postingList.updateBM25Parameters(documentsLength, postingList.getPostings().size());
+            }
+            documentId ++;
+            if((documentId%1000000)==0){
+                System.out.println("at docid: "+documentId);
             }
         }
         return index;
@@ -275,10 +282,10 @@ public class Spimi implements SpimiListener {
      * cleaning directories containing partial data structures and document Index file
      */
     private void cleanup() {
-        //FileUtils.removeFile(config.getDocumentIndexPath() + "/documentIndex");
-        //FileUtils.deleteFolder(config.getDocumentIndexPath());
-        //FileUtils.deleteFolder(config.getFrequencyFolder());
-        //FileUtils.deleteFolder(config.getPartialVocabularyFolder());
+        FileUtils.removeFile(config.invertedIndexConfig.getDocumentIndexFile());
+        FileUtils.deleteFolder(config.invertedIndexConfig.getDocumentIndexDir());
+        FileUtils.deleteFolder(config.invertedIndexConfig.getFrequencyFolder());
+        FileUtils.deleteFolder(config.vocabularyConfig.getPartialVocabularyDir());
     }
 
     //obtain spimi instance with configuration

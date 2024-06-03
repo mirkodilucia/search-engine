@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.application;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.config.ConfigLoader;
 import it.unipi.dii.aide.mircv.application.config.DocumentManager;
+import it.unipi.dii.aide.mircv.application.data.DocumentCollectionSize;
 import it.unipi.dii.aide.mircv.application.indexer.Merger2;
 import it.unipi.dii.aide.mircv.application.indexer.MergerLoader;
 import it.unipi.dii.aide.mircv.application.indexer.spimi.Spimi;
@@ -16,8 +17,11 @@ import java.util.Arrays;
 public class Main {
     private static Config config;
 
+
     public static void main(String[] args) {
         config = ConfigLoader.load();
+
+        DocumentCollectionSize.initialize(config);
 
         //DocumentManager dp = DocumentManager.with(config);
         //dp.initialize();

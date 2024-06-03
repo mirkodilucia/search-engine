@@ -128,7 +128,7 @@ public class PostingList {
     // Method to open the posting list
     public void openList() {
         Vocabulary v = Vocabulary.with(config);
-        v.readFromDisk();
+        //v.readFromDisk();
         blocks = v.get(term).readBlocks();
 
         if (blocks == null) {
@@ -193,10 +193,10 @@ public class PostingList {
 
     // Method to write the posting list as plain text in debug files
     public void debugSaveToDisk(String docidsPath, String freqsPath, int maxPostingsPerBlock) {
-        //FileUtils.createFolder("../test/data/debug");
-        //FileUtils.createFolder("../test/data/debug/" + docidsPath);
-        //FileUtils.createFolder("../test/data/debug/" + freqsPath);
-        //FileUtils.createFolder("../test/data/debug/completeList.txt");
+        FileUtils.createFolder("../test/data/debug");
+        FileUtils.createFolder("../test/data/debug/" + docidsPath);
+        FileUtils.createFolder("../test/data/debug/" + freqsPath);
+        FileUtils.createFolder("../test/data/debug/completeList.txt");
 
         try {
             BufferedWriter writerDocids = new BufferedWriter(new FileWriter("../test/data/debug/" + docidsPath, true));

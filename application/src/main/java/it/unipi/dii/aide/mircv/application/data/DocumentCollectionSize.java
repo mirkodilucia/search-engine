@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.application.data;
 
+import it.unipi.dii.aide.mircv.application.config.Config;
+
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,11 +11,23 @@ import java.io.ObjectOutputStream;
 
 public class DocumentCollectionSize {
 
-    private static long collectionSize = 0;
-    private static long vocabularySize = 0;
-    private static long totalDocumentLen = 0;
+    private static long collectionSize;
+    private static long vocabularySize;
+    private static long totalDocumentLen;
+
+
+    public static void initialize(Config config){
+        if(!readFile(config.collectionConfig.getCollectionStatisticsPath())){
+            collectionSize = 0;
+            vocabularySize = 0;
+            totalDocumentLen = 0;
+        }
+
+    }
 
     public static boolean readFile(String collectionStatisticsPath) {
+
+
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(collectionStatisticsPath))) {
             collectionSize = ois.readLong();
             vocabularySize = ois.readLong();

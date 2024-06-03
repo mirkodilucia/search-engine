@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
@@ -41,10 +42,10 @@ public class DocumentIndexEntry {
     }
 
     public long writeFile(){
-        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_FILE),
+        try (FileChannel fc = (FileChannel) Files.newByteChannel(Paths.get(DOCUMENT_INDEX_FILE),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
-                StandardOpenOption.CREATE))) {
+                StandardOpenOption.CREATE)) {
 
             MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
 
@@ -74,10 +75,10 @@ public class DocumentIndexEntry {
     }
 
     public boolean readFile(long memoryOffset) {
-        try (FileChannel fc = (FileChannel.open(Paths.get(DOCUMENT_INDEX_FILE),
+        try (FileChannel fc = (FileChannel) Files.newByteChannel(Paths.get(DOCUMENT_INDEX_FILE),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
-                StandardOpenOption.CREATE))) {
+                StandardOpenOption.CREATE)) {
 
             MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset, DOC_ID_SIZE);
 
@@ -111,6 +112,25 @@ public class DocumentIndexEntry {
     public String toString() {
         return "document:" + this.documentId + ":pid:" + this.pId + ":len:" + this.documentLength;
     }
+
+    @Override
+    public boolean equals(Object o){
+
+        if(o == this)
+            return true;
+
+        if (!(o instanceof DocumentIndexEntry de)) {
+            return false;
+        }
+
+        return de.getDocumentId() == this.getDocumentId() && de.getPId().equals(this.getPId()) && de.getDocumentLenght() == this.getDocumentLenght();
+    }
+
+    public static void resetOffset(){
+        memoryOffset = 0;
+    }
+
+
 
     public String getPId() {
         return pId;
