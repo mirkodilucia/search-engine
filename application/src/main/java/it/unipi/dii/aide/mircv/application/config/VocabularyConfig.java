@@ -2,59 +2,36 @@ package it.unipi.dii.aide.mircv.application.config;
 
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 
-import java.io.File;
-
+//Related to the paths of the vocabulary file
 public class VocabularyConfig {
 
+    private final String vocabularyFile;  //File
+    private final String frequencyFileName; //File
+    private final String docIdFileName; //File
     private final String vocabularyPath;
 
-    private final String partialVocabularyDir;
+    public VocabularyConfig(String vocabularyPath, String frequencyFileNAme, String docIdFileName) {
+        this.vocabularyFile = vocabularyPath;
 
-    private String blockDescriptorsPath;
-
-    private boolean compressionEnabled;
-
-
-    public String getPathToVocabularyFile() {
-        return vocabularyPath;
+        this.frequencyFileName = frequencyFileNAme;
+        this.docIdFileName = docIdFileName;
     }
 
-    public VocabularyConfig(String vocabularyPath, String partialVocabularyDir, boolean compressionEnabled) {
-        this.vocabularyPath = vocabularyPath;
-        this.partialVocabularyDir = partialVocabularyDir;
-        this.compressionEnabled = compressionEnabled;
+    public String getVocabularyFile() {
+        return vocabularyFile;
     }
 
-    public String getBlockDescriptorsPath() {
-        return blockDescriptorsPath;
-    }
-
-    public void setBlockDescriptorsPath(String blockDescriptorsPath) {
-        this.blockDescriptorsPath = blockDescriptorsPath;
-    }
-
-    public boolean isCompressionEnabled() {
-        return compressionEnabled;
-    }
-
-    public String getPathToPartialVocabularyDir(int i) {
-        return partialVocabularyDir + "/partial_vocabulary" + i;
-    }
-
-    public String getPathToVocabularyDir() {
-        return partialVocabularyDir;
-    }
-
-    public String getPartialVocabularyDir() {
-        return partialVocabularyDir;
-    }
-
-    public void setCompressionEnabled(boolean compressionEnabled) {
-        this.compressionEnabled = compressionEnabled;
-    }
 
     public void cleanUp() {
-        FileUtils.removeFile(partialVocabularyDir);
-        //FileUtils.removeFile(vocabularyPath);
+
+        FileUtils.removeFile(vocabularyFile);
+    }
+
+    public String getFrequencyFileName() {
+        return frequencyFileName;
+    }
+
+    public String getDocIdFileName() {
+        return docIdFileName;
     }
 }

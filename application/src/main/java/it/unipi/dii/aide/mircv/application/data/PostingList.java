@@ -1,7 +1,6 @@
 package it.unipi.dii.aide.mircv.application.data;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
-import it.unipi.dii.aide.mircv.application.config.Configuration;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 
 import java.io.BufferedWriter;

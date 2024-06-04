@@ -20,6 +20,17 @@ public class Config implements Serializable {
 
     public CollectionConfig collectionConfig;
 
+    public PartialDirectoryConfig partialDirectoryConfig;
+
+    public BlockDescriptorConfig blockDescriptorConfig;
+
+    public DocumentIndexConfig documentIndexConfig;
+
+    public Config(){
+
+    }
+
+
     public Config(
         DatasetConfig datasetConfig,
         PreprocessConfig preprocessConfig,
@@ -27,6 +38,9 @@ public class Config implements Serializable {
         InvertedIndexConfig invertedIndexConfig,
         ScorerConfig scorerConfig,
         CollectionConfig collectionConfig,
+        PartialDirectoryConfig partialDirectoryConfig,
+        BlockDescriptorConfig blockDescriptorConfig,
+        DocumentIndexConfig documentIndexConfig,
         String testDir,
         String debugDir,
         boolean debugEnabled
@@ -37,6 +51,9 @@ public class Config implements Serializable {
         this.invertedIndexConfig = invertedIndexConfig;
         this.scorerConfig = scorerConfig;
         this.collectionConfig = collectionConfig;
+        this.partialDirectoryConfig = partialDirectoryConfig;
+        this.blockDescriptorConfig = blockDescriptorConfig;
+        this.documentIndexConfig = documentIndexConfig;
 
         this.testDir = testDir;
         this.debugDir = debugDir;
@@ -44,7 +61,7 @@ public class Config implements Serializable {
     }
 
     public boolean isCompressionEnabled() {
-        return vocabularyConfig.isCompressionEnabled();
+        return blockDescriptorConfig.isCompressionEnabled();
     }
 
     public boolean isDebugEnabled() {
@@ -99,6 +116,14 @@ public class Config implements Serializable {
         return invertedIndexConfig;
     }
 
+    public DatasetConfig getDatasetConfig() {
+        return datasetConfig;
+    }
+
+    public void setDatasetConfig(DatasetConfig datasetConfig) {
+        this.datasetConfig = datasetConfig;
+    }
+
     public void setInvertedIndexConfig(InvertedIndexConfig invertedIndexConfig) {
         this.invertedIndexConfig = invertedIndexConfig;
     }
@@ -114,6 +139,31 @@ public class Config implements Serializable {
     public CollectionConfig getCollectionConfig() {
         return collectionConfig;
     }
+
+    public PartialDirectoryConfig getPartialDirectoryConfig() {
+        return partialDirectoryConfig;
+    }
+
+    public BlockDescriptorConfig getBlockDescriptorConfig() {
+        return blockDescriptorConfig;
+    }
+
+    public DocumentIndexConfig getDocumentIndexConfig() {
+        return documentIndexConfig;
+    }
+
+    public void setPartialDirectoryConfig(PartialDirectoryConfig partialDirectoryConfig) {
+        this.partialDirectoryConfig = partialDirectoryConfig;
+    }
+
+    public void setBlockDescriptorConfig(BlockDescriptorConfig blockDescriptorConfig) {
+        this.blockDescriptorConfig = blockDescriptorConfig;
+    }
+
+    public void setDocumentIndexConfig(DocumentIndexConfig documentIndexConfig) {
+        this.documentIndexConfig = documentIndexConfig;
+    }
+
 
     public void setCollectionConfig(CollectionConfig collectionConfig) {
         this.collectionConfig = collectionConfig;

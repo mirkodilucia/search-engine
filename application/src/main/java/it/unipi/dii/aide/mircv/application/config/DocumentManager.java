@@ -52,26 +52,5 @@ public class DocumentManager {
         return INSTANCE;
     }
 
-    public void initialize() {
-        FileUtils.removeFile(configuration.invertedIndexConfig.getDocumentIndexFile());
-        FileUtils.removeFile(configuration.vocabularyConfig.getPathToVocabularyFile());
-        FileUtils.removeFile(configuration.invertedIndexConfig.getDocumentIndexFile());
-        FileUtils.removeFile(configuration.invertedIndexConfig.getInvertedIndexFreqsFile());
-        FileUtils.removeFile(configuration.invertedIndexConfig.getBlockDescriptorFile());
 
-        FileUtils.deleteFolder(configuration.vocabularyConfig.getPartialVocabularyDir());
-        FileUtils.deleteFolder(configuration.invertedIndexConfig.getDocumentIndexDir());
-        FileUtils.deleteFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsDir());
-        FileUtils.deleteFolder(configuration.getDebugFolder());
-
-        FileUtils.createFolder(configuration.vocabularyConfig.getPathToVocabularyDir());
-        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexDir());
-        FileUtils.createFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsDir());
-        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexFile());
-        FileUtils.createFolder(configuration.invertedIndexConfig.getInvertedIndexFreqsFile());
-        FileUtils.createFolder(configuration.vocabularyConfig.getPathToVocabularyFile());
-        FileUtils.createFolder(configuration.invertedIndexConfig.getDocumentIndexFile());
-
-        FileUtils.createFolder(configuration.getDebugFolder());
-    }
 }

@@ -5,7 +5,6 @@ import it.unipi.dii.aide.mircv.application.data.*;
 import it.unipi.dii.aide.mircv.application.indexer.FileChannelUtils;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -32,12 +31,40 @@ public class Spimi implements SpimiListener {
     //number of partial indexes to write
     private long numPostings = 0;
 
+    /*
+   path to the file on the disk storing the partial vocabulary
+   */
+    private static String PATH_TO_PARTIAL_VOCABULARY;
+
+    /*
+   path to the file on the disk storing the partial frequencies of the posting list
+   */
+    private static String PATH_TO_PARTIAL_FREQUENCIES;
+
+    /*
+    path to the file on the disk storing the partial docids of the posting list
+    */
+
+    private static String PATH_TO_PARTIAL_DOCID;
+
+
+
+
     //configuration
     protected final Config config;
 
     boolean allDocumentsProcessed = false;
     int documentsLength = 0;
     int documentId = 1;
+
+    public void setupSpimi() {
+        PATH_TO_PARTIAL_VOCABULARY = config.getPartialDirectoryConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
+        PATH_TO_PARTIAL_FREQUENCIES = config.getPartialDirectoryConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName();
+        PATH_TO_PARTIAL_DOCID = config.getPartialDirectoryConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName();
+
+
+
+    }
 
     protected Spimi(Config config) {
         this.config = config;
@@ -61,7 +88,7 @@ public class Spimi implements SpimiListener {
 
                 if (!writeResult) {
                     System.out.println("Couldn't write index to disk.");
-                    cleanup();
+                    //cleanup();
                     return -1;
                 }
                 index.clear();
@@ -186,7 +213,7 @@ public class Spimi implements SpimiListener {
 
         // try to open a file channel to the file of the inverted index
         try (
-                FileChannel docsFchan = FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(numIndexes),
+                FileChannel docsFchan = FileChannelUtils.openFileChannel(config.invertedIndexConfiginvertedIndexConfig.getPartialIndexDocumentsPath(numIndexes),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE
@@ -280,13 +307,14 @@ public class Spimi implements SpimiListener {
 
     /**
      * cleaning directories containing partial data structures and document Index file
-     */
+     *
     private void cleanup() {
         FileUtils.removeFile(config.invertedIndexConfig.getDocumentIndexFile());
-        FileUtils.deleteFolder(config.invertedIndexConfig.getDocumentIndexDir());
-        FileUtils.deleteFolder(config.invertedIndexConfig.getFrequencyFolder());
+        FileUtils.deleteFolder(config.partialDirectoryConfig.getPartialInvertedFrequenciesPath());
+        FileUtils.deleteFolder(config.partialDirectoryConfig.getPartialInvertedIndexDocIdPath());
         FileUtils.deleteFolder(config.vocabularyConfig.getPartialVocabularyDir());
     }
+     */
 
     //obtain spimi instance with configuration
     public static Spimi with(Config config) {
