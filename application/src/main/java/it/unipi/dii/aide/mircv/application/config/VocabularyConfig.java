@@ -10,11 +10,11 @@ public class VocabularyConfig {
     private final String docIdFileName; //File
     private final String vocabularyPath;
 
-    public VocabularyConfig(String vocabularyPath, String frequencyFileNAme, String docIdFileName) {
-        this.vocabularyFile = vocabularyPath;
-
+    public VocabularyConfig(String vocabularyFile, String frequencyFileNAme, String docIdFileName, String vocabularyPath) {
+        this.vocabularyFile = vocabularyFile;
         this.frequencyFileName = frequencyFileNAme;
         this.docIdFileName = docIdFileName;
+        this.vocabularyPath = vocabularyPath;
     }
 
     public String getVocabularyFile() {
@@ -22,16 +22,15 @@ public class VocabularyConfig {
     }
 
 
-    public void cleanUp() {
-
-        FileUtils.removeFile(vocabularyFile);
-    }
-
     public String getFrequencyFileName() {
         return frequencyFileName;
     }
 
     public String getDocIdFileName() {
         return docIdFileName;
+    }
+
+    public String getVocabularyPath() {
+        return vocabularyPath;
     }
 }

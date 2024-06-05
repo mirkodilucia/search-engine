@@ -8,11 +8,11 @@ public class ConfigUtils {
     public static Config getConfig(String basePath) {
 
         Config config = new Config();
-        config.setBlockDescriptorConfig(new BlockDescriptorConfig("../test/data/" + basePath + "/blockDescriptors", true));
-        config.setVocabularyConfig(new VocabularyConfig("../test/data/" + basePath + "/vocabulary", "../test/data/" + basePath + "/vocabularyFreqs", "../test/data/" + basePath + "/vocabularyDocId"));
-        config.setDocumentIndexConfig(new DocumentIndexConfig("../test/data/" + basePath + "/documentIndex"));
-        config.setPartialDirectoryConfig(new PartialDirectoryConfig("../test/data/" + basePath + "/partialInvertedFrequenciesPathDir", "../test/data/" + basePath + "/partialInvertedIndexDocIdPathDir", "../test/data/" + basePath + "/partialVocabularyDir", "../test/data/" + basePath + "/frequencyDir", "../test/data/" + basePath + "/docIdDir"));
-        config.setInvertedIndexConfig(new InvertedIndexConfig("../test/data/" + basePath + "/invertedIndexFreqs", "../test/data/" + basePath + "/invertedIndexDocId"));
+        config.setBlockDescriptorConfig(new BlockDescriptorConfig("data/blockDescriptors", true));
+        config.setVocabularyConfig(new VocabularyConfig("/vocabulary", "/frequencies" , "/docids", "data/vocabulary"));
+        config.setDocumentIndexConfig(new DocumentIndexConfig("data/documentIndex"));
+        config.setPartialResultsConfig(new PartialResultsConfig("data/partial_vocabulary", "data/partial_frequencies", "data/partial_docids"));
+        config.setInvertedIndexConfig(new InvertedIndexConfig("data/invertedIndexFreqs", "data/invertedIndexDocs"));
         config.setScorerConfig(new ScorerConfig(true));
         config.setPreprocessConfig(new PreprocessConfig("../resources/stopwords.dat", true, true));
         config.setDatasetConfig(new DatasetConfig("../resources/dataset/collection.tar.gz"));

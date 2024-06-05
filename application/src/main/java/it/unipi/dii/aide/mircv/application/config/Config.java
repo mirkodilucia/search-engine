@@ -20,7 +20,7 @@ public class Config implements Serializable {
 
     public CollectionConfig collectionConfig;
 
-    public PartialDirectoryConfig partialDirectoryConfig;
+    public PartialResultsConfig partialResultsConfig;
 
     public BlockDescriptorConfig blockDescriptorConfig;
 
@@ -38,7 +38,7 @@ public class Config implements Serializable {
         InvertedIndexConfig invertedIndexConfig,
         ScorerConfig scorerConfig,
         CollectionConfig collectionConfig,
-        PartialDirectoryConfig partialDirectoryConfig,
+        PartialResultsConfig partialResultsConfig,
         BlockDescriptorConfig blockDescriptorConfig,
         DocumentIndexConfig documentIndexConfig,
         String testDir,
@@ -51,7 +51,7 @@ public class Config implements Serializable {
         this.invertedIndexConfig = invertedIndexConfig;
         this.scorerConfig = scorerConfig;
         this.collectionConfig = collectionConfig;
-        this.partialDirectoryConfig = partialDirectoryConfig;
+        this.partialResultsConfig = partialResultsConfig;
         this.blockDescriptorConfig = blockDescriptorConfig;
         this.documentIndexConfig = documentIndexConfig;
 
@@ -140,8 +140,8 @@ public class Config implements Serializable {
         return collectionConfig;
     }
 
-    public PartialDirectoryConfig getPartialDirectoryConfig() {
-        return partialDirectoryConfig;
+    public PartialResultsConfig getPartialResultsConfig() {
+        return partialResultsConfig;
     }
 
     public BlockDescriptorConfig getBlockDescriptorConfig() {
@@ -152,8 +152,8 @@ public class Config implements Serializable {
         return documentIndexConfig;
     }
 
-    public void setPartialDirectoryConfig(PartialDirectoryConfig partialDirectoryConfig) {
-        this.partialDirectoryConfig = partialDirectoryConfig;
+    public void setPartialResultsConfig(PartialResultsConfig partialResultsConfig) {
+        this.partialResultsConfig = partialResultsConfig;
     }
 
     public void setBlockDescriptorConfig(BlockDescriptorConfig blockDescriptorConfig) {
@@ -169,9 +169,7 @@ public class Config implements Serializable {
         this.collectionConfig = collectionConfig;
     }
 
-    public void cleanUpVocabulary() {
-        this.vocabularyConfig.cleanUp();
-    }
+
 
     public void cleanUpInvertedIndex() {
         this.invertedIndexConfig.cleanUp();
