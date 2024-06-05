@@ -9,6 +9,7 @@ public class ConfigUtils {
 
         Config config = new Config();
         config.setBlockDescriptorConfig(new BlockDescriptorConfig("data/blockDescriptors", true));
+
         config.setVocabularyConfig(new VocabularyConfig("/vocabulary", "/frequencies" , "/docids", "data/vocabulary"));
         config.setDocumentIndexConfig(new DocumentIndexConfig("data/documentIndex"));
         config.setPartialResultsConfig(new PartialResultsConfig("data/partial_vocabulary", "data/partial_frequencies", "data/partial_docids"));

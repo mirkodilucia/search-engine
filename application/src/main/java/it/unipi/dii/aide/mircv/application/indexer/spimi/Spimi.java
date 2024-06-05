@@ -53,7 +53,7 @@ public class Spimi implements SpimiListener {
     protected static String PATH_COMPRESSED_COLLECTION;
 
     //configuration
-    protected final Config config;
+    protected static Config config;
 
     boolean allDocumentsProcessed = false;
     int documentsLength = 0;
@@ -65,13 +65,11 @@ public class Spimi implements SpimiListener {
         PATH_TO_PARTIAL_VOCABULARY = config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
         PATH_TO_PARTIAL_FREQUENCIES = config.getPartialResultsConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName();
         PATH_TO_PARTIAL_DOCID = config.getPartialResultsConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName();
-
-
-
     }
 
     protected Spimi(Config config) {
         this.config = config;
+        setupSpimi();
         numIndexes = 0;
         DocumentIndexEntry.reset();
 
