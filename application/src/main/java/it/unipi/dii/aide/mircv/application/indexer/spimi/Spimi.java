@@ -61,7 +61,7 @@ public class Spimi implements SpimiListener {
 
     public void setupSpimi() {
         PATH_TO_COLLECTION = config.getCollectionConfig().getRawCollectionPath();
-        PATH_COMPRESSED_COLLECTION = config.getCollectionConfig().getRawCollectionPath();
+        PATH_COMPRESSED_COLLECTION = config.getCollectionConfig().getCompressedCollectionPath();
         PATH_TO_PARTIAL_VOCABULARY = config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
         PATH_TO_PARTIAL_FREQUENCIES = config.getPartialResultsConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName();
         PATH_TO_PARTIAL_DOCID = config.getPartialResultsConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName();

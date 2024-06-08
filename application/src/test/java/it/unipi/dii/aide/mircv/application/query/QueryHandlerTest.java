@@ -83,9 +83,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testMaxScoreTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected ){
-        config.scorerConfig.setMaxScoreEnabled(true);
-        config.vocabularyConfig.setCompressionEnabled(true);
-        config.preprocessConfig.setStemStopRemovalEnabled(false);
+        config.getScorerConfig().setMaxScoreEnabled(true);
+        config.getBlockDescriptorConfig().setCompressionEnabled(true);
+        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.TFIDF);
@@ -96,9 +96,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testMaxScoreBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.scorerConfig.setMaxScoreEnabled(true);
-        config.vocabularyConfig.setCompressionEnabled(true);
-        config.preprocessConfig.setStemStopRemovalEnabled(false);
+        config.getScorerConfig().setMaxScoreEnabled(true);
+        config.getBlockDescriptorConfig().setCompressionEnabled(true);
+        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.BM25);
@@ -111,9 +111,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testDAATTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.scorerConfig.setMaxScoreEnabled(false);
-        config.vocabularyConfig.setCompressionEnabled(true);
-        config.preprocessConfig.setStemStopRemovalEnabled(false);
+        config.getScorerConfig().setMaxScoreEnabled(false);
+        config.getBlockDescriptorConfig().setCompressionEnabled(true);
+        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.TFIDF);
@@ -124,9 +124,9 @@ public class QueryHandlerTest
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testDAATBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.scorerConfig.setMaxScoreEnabled(false);
-        config.vocabularyConfig.setCompressionEnabled(true);
-        config.preprocessConfig.setStemStopRemovalEnabled(false);
+        config.getScorerConfig().setMaxScoreEnabled(false);
+        config.getBlockDescriptorConfig().setCompressionEnabled(true);
+        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.BM25);

@@ -7,6 +7,8 @@ import it.unipi.dii.aide.mircv.application.compression.VariableByteCompressor;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.nio.MappedByteBuffer;
@@ -23,8 +25,58 @@ public class Merger2 {
     private final Config config;
     private final MergerLoader loader;
 
+    /**
+     * Standard pathname for partial index documents files
+     */
+    private static String PATH_TO_PARTIAL_DOCID;
+
+    /**
+     * Standard pathname for partial index frequencies files
+     */
+    private static String PATH_TO_PARTIAL_FREQUENCIES;
+
+    /**
+     * Standard pathname for partial vocabulary files
+     */
+    private static String PATH_TO_PARTIAL_VOCABULARY;
+    /**
+     * Path to the inverted index docs file
+     */
+    private static String PATH_TO_INVERTED_INDEX_DOCS;
+
+    /**
+     * Path to the inverted index freqs file
+     */
+    private static String PATH_TO_INVERTED_INDEX_FREQS;
+
+    /**
+     * Path to vocabulary
+     */
+    private static String PATH_TO_VOCABULARY;
+
+    /**
+     * path to block descriptors file
+     */
+    private static String PATH_TO_BLOCK_DESCRIPTORS;
+
+    private static String PATH_TO_COLLECTION_STATISTICS;
+
+
+    public void setupMerger2() {
+        PATH_TO_BLOCK_DESCRIPTORS = config.getBlockDescriptorConfig().getBlockDescriptorsPath();
+        PATH_TO_VOCABULARY = config.getVocabularyConfig().getVocabularyPath();
+        PATH_TO_INVERTED_INDEX_DOCS = config.getInvertedIndexConfig().getInvertedIndexDocs();
+        PATH_TO_INVERTED_INDEX_FREQS = config.getInvertedIndexConfig().getInvertedIndexFreqsFile();
+        PATH_TO_PARTIAL_VOCABULARY = config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
+        PATH_TO_PARTIAL_FREQUENCIES = config.getPartialResultsConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName();
+        PATH_TO_PARTIAL_DOCID = config.getPartialResultsConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName();
+        PATH_TO_COLLECTION_STATISTICS = config.getCollectionConfig().getCollectionStatisticsPath();
+    }
+
+
     private Merger2(Config config, int numIndexes) {
         this.config = config;
+        setupMerger2();
         this.loader = new MergerLoader(config, numIndexes);
 
         nextTerms = new VocabularyEntry[numIndexes];
@@ -38,16 +90,16 @@ public class Merger2 {
                 nextTerms[i] = new VocabularyEntry();
                 vocabularyEntryMemoryOffset[i] = 0;
 
-                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
+                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i],PATH_TO_PARTIAL_VOCABULARY + "_" + i);
                 if (ret == -1 || ret == 0) {
                     nextTerms[i] = null;
                 }
 
-                loader.pushDocumentIdChannel(i,  FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(i),
+                loader.pushDocumentIdChannel(i,  (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_DOCID+ "_" + i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE));
-                loader.pushFrequencyChannel(i, FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexFrequenciessPath(i),
+                loader.pushFrequencyChannel(i,(FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_FREQUENCIES+ "_" + i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE));
@@ -68,22 +120,26 @@ public class Merger2 {
         // open file channels for vocabulary writes, docid and frequency writes, and block descriptor writes
         try (
                 FileChannel vocabularyChannel =
-                        FileChannelUtils.openFileChannel(config.vocabularyConfig.getPathToVocabularyFile(),
+                        (FileChannel) Files.newByteChannel(
+                                Paths.get(PATH_TO_VOCABULARY),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel documentIdChannel =
-                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getDocumentIndexFile(),
+                        (FileChannel) Files.newByteChannel(
+                                Paths.get(PATH_TO_INVERTED_INDEX_DOCS),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel frequencyChan =
-                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getInvertedIndexFreqsFile(),
+                        (FileChannel) Files.newByteChannel(
+                                Paths.get(PATH_TO_INVERTED_INDEX_FREQS),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
                 FileChannel descriptorChan =
-                        FileChannelUtils.openFileChannel(config.invertedIndexConfig.getBlockDescriptorFile(),
+                        (FileChannel) Files.newByteChannel(
+                                Paths.get(PATH_TO_BLOCK_DESCRIPTORS),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.READ,
                                 StandardOpenOption.CREATE);
@@ -95,8 +151,8 @@ public class Merger2 {
 
                 if (termToProcess == null)
                     break;
-
-                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, config.vocabularyConfig.getPathToVocabularyFile());
+                //TODO Verify vocabulary constructor
+                VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess, PATH_TO_BLOCK_DESCRIPTORS);
                 PostingList mergedPostingList = worker.processTerm(loader, vocabularyEntry, termToProcess);
 
                 if(mergedPostingList == null){
@@ -119,8 +175,10 @@ public class Merger2 {
 
                     if (compressionMode) {
                         processCompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, maxNumPostings, documentIdChannel, frequencyChan, descriptorChan);
+                        loader.cleanup();
                     }else {
                         processUncompressedPostingList(plIterator, blockDescriptor, nPostingsToBeWritten, documentIdChannel, frequencyChan, descriptorChan);
+                        loader.cleanup();
                     }
                 }
 
@@ -134,7 +192,7 @@ public class Merger2 {
             }
 
             loader.cleanup();
-            DocumentCollectionSize.updateVocabularySize(vocabularySize, config.collectionConfig.getCollectionStatisticsPath());
+            DocumentCollectionSize.updateVocabularySize(vocabularySize, PATH_TO_COLLECTION_STATISTICS);
         } catch (Exception ex) {
             loader.cleanup();
             ex.printStackTrace();
@@ -157,14 +215,15 @@ public class Merger2 {
             FileChannel docidChan,
             FileChannel frequencyChan,
             FileChannel descriptorChan
-    ) throws IOException {
+    )
+            throws IOException {
 
         int postingsInBlock = 0;
         int[] docids = new int[nPostingsToBeWritten];
         int[] freqs = new int[nPostingsToBeWritten];
 
         // Initialize docids and freqs arrays
-        while (plIterator.hasNext()) {
+        while (true){ //while (plIterator.hasNext()) {
             Posting currPosting = plIterator.next();
             docids[postingsInBlock] = currPosting.getDocId();
             freqs[postingsInBlock] = currPosting.getFrequency();
@@ -172,14 +231,19 @@ public class Merger2 {
             postingsInBlock++;
 
             if (postingsInBlock == nPostingsToBeWritten) {
-                // TODO: controlla che la encode vada bene
+
                 byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docids);
                 byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
 
                 // Write compressed posting lists to disk
                 this.loader.writeCompressedPostingListsToDisk(currPosting, docidChan, frequencyChan, descriptorChan,
                         compressedDocs, compressedFreqs, blockDescriptor, docsMemOffset, freqsMemOffset, maxNumPostings);
+
+                docsMemOffset += compressedDocs.length;
+                freqsMemOffset += compressedFreqs.length;
                 break;
+
+
             }
         }
     }
@@ -201,7 +265,7 @@ public class Merger2 {
         blockDescriptor.setFreqSize(nPostingsToBeWritten * 4);
 
         // Write postings to block
-        while (plIterator.hasNext()) {
+        while (true){//while (plIterator.hasNext()) {
             Posting currPosting = plIterator.next();
 
             // Encode docid and freq
@@ -226,6 +290,7 @@ public class Merger2 {
             }
         }
     }
+
 
     public static Merger2 with(Config config, int numIndexes) {
         instance = new Merger2(config, numIndexes);

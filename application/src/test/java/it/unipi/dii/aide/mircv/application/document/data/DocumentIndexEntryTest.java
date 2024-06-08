@@ -19,7 +19,7 @@ class DocumentIndexEntryTest {
 
     @BeforeEach
     void updatePath() {
-        DocumentIndexEntry.reset();
+        DocumentIndexEntry.setTestPath();
     }
 
     @Test

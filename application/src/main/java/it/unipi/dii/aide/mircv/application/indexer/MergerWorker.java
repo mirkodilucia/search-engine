@@ -15,8 +15,18 @@ public class MergerWorker {
 
     private final long[] vocEntryMemOffset;
 
+    /**
+     * Standard pathname for partial vocabulary files
+     */
+    private static String PATH_TO_PARTIAL_VOCABULARY;
+
+    public void setupMergerWorker() {
+        PATH_TO_PARTIAL_VOCABULARY = config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
+    }
+
     private MergerWorker(Config configuration, int numIndexes, VocabularyEntry[] nextTerms) {
         config = configuration;
+        setupMergerWorker();
         this.numIndexes = numIndexes;
         this.nextTerms = nextTerms;
         this.vocEntryMemOffset = new long[numIndexes];
@@ -79,7 +89,7 @@ public class MergerWorker {
                 vocEntryMemOffset[i] += VocabularyEntry.ENTRY_SIZE;
 
                 // read next vocabulary entry from the i-th vocabulary
-                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
+                long ret = nextTerms[i].readFromDisk(vocEntryMemOffset[i], PATH_TO_PARTIAL_VOCABULARY+ "_" +i);
 
                 // check if errors occurred while reading the vocabulary entry
                 if(ret == -1 || ret == 0){

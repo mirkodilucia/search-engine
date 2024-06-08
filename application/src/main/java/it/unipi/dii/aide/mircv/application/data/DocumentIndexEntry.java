@@ -24,8 +24,9 @@ public class DocumentIndexEntry {
     private int documentLength;
     private static long memoryOffset = 0;
 
+
     public DocumentIndexEntry(Config config){
-        DOCUMENT_INDEX_FILE = config.invertedIndexConfig.getDocumentIndexFile();
+        DOCUMENT_INDEX_FILE = config.getDocumentIndexConfig().getDocumentIndexPath();
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
@@ -146,5 +147,13 @@ public class DocumentIndexEntry {
 
     public void setDocumentLength(int length) {
         this.documentLength = length;
+    }
+
+    /**
+     * updates the document index path file (only for test purposes)
+     */
+    public static void setTestPath(){
+        DocumentIndexEntry.DOCUMENT_INDEX_FILE = "src/test/data/testDocumentIndex";
+        DocumentIndexEntry.memoryOffset = 0;
     }
 }

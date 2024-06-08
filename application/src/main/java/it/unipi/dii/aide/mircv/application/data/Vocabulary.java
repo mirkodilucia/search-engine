@@ -30,7 +30,7 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
      */
     public static Vocabulary with(Config config){
         if(instance == null){
-            instance = new Vocabulary(config.getVocabularyConfig().getVocabularyFile()); //Verify this is the filename
+            instance = new Vocabulary(config.getVocabularyConfig().getVocabularyPath());
         }
         return instance;
     }

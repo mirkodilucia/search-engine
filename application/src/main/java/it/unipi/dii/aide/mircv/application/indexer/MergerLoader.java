@@ -88,6 +88,7 @@ public class MergerLoader {
 
         // Write the block descriptor on disk
         blockDescriptor.saveDescriptorOnDisk(descriptorChan);
+
     }
 
     public void pushDocumentIdChannel(int i, FileChannel fileChannel) {

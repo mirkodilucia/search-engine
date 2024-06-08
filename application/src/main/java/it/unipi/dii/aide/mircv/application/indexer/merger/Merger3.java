@@ -8,6 +8,8 @@ import it.unipi.dii.aide.mircv.application.data.PostingList;
 
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class Merger3 {
@@ -24,9 +26,57 @@ public class Merger3 {
     private static FileChannel[] documentIdChannels = null;
 
     private static FileChannel[] frequencyChannels = null;
+    /**
+     * Standard pathname for partial index documents files
+     */
+    private static String PATH_TO_PARTIAL_DOCID;
+
+    /**
+     * Standard pathname for partial index frequencies files
+     */
+    private static String PATH_TO_PARTIAL_FREQUENCIES;
+
+    /**
+     * Standard pathname for partial vocabulary files
+     */
+    private static String PATH_TO_PARTIAL_VOCABULARY;
+    /**
+     * Path to the inverted index docs file
+     */
+    private static String PATH_TO_INVERTED_INDEX_DOCS;
+
+    /**
+     * Path to the inverted index freqs file
+     */
+    private static String PATH_TO_INVERTED_INDEX_FREQS;
+
+    /**
+     * Path to vocabulary
+     */
+    private static String PATH_TO_VOCABULARY;
+
+    /**
+     * path to block descriptors file
+     */
+    private static String PATH_TO_BLOCK_DESCRIPTORS;
+
+    private static String PATH_TO_COLLECTION_STATISTICS;
+
+
+    public void setupMerger3() {
+        PATH_TO_BLOCK_DESCRIPTORS = config.getBlockDescriptorConfig().getBlockDescriptorsPath();
+        PATH_TO_VOCABULARY = config.getVocabularyConfig().getVocabularyPath();
+        PATH_TO_INVERTED_INDEX_DOCS = config.getInvertedIndexConfig().getInvertedIndexDocs();
+        PATH_TO_INVERTED_INDEX_FREQS = config.getInvertedIndexConfig().getInvertedIndexFreqsFile();
+        PATH_TO_PARTIAL_VOCABULARY = config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile();
+        PATH_TO_PARTIAL_FREQUENCIES = config.getPartialResultsConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName();
+        PATH_TO_PARTIAL_DOCID = config.getPartialResultsConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName();
+        PATH_TO_COLLECTION_STATISTICS = config.getCollectionConfig().getCollectionStatisticsPath();
+    }
 
     private Merger3(Config config, int numIndexes) {
         this.config = config;
+        setupMerger3();
         this.numIndexes = numIndexes;
 
         nextTerms = new VocabularyEntry[numIndexes];
@@ -42,16 +92,16 @@ public class Merger3 {
                 nextTerms[i] = new VocabularyEntry();
                 vocabularyEntryMemoryOffset[i] = 0;
 
-                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
+                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i],PATH_TO_PARTIAL_VOCABULARY + "_" + i);
                 if (ret == -1 || ret == 0) {
                     nextTerms[i] = null;
                 }
 
-                documentIdChannels[i] = FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(i),
+                documentIdChannels[i] = (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_DOCID+ "_" + i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
-                frequencyChannels[i] = FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexFrequenciessPath(i),
+                frequencyChannels[i] = (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_FREQUENCIES+ "_" + i),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
@@ -72,23 +122,23 @@ public class Merger3 {
         long vocabularyMemoryOffset = 0;
 
         try (
-                FileChannel vocabularyChannel = FileChannelUtils.openFileChannel(
-                        config.vocabularyConfig.getPathToVocabularyFile(),
+                FileChannel vocabularyChannel = (FileChannel) Files.newByteChannel(
+                        Paths.get(PATH_TO_VOCABULARY),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
-                FileChannel documentIdChannel = FileChannelUtils.openFileChannel(
-                        config.invertedIndexConfig.getDocumentIndexFile(),
+                FileChannel documentIdChannel = (FileChannel) Files.newByteChannel(
+                        Paths.get(PATH_TO_INVERTED_INDEX_DOCS),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
-                FileChannel frequencyChannel = FileChannelUtils.openFileChannel(
-                        config.invertedIndexConfig.getInvertedIndexFreqsFile(),
+                FileChannel frequencyChannel = (FileChannel) Files.newByteChannel(
+                        Paths.get(PATH_TO_INVERTED_INDEX_FREQS),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
-                FileChannel descriptorChannel = FileChannelUtils.openFileChannel(
-                        config.invertedIndexConfig.getBlockDescriptorFile(),
+                FileChannel descriptorChannel = (FileChannel) Files.newByteChannel(
+                        Paths.get(PATH_TO_BLOCK_DESCRIPTORS),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
@@ -186,7 +236,7 @@ public class Merger3 {
                 vocabularyEntryMemoryOffset[i] += VocabularyEntry.ENTRY_SIZE;
 
                 // read next vocabulary entry from the i-th vocabulary
-                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], config.vocabularyConfig.getPathToPartialVocabularyDir(i));
+                long ret = nextTerms[i].readFromDisk(vocabularyEntryMemoryOffset[i], PATH_TO_PARTIAL_VOCABULARY+ "_" +i);
 
                 // check if errors occurred while reading the vocabulary entry
                 if(ret == -1 || ret == 0){

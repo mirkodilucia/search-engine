@@ -4,6 +4,7 @@ import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.data.*;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
@@ -162,6 +163,13 @@ public class SpimiTest {
         assertEquals(index.toString(), result);
     }
 
+    @AfterAll
+    static void teardown() {
+        FileUtils.removeFile("src/test/data/testDocumentDocids");
+        FileUtils.removeFile("src/test/data/testDocumentFreqs");
+    }
+
+    /*
     @AfterEach
     void cleanup() {
         documentIndex = null;
@@ -172,4 +180,5 @@ public class SpimiTest {
 
 
     }
+    */
 }

@@ -179,9 +179,21 @@ public class VocabularyEntry
         this.maxTfIdf = maxTfIdf;
     }
 
+    /**
+     * Constructor for the vocabulary entry for the term passed as parameter
+     * Assign the termid to the term and initializes all the statistics and memory information
+     *
+     * @param term the token of the entry
+     */
+    public VocabularyEntry(String term) {
+        // Assign the term
+        this.term = term;
+    }
+    /*
     public VocabularyEntry(String blockDescriptorsPath){
         BLOCK_DESCRIPTORS_PATH = blockDescriptorsPath;
     }
+    */
     public VocabularyEntry(String term, String blockDescriptorsPath){
         BLOCK_DESCRIPTORS_PATH = blockDescriptorsPath;
         this.term = term;

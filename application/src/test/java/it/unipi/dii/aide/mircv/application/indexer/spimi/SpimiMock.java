@@ -7,6 +7,8 @@ import it.unipi.dii.aide.mircv.application.indexer.FileChannelUtils;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,12 +42,12 @@ public class SpimiMock extends Spimi {
 
     public Vocabulary buildVocabulary(HashMap<String, PostingList> index) {
         try (
-                FileChannel docsFchan = FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
+                FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get("src/test/data/testDocumentDocids"),// FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE
                 );
-                FileChannel freqsFchan = FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
+                FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get("src/test/data/testDocumentFreqs"), //FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
@@ -64,7 +66,7 @@ public class SpimiMock extends Spimi {
             if(docsMbb != null && freqsMbb != null) {
                 for(PostingList postingList : index.values()) {
 
-                    VocabularyEntry vocabularyEntry = new VocabularyEntry(postingList.getTerm(), config.vocabularyConfig.getPathToPartialVocabularyDir(0));
+                    VocabularyEntry vocabularyEntry = new VocabularyEntry(postingList.getTerm()); //, config.vocabularyConfig.getPathToPartialVocabularyDir(0));
                     vocabularyEntry.setDocIdOffset(docsMbb.position());
                     vocabularyEntry.setFrequencyOffset(freqsMbb.position());
 

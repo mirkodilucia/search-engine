@@ -16,6 +16,11 @@ public class InitialDocument {
     private String[] tokens;
     private String[] relevantTokens;
     private String[] stems;
+    private static String PATH_TO_COLLECTION;
+
+    public void setupTextDocument() {
+        PATH_TO_COLLECTION = config.getCollectionConfig().getRawCollectionPath();
+    }
 
     public InitialDocument(Config config, String docId, String plainText) {
         this.config = config;
@@ -43,7 +48,7 @@ public class InitialDocument {
 
     public void writeFileString() {
         String fileData = this.docId + ";" + String.join(",", this.stems);
-        FileUtils.writeFile(config.collectionConfig.getRawCollectionPath() + "/" + docId, fileData);
+        FileUtils.writeFile(PATH_TO_COLLECTION+ "/" + docId, fileData);
     }
 
     public void setTokens(ArrayList<String> tokens1) {
