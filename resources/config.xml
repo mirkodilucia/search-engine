@@ -20,8 +20,8 @@
         </vocabularyConfig>
         <invertedIndexConfig>
             <blockDescriptorPath>data/blockDescriptors</blockDescriptorPath>
-            <documentIndexPath>data/index/documentIndex</documentIndexPath>
-            <invertedIndexFreqs>data/frequencies/invertedIndexFreqs</invertedIndexFreqs>
+            <documentIndexPath>data/documentIndex</documentIndexPath>
+            <invertedIndexFreqs>data/invertedIndexFreqs</invertedIndexFreqs>
             <invertedIndexDocs>data/invertedIndexDocs</invertedIndexDocs>
             <partialInvertedFrequenciesPath>data/partial_frequencies</partialInvertedFrequenciesPath>
             <partialInvertedIndexDocumentsPath>data/partial_docids</partialInvertedIndexDocumentsPath>
@@ -29,7 +29,7 @@
         <scorerConfig>
             <maxScoreEnabled>true</maxScoreEnabled>
         </scorerConfig>
-        <collectionConfig>
+        <collectionConfig> //TODO verificare path
             <rawCollectionPath>resources/dataset/collection.tar.gz</rawCollectionPath>
             <compressedCollectionPath>resources/dataset/collection.tar.gz</compressedCollectionPath>
             <collectionStatisticsPath>data/collection_statistics</collectionStatisticsPath>

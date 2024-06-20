@@ -26,22 +26,18 @@
                 <element name="vocabularyConfig">
                     <complexType>
                         <sequence>
+                            <element name="vocabularyFile" type="string" />
+                            <element name="frequencyFileName" type="string" />
+                            <element name="docIdFileName" type="string" />
                             <element name="vocabularyPath" type="string" />
-                            <element name="partialVocabularyDir" type="string" />
-                            <element name="compressionEnabled" type="boolean" />
-                            <element name="blockDescriptorsPath" type="string" />
                         </sequence>
                     </complexType>
                 </element>
                 <element name="invertedIndexConfig">
                     <complexType>
                         <sequence>
-                            <element name="blockDescriptorPath" type="string" />
-                            <element name="documentIndexPath" type="string" />
                             <element name="invertedIndexFreqs" type="string" />
-                            <element name="invertedIndexDocs" type="string" />
-                            <element name="partialInvertedFrequenciesPath" type="string" />
-                            <element name="partialInvertedIndexDocumentsPath" type="string" />
+                            <element name="invertedIndexDocId" type="string" />
                         </sequence>
                     </complexType>
                 </element>
@@ -58,6 +54,30 @@
                             <element name="rawCollectionPath" type="string" />
                             <element name="compressedCollectionPath" type="string" />
                             <element name="collectionStatisticsPath" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="partialResultsConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="partialVocabularyDir" type="string" />
+                            <element name="frequencyDir" type="string" />
+                            <element name="docIdDir" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="blockDescriptorConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="blockDescriptorsPath" type="string" />
+                            <element name="compressionEnabled" type="boolean" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="documentIndexConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="documentIndexPath" type="string" />
                         </sequence>
                     </complexType>
                 </element>
