@@ -6,7 +6,6 @@ package it.unipi.dii.aide.mircv.application.config;
 public class BlockDescriptorConfig
 {
     private String blockDescriptorsPath; //File
-
     private boolean compressionEnabled;
 
     public BlockDescriptorConfig(String blockDescriptorsPath, boolean compressionEnabled) {
