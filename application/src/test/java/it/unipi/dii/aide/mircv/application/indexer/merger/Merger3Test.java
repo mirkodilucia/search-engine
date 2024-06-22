@@ -9,7 +9,7 @@ public class Merger3Test {
 
     @Test
     public void initializeMerger() {
-        Config config = ConfigUtils.getConfig("merger3Test");
+        Config config = ConfigUtils.getConfig();
         Merger3 merger = Merger3.with(config, 1);
 
         assert(merger != null);
@@ -17,7 +17,7 @@ public class Merger3Test {
 
     @Test
     public void initializeMergerWithConfig() {
-        Config config = ConfigUtils.getConfig("merger3Test");
+        Config config = ConfigUtils.getConfig();
 
         Merger3 merger = Merger3.with(config, 1);
 
@@ -28,7 +28,7 @@ public class Merger3Test {
 
     @Test
     public void mergerGetMinimumTerm() {
-        Config config = ConfigUtils.getConfig("merger3Test");
+        Config config = ConfigUtils.getConfig();
 
         Merger3 merger = Merger3.with(config, 3);
         String vocabularyEntry = merger.getMinimumTerm();
@@ -37,7 +37,7 @@ public class Merger3Test {
 
     @Test
     public void mergeIndexes() {
-        Config config = ConfigUtils.getConfig("merger3Test");
+        Config config = ConfigUtils.getConfig();
 
         Merger3 merger = Merger3.with(config, 3);
         boolean result = merger.mergeIndexes(false, false);

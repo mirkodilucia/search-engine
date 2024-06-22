@@ -26,9 +26,7 @@ public class Config implements Serializable {
 
     public DocumentIndexConfig documentIndexConfig;
 
-    public Config(){
-
-    }
+    public Config(){}
 
 
     public Config(

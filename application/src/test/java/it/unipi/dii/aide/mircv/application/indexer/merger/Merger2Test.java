@@ -10,7 +10,7 @@ public class Merger2Test {
 
     @Test
     public void mergeIndexesTest() {
-        Config config = ConfigUtils.getConfig("merger2Test");
+        Config config = ConfigUtils.getConfig();
         Merger2 merger = Merger2.with(config, 1);
 
         try {
@@ -22,7 +22,7 @@ public class Merger2Test {
 
     @Test
     public void singleIndexMergeWithoutCompression() {
-        Config config = ConfigUtils.getConfig("merger2Test");
+        Config config = ConfigUtils.getConfig();
 
         MergerWithouCompression.mergeSingleIndex(config, config.isCompressionEnabled());
     }

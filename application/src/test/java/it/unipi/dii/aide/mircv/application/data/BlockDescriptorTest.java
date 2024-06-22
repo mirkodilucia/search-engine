@@ -26,7 +26,7 @@ public class BlockDescriptorTest {
     // Setting up test paths before running the tests
     @BeforeAll
     static void setTestPaths() {
-        config = ConfigUtils.getConfig("blockDescriptorTest");
+        config = ConfigUtils.getConfig();
         VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptorsTest");
     }
 

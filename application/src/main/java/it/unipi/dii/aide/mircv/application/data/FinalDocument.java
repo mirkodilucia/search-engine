@@ -19,8 +19,7 @@ public class FinalDocument {
      */
     private ArrayList<String> tokens;
 
-    public FinalDocument() {
-    }
+    public FinalDocument() {}
 
     /**
      * Creates a new FinalDocument with the given identifier and payload

@@ -33,7 +33,7 @@ public class QueryHandlerTest
 
     @BeforeAll
     public static void setup() {
-        config = ConfigUtils.getConfig("queryHandler");
+        config = ConfigUtils.getConfig();
 
         docIndex = DocumentIndexTable.with(config);
         VocabularyEntry.setBlockDescriptorsPath("../test/data/queryHandler/blockDescriptors");

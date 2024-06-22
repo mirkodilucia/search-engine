@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,12 +24,14 @@ public class SpimiTest {
     private static DocumentIndexTable documentIndex;
     private static Vocabulary vocabulary;
     private static Config config;
+    private static SpimiMock spimiMock;
 
-    private void init() {
-        config = ConfigUtils.getConfig("spimi");
-
+    public static void init() {
+        config = ConfigUtils.getConfig();
+        //config = new Config();
         documentIndex = DocumentIndexTable.with(config);
         vocabulary = Vocabulary.with(config);
+        spimiMock = SpimiMock.with(config);
 
         FinalDocument d1 = new FinalDocument();
         d1.setPid("document1");
@@ -137,6 +140,28 @@ public class SpimiTest {
         vocabulary.put("salad",e5);
     }
 
+
+
+    @Test
+    public void buildDocumentIndex_ShouldBeEqual() {
+        init();
+        assertEquals(documentIndex, spimiMock.buildDocumentIndexTable(testDocuments));
+    }
+
+    @Test
+    public void buildVocabulary_ShouldbeEqual() {
+        init();
+        assertEquals(vocabulary, spimiMock.buildVocabulary(index));
+    }
+
+    @Test
+    public void buildIndex_ShouldBeEqual() {
+        init();
+
+        assertEquals(index.toString(), spimiMock.executeSpimiInMemory(testDocuments).toString());
+    }
+
+    /*
     @Test
     public void buildDocumentIndex_ShouldBeEqual() {
         init();
@@ -153,7 +178,7 @@ public class SpimiTest {
 
     @Test
     public void buildIndex_ShouldBeEqual() {
-        init();
+
         DocumentIndexTable testDocumentIndex = SpimiMock.with(config).buildDocumentIndexTable(testDocuments);
         Vocabulary testVocabulary = SpimiMock.with(config).buildVocabulary(index);
         assertEquals(documentIndex, testDocumentIndex);
@@ -162,11 +187,13 @@ public class SpimiTest {
         String result = SpimiMock.with(config).executeSpimiInMemory(testDocuments).toString();
         assertEquals(index.toString(), result);
     }
+    */
+
 
     @AfterAll
     static void teardown() {
-        FileUtils.removeFile("src/test/data/testDocumentDocids");
-        FileUtils.removeFile("src/test/data/testDocumentFreqs");
+        FileUtils.removeFile("test/data/testDocumentDocids");
+        FileUtils.removeFile("test/data/testDocumentFreqs");
     }
 
     /*

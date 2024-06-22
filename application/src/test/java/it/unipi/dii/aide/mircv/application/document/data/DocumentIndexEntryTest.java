@@ -14,7 +14,7 @@ class DocumentIndexEntryTest {
 
     @BeforeAll
     static void init() {
-        config = ConfigUtils.getConfig("documentIndexTest");
+        config = ConfigUtils.getConfig();
     }
 
     @BeforeEach

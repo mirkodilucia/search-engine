@@ -5,7 +5,7 @@ import it.unipi.dii.aide.mircv.application.config.*;
 public class ConfigUtils {
 
 
-    public static Config getConfig(String basePath) {
+    public static Config getConfig() {
 
         Config config = new Config();
         config.setBlockDescriptorConfig(new BlockDescriptorConfig("data/blockDescriptors", true));
@@ -17,7 +17,7 @@ public class ConfigUtils {
         config.setScorerConfig(new ScorerConfig(true));
         config.setPreprocessConfig(new PreprocessConfig("../resources/stopwords.dat", true, true));
         config.setDatasetConfig(new DatasetConfig("../resources/dataset/collection.tar.gz"));
-        config.setCollectionConfig(new CollectionConfig("../test/data/" + basePath + "/rawCollection", "../test/data/" + basePath + "/compressedCollection", "../test/data/" + basePath + "/collectionStats"));
+        config.setCollectionConfig(new CollectionConfig("resources/dataset/sampled_collection.tsv", "resources/dataset/collection.tar.gz", "data/collection_statistics"));
 
         return config;
 

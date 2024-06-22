@@ -41,13 +41,14 @@ public class SpimiMock extends Spimi {
     }
 
     public Vocabulary buildVocabulary(HashMap<String, PostingList> index) {
+        Files.exists(Paths.get("test/data"));
         try (
-                FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get("src/test/data/testDocumentDocids"),// FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
+                FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get("../test/data/testDocumentDocids"),// FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE
                 );
-                FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get("src/test/data/testDocumentFreqs"), //FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
+                FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get("../test/data/testDocumentFreqs"), //FileChannelUtils.openFileChannel(config.invertedIndexConfig.getPartialIndexDocumentsPath(0),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);

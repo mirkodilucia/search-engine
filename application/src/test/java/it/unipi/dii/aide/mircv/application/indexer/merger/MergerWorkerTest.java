@@ -12,7 +12,7 @@ public class MergerWorkerTest
 {
     @Test
     public void testGetMinimumTerm() {
-        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+        Config config = ConfigUtils.getConfig();
 
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
         nextTerms[0] = new VocabularyEntry("term", "../test/data/getMinimumTermTest");
@@ -24,7 +24,7 @@ public class MergerWorkerTest
 
     @Test
     public void testGetMinimumTermWithMultipleTerm() {
-        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+        Config config = ConfigUtils.getConfig();
 
         VocabularyEntry[] nextTerms = new VocabularyEntry[2];
         nextTerms[0] = new VocabularyEntry("Apple", "../test/data/getMinimumTermTest");
@@ -37,7 +37,7 @@ public class MergerWorkerTest
 
     @Test
     public void processTermTest() {
-        Config config = ConfigUtils.getConfig("mergerWorkerTest");
+        Config config = ConfigUtils.getConfig();
 
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
         nextTerms[0] = new VocabularyEntry("term", "../test/data/processTermTest");

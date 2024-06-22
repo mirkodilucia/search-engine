@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StemmerTest {
 
     static Config setup() {
-        Config config = ConfigUtils.getConfig("stemmerTest");
+        Config config = ConfigUtils.getConfig();
         return config;
     }
 
