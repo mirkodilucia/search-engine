@@ -15,6 +15,12 @@ public class DocumentCollectionSize {
     private static long vocabularySize;
     private static long totalDocumentLen;
 
+    /**
+     * Path to the collection size for testing
+     */
+    private static String COLLECTION_STATISTICS_PATH = "data/collection_statistics";
+
+
 
     public static void initialize(Config config){
         if(!readFile(config.collectionConfig.getCollectionStatisticsPath())){
@@ -89,4 +95,19 @@ public class DocumentCollectionSize {
         totalDocumentLen = documentsLength;
         return writeFile(collectionStatisticsPath);
     }
+
+    /** needed for testing purposes
+     * @param collectionStatisticsPath: path to be set
+     */
+    public static void setCollectionStatisticsPath(String collectionStatisticsPath) {
+        COLLECTION_STATISTICS_PATH = collectionStatisticsPath;
+
+    }
+
+    /** needed for testing purposes
+     * @param size: path to be set
+     */
+    public static void setCollectionSize(int size) { DocumentCollectionSize.collectionSize = size;}
+
+
 }

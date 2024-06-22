@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv.application.data;
 
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
+import it.unipi.dii.aide.mircv.application.config.Config;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -15,9 +16,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public class VocabularyEntry
 {
-    private static String BLOCK_DESCRIPTORS_PATH;
+    private Config config;
+    private static String BLOCK_DESCRIPTORS_PATH = "data/blockDescriptors";
     private String term;
     private int documentFrequency;
     private double inverseDocumentFrequency = 0;
@@ -46,6 +49,7 @@ public class VocabularyEntry
     public VocabularyEntry() {
 
     }
+
 
     public VocabularyEntry(String term,
                            int documentFrequency, int memoryOffset,

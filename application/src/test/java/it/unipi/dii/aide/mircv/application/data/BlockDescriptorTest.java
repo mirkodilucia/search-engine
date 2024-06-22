@@ -33,6 +33,7 @@ public class BlockDescriptorTest {
     // Test for a single descriptor block
     @Test
     public void oneDescriptorBlockTest() {
+        setTestPaths();
         // create a posting list with 1023 elements
         PostingList list = new PostingList(config, "test");
         for (int i = 0; i < 1023; i++) {
@@ -80,6 +81,7 @@ public class BlockDescriptorTest {
     // Test for multiple descriptors
     @Test
     public void multipleDescriptorsTest() {
+        setTestPaths();
         // create a posting list with 1025 elements
         PostingList list = new PostingList(config, "test");
         for (int i = 1; i <= 1025; i++) {

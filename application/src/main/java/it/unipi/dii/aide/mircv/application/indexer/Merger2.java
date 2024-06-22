@@ -296,4 +296,53 @@ public class Merger2 {
         instance = new Merger2(config, numIndexes);
         return instance;
     }
+
+    //TESTING
+    /**
+     * needed for testing purposes
+     * @param pathToVocabulary: path to be set as vocabulary path
+     */
+    public static void setPathToVocabulary(String pathToVocabulary) {
+        PATH_TO_VOCABULARY = pathToVocabulary;
+    }
+
+    /**
+     * needed for testing purposes
+     * @param pathToInvertedIndexDocs: path to be set as inverted index's docs path
+     */
+    public static void setPathToInvertedIndexDocs(String pathToInvertedIndexDocs) {
+        PATH_TO_INVERTED_INDEX_DOCS = pathToInvertedIndexDocs;
+    }
+
+    /**
+     * needed for testing purposes
+     * @param invertedIndexFreqs: path to be set as inverted index's freqs path
+     */
+    public static void setPathToInvertedIndexFreqs(String invertedIndexFreqs) { PATH_TO_INVERTED_INDEX_FREQS = invertedIndexFreqs;}
+
+    /**
+     * needed for testing purposes
+     * @param blockDescriptorsPath: path to be set as block descriptors' path
+     */
+    public static void setPathToBlockDescriptors(String blockDescriptorsPath) { PATH_TO_BLOCK_DESCRIPTORS = blockDescriptorsPath;}
+
+    /**
+     * needed for testing purposes
+     * @param pathToPartialIndexesDocs: path to be set
+     */
+    public static void setPathToPartialIndexesDocs(String pathToPartialIndexesDocs) { PATH_TO_PARTIAL_DOCID = pathToPartialIndexesDocs;}
+
+    /**
+     * needed for testing purposes
+     * @param pathToPartialIndexesFreqs: path to be set
+     */
+    public static void setPathToPartialIndexesFreqs(String pathToPartialIndexesFreqs) { PATH_TO_PARTIAL_FREQUENCIES = pathToPartialIndexesFreqs;}
+
+    /**
+     * needed for testing purposes
+     * @param pathToPartialVocabularies: path to be set
+     */
+    public static void setPathToPartialVocabularies(String pathToPartialVocabularies) { PATH_TO_PARTIAL_VOCABULARY = pathToPartialVocabularies;}
+
+
 }

@@ -33,6 +33,16 @@ public class BlockDescriptor {
     private static long memoryOffset = 0;
 
     /**
+     * path to the docid file of the inverted index
+     */
+    private static String INVERTED_INDEX_DOCS = "data/invertedIndexDocs";
+    /**
+     * path to the frequency file of the inverted index
+     */
+    private static String INVERTED_INDEX_FREQS = "data/invertedIndexFreqs";
+
+
+    /**
      * Gets the current memory offset.
      *
      * @return The memory offset.
@@ -112,11 +122,11 @@ public class BlockDescriptor {
 
         try (
                 // Opening file channels for docid and frequency files
-                FileChannel docsFileChannel = (FileChannel) Files.newByteChannel(Paths.get(invertedIndexDocsPath),
+                FileChannel docsFileChannel = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_DOCS),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
-                FileChannel freqsFileChannel = (FileChannel) Files.newByteChannel(Paths.get(invertedIndexFreqsPath),
+                FileChannel freqsFileChannel = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_FREQS),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
@@ -193,5 +203,19 @@ public class BlockDescriptor {
      */
     public static void setMemoryOffset(long memoryOffset) {
         BlockDescriptor.memoryOffset = memoryOffset;
+    }
+
+    /** needed for testing purposes
+     * @param invertedIndexDocs: path to be set
+     */
+    public static void setInvertedIndexDocs(String invertedIndexDocs) {
+        INVERTED_INDEX_DOCS = invertedIndexDocs;
+    }
+
+    /** needed for testing purposes
+     * @param invertedIndexFreqs: path to be set
+     */
+    public static void setInvertedIndexFreqs(String invertedIndexFreqs) {
+        INVERTED_INDEX_FREQS = invertedIndexFreqs;
     }
 }
