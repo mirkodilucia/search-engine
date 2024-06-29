@@ -26,7 +26,9 @@ public class DocumentIndexEntry {
 
 
     public DocumentIndexEntry(Config config){
-        DOCUMENT_INDEX_FILE = config.getDocumentIndexConfig().getDocumentIndexPath();
+        //DOCUMENT_INDEX_FILE = config.getDocumentIndexConfig().getDocumentIndexPath();
+        DOCUMENT_INDEX_FILE = "../test/data/merger/docIndex";   // TESTING
+
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {

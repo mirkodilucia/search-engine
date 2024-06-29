@@ -24,7 +24,7 @@ public class BlockDescriptorTest {
     private static Config config;
 
     // Setting up test paths before running the tests
-    @BeforeAll
+
     static void setTestPaths() {
         config = ConfigUtils.getConfig();
         VocabularyEntry.setBlockDescriptorsPath("../test/data/blockDescriptorsTest");
@@ -76,6 +76,7 @@ public class BlockDescriptorTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        removeFile();
     }
 
     // Test for multiple descriptors
@@ -172,10 +173,11 @@ public class BlockDescriptorTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        removeFile();
     }
 
     // Removing the file created during tests
-    @AfterAll
+
     static void removeFile() {
         FileUtils.removeFile("../test/data/blockDescriptorsTest");
     }

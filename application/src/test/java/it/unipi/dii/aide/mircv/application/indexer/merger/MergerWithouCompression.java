@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.application.indexer.merger;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.*;
 import it.unipi.dii.aide.mircv.application.indexer.Merger2;
+import it.unipi.dii.aide.mircv.application.utils.FileUtils;
 
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
@@ -19,7 +20,66 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MergerWithouCompression {
 
+
+    private static final String TEST_DIRECTORY = "../test/data/merger";
+    private static final String PATH_TO_PARTIAL_VOCABULARY = TEST_DIRECTORY + "/partial_vocabulary/partial_vocabulary";
+    private static final String PATH_TO_PARTIAL_FREQUENCIES = TEST_DIRECTORY+"/partial_freqs/partial_freqs";
+    private static final String PATH_TO_PARTIAL_INDEXES_DOCS = TEST_DIRECTORY+"/partial_docids/partial_docids";
+    private static final String DOCINDEX_PATH = TEST_DIRECTORY+"/docIndex";
+    private static final String VOCABULARY_PATH = TEST_DIRECTORY+"/vocabulary";
+    private static final String INVERTED_INDEX_DOCIDS = TEST_DIRECTORY+"/docids";
+    private static final String INVERTED_INDEX_FREQS = TEST_DIRECTORY+"/freqs";
+    private static final String BLOCK_DESCRIPTOR_PATH = TEST_DIRECTORY + "/block_descriptors";
+    private static final String COLLECTION_STATISTICS_PATH = TEST_DIRECTORY + "/collection_statistics";
+
+
+    static void setPaths(){
+        //FileUtils.deleteFolder(TEST_DIRECTORY);
+        FileUtils.createFolder(TEST_DIRECTORY);
+        Merger2.setPathToVocabulary(VOCABULARY_PATH);
+        Merger2.setPathToInvertedIndexDocs(INVERTED_INDEX_DOCIDS);
+        Merger2.setPathToInvertedIndexFreqs(INVERTED_INDEX_FREQS);
+        Merger2.setPathToBlockDescriptors(BLOCK_DESCRIPTOR_PATH);
+        Merger2.setPathToPartialIndexesDocs(PATH_TO_PARTIAL_INDEXES_DOCS);
+        Merger2.setPathToPartialIndexesFreqs(PATH_TO_PARTIAL_FREQUENCIES);
+        Merger2.setPathToPartialVocabularies(PATH_TO_PARTIAL_VOCABULARY);
+        VocabularyEntry.setBlockDescriptorsPath(BLOCK_DESCRIPTOR_PATH);
+        BlockDescriptor.setInvertedIndexDocs(INVERTED_INDEX_DOCIDS);
+        BlockDescriptor.setInvertedIndexFreqs(INVERTED_INDEX_FREQS);
+        DocumentCollectionSize.setCollectionStatisticsPath(COLLECTION_STATISTICS_PATH);
+        Vocabulary.setVocabularyPath(VOCABULARY_PATH);
+        //if(Flags.isStemStopRemovalEnabled())
+            //Preprocesser.readStopwords();
+    }
+
+
+
+    static void setUp() {
+        //create directories to store partial frequencies, docids and vocabularies
+        //FileUtils.createFolder(TEST_DIRECTORY);
+        FileUtils.createFolder(TEST_DIRECTORY+"/partial_freqs");
+        FileUtils.createFolder(TEST_DIRECTORY+"/partial_docids");
+        FileUtils.createFolder(TEST_DIRECTORY+"/partial_vocabulary");
+        BlockDescriptor.setMemoryOffset(0);
+        Vocabulary.unsetInstance();
+    }
+
+
+    static void tearDown() {
+        //delete directories to store partial frequencies, docids and vocabularies
+        //FileUtils.deleteFolder(TEST_DIRECTORY+"/partial_freqs");
+        //FileUtils.deleteFolder(TEST_DIRECTORY+"/partial_docids");
+        //FileUtils.deleteFolder(TEST_DIRECTORY+"/partial_vocabulary");
+        //FileUtils.deleteFolder(TEST_DIRECTORY);
+    }
+
+
+
     private static LinkedHashMap<Integer, DocumentIndexEntry> buildDocumentIndex(Config config, ArrayList<ArrayList<PostingList>> indexes){
+        setPaths();
+        setUp();
+
+
         LinkedHashMap<Integer, DocumentIndexEntry> docIndex = new LinkedHashMap<>();
         int docCounter = 0;
 
@@ -37,19 +97,28 @@ public class MergerWithouCompression {
                 }
             }
         }
+        tearDown();
         return docIndex;
     }
 
     private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config){
+        setPaths();
+        setUp();
         // get vocabulary from disk
         Vocabulary v = Vocabulary.with(config);
+
         v.readFromDisk();
+        System.out.println(v.getPath());
 
         ArrayList<ArrayList<Posting>> mergedLists = new ArrayList<>(v.size());
         ArrayList<VocabularyEntry> vocEntries = new ArrayList<>(v.values());
 
         for(VocabularyEntry vocabularyEntry: vocEntries){
             PostingList p = new PostingList(config);
+
+            System.out.println(v.getPath());
+
+
             p.setTerm(vocabularyEntry.getTerm());
             p.openList();
             ArrayList<Posting> postings = new ArrayList<>();
@@ -62,14 +131,16 @@ public class MergerWithouCompression {
 
             mergedLists.add(postings);
         }
+        tearDown();
         return mergedLists;
     }
 
     public static boolean writeDocumentIndexToDisk(Config config, LinkedHashMap<Integer, DocumentIndexEntry> docIndex) {
-
+        setPaths();
+        setUp();
         // try to open a file channel to the file of the inverted index
         try (FileChannel fChan = (FileChannel) Files.newByteChannel(
-                Paths.get(config.getInvertedIndexConfig().getInvertedIndexDocs()),
+                Paths.get(DOCINDEX_PATH),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))
@@ -102,30 +173,34 @@ public class MergerWithouCompression {
 
         } catch(Exception e){
             e.printStackTrace();
+            tearDown();
             return false;
         }
 
         DocumentCollectionSize.setCollectionSize(docIndex.size());
         DocumentCollectionSize.setTotalDocumentLen(22);
+        tearDown();
         return true;
     }
 
     private static boolean writeIntermediateIndexesToDisk(Config config, ArrayList<ArrayList<PostingList>> intermediateIndexes) {
+        setPaths();
+        setUp();
         for (ArrayList<PostingList> intermediateIndex : intermediateIndexes) {
 
             int i = intermediateIndexes.indexOf(intermediateIndex);
 
             try (
-                    FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialResultsConfig().getDocIdDir() + config.getVocabularyConfig().getDocIdFileName() + "_" + i),
+                    FileChannel docsFchan = (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_INDEXES_DOCS + "_"+i),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE
                     );
-                    FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialResultsConfig().getFrequencyDir() + config.getVocabularyConfig().getFrequencyFileName()+ "_" + i),
+                    FileChannel freqsFchan = (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_FREQUENCIES +"_"+ i),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE);
-                    FileChannel vocabularyFchan = (FileChannel) Files.newByteChannel(Paths.get(config.getPartialResultsConfig().getPartialVocabularyDir() + config.getVocabularyConfig().getVocabularyFile() + "_" + i),
+                    FileChannel vocabularyFchan = (FileChannel) Files.newByteChannel(Paths.get(PATH_TO_PARTIAL_VOCABULARY +"_"+ i),
                             StandardOpenOption.WRITE,
                             StandardOpenOption.READ,
                             StandardOpenOption.CREATE)
@@ -169,18 +244,22 @@ public class MergerWithouCompression {
                         freqOffset += numPostings * 4L;
 
                     } else {
+                        tearDown();
                         return false;
                     }
                 }
             } catch (Exception e) {
+                tearDown();
                 return false;
             }
         }
+        tearDown();
         return true;
     }
 
     public static void mergeSingleIndex(Config config, Boolean compressionMode){
-
+        setPaths();
+        setUp();
         // building partial index 1
         ArrayList<PostingList> index1 = new ArrayList<>();
 
@@ -232,6 +311,7 @@ public class MergerWithouCompression {
         expectedResults.add(postings);
 
         assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
+        tearDown();
     }
 
 }

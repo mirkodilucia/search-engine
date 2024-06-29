@@ -26,7 +26,7 @@ public class MergerWorker {
 
     private MergerWorker(Config configuration, int numIndexes, VocabularyEntry[] nextTerms) {
         config = configuration;
-        setupMergerWorker();
+        //setupMergerWorker();
         this.numIndexes = numIndexes;
         this.nextTerms = nextTerms;
         this.vocEntryMemOffset = new long[numIndexes];

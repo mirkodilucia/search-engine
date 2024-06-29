@@ -2,28 +2,29 @@ package it.unipi.dii.aide.mircv.application.data;
 
 import it.unipi.dii.aide.mircv.application.config.Config;
 
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class DocumentCollectionSize {
 
     private static long collectionSize;
     private static long vocabularySize;
     private static long totalDocumentLen;
-
+    private static Config config;
     /**
      * Path to the collection size for testing
      */
     private static String COLLECTION_STATISTICS_PATH = "data/collection_statistics";
 
 
+    public static void setupCollectionStatisticPath() {
+        COLLECTION_STATISTICS_PATH = config.getCollectionConfig().getCollectionStatisticsPath();
+    }
+
 
     public static void initialize(Config config){
-        if(!readFile(config.collectionConfig.getCollectionStatisticsPath())){
+        if(!readFile()) {
+            DocumentCollectionSize.config = config;
+            setupCollectionStatisticPath();
             collectionSize = 0;
             vocabularySize = 0;
             totalDocumentLen = 0;
@@ -31,33 +32,42 @@ public class DocumentCollectionSize {
 
     }
 
-    public static boolean readFile(String collectionStatisticsPath) {
+    public static boolean readFile() {
+        if(COLLECTION_STATISTICS_PATH==null)
+            return false;
+        File file = new File(COLLECTION_STATISTICS_PATH);
 
+        if(!file.exists()){
+            return false;
+        }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(collectionStatisticsPath))) {
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
+
             collectionSize = ois.readLong();
             vocabularySize = ois.readLong();
             totalDocumentLen = ois.readLong();
+
             return true;
-        } catch (FileNotFoundException e) {
-            // TODO: handle exception with logger
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public static boolean writeFile(String collectionStatisticsPath) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(collectionStatisticsPath))) {
+    public static boolean writeFile() {
+        File file = new File(COLLECTION_STATISTICS_PATH);
+        if(file.exists())
+            if(!file.delete())
+                return false;
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeLong(collectionSize);
             oos.writeLong(vocabularySize);
             oos.writeLong(totalDocumentLen);
             return true;
-        } catch (FileNotFoundException e) {
-            // TODO: handle exception with logger
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -85,15 +95,30 @@ public class DocumentCollectionSize {
         return totalDocumentLen;
     }
 
-    public static void updateVocabularySize(long vocSize, String collectionStatisticsPath) {
+    public static void updateVocabularySize(long vocSize) {
         vocabularySize = vocSize;
-        writeFile(collectionStatisticsPath);
+        writeFile();
     }
 
     public static boolean updateStatistics(int documentId, int documentsLength, String collectionStatisticsPath) {
         collectionSize = documentId;
         totalDocumentLen = documentsLength;
-        return writeFile(collectionStatisticsPath);
+        return writeFile();
+    }
+
+    /**
+     * update the collection size and save the value on disk
+     * @param size the new size
+     * @return true if write is successful
+     */
+    public static boolean updateCollectionSize(long size){
+        collectionSize = size;
+        return writeFile();
+    }
+
+    public static boolean updateDocumentsLenght(long len){
+        totalDocumentLen = len;
+        return writeFile();
     }
 
     /** needed for testing purposes

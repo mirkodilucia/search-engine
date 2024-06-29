@@ -73,10 +73,9 @@ public class Merger2 {
         PATH_TO_COLLECTION_STATISTICS = config.getCollectionConfig().getCollectionStatisticsPath();
     }
 
-
     private Merger2(Config config, int numIndexes) {
         this.config = config;
-        setupMerger2();
+        //setupMerger2();
         this.loader = new MergerLoader(config, numIndexes);
 
         nextTerms = new VocabularyEntry[numIndexes];
@@ -191,8 +190,10 @@ public class Merger2 {
                 }
             }
 
-            loader.cleanup();
-            DocumentCollectionSize.updateVocabularySize(vocabularySize, PATH_TO_COLLECTION_STATISTICS);
+            loader.cleanup(); //OCCHIOOOOOOO
+            //DocumentCollectionSize.updateVocabularySize(vocabularySize, PATH_TO_COLLECTION_STATISTICS);
+            //DocumentCollectionSize.updateVocabularySize(vocabularySize, "../test/data/merger/collection_statistics"); //TESTING OCCCHIOOOOOOOOOOOOOOOOOOOOOOOOOOOOO TOLGLIERE COMMENTO
+
         } catch (Exception ex) {
             loader.cleanup();
             ex.printStackTrace();
@@ -223,7 +224,7 @@ public class Merger2 {
         int[] freqs = new int[nPostingsToBeWritten];
 
         // Initialize docids and freqs arrays
-        while (true){ //while (plIterator.hasNext()) {
+        while (plIterator.hasNext()) { //while (plIterator.hasNext()) {
             Posting currPosting = plIterator.next();
             docids[postingsInBlock] = currPosting.getDocId();
             freqs[postingsInBlock] = currPosting.getFrequency();

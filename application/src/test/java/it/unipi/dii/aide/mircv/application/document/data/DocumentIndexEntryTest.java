@@ -4,26 +4,31 @@ import it.unipi.dii.aide.mircv.application.ConfigUtils;
 import it.unipi.dii.aide.mircv.application.config.Config;
 import it.unipi.dii.aide.mircv.application.data.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.application.utils.FileUtils;
-import org.junit.jupiter.api.*;
+//import org.junit.jupiter.api.*;
+import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DocumentIndexEntryTest {
+public class DocumentIndexEntryTest {
 
     private static Config config;
 
-    @BeforeAll
+
     static void init() {
         config = ConfigUtils.getConfig();
     }
 
-    @BeforeEach
+
     void updatePath() {
         DocumentIndexEntry.setTestPath();
     }
 
     @Test
-    void writeReadFromZero() {
+    public void writeReadFromZero() {
+        updatePath();
         DocumentIndexEntry entry1 = new DocumentIndexEntry(config, "test1", 0, 10);
 
         long offset1 = entry1.writeFile();
@@ -33,10 +38,12 @@ class DocumentIndexEntryTest {
         assertTrue(readEntry1.readFile(offset1));
 
         assertEquals(entry1.toString(), readEntry1.toString());
+        deleteTestFile();
     }
 
     @Test
-    void writeReadSubsequent() {
+    public void writeReadSubsequent() {
+        updatePath();
         DocumentIndexEntry entry1 = new DocumentIndexEntry(config, "test1", 0, 10);
         DocumentIndexEntry entry2 = new DocumentIndexEntry(config, "test2", 1, 15);
 
@@ -52,9 +59,10 @@ class DocumentIndexEntryTest {
 
         assertEquals(entry1.toString(), readEntry1.toString());
         assertEquals(entry2.toString(), readEntry2.toString());
+        deleteTestFile();
     }
 
-    @AfterEach
+
     void deleteTestFile() {
         FileUtils.removeFile("../test/data/testDocumentIndex");
     }

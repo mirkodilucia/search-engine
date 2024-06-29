@@ -35,11 +35,11 @@ public class BlockDescriptor {
     /**
      * path to the docid file of the inverted index
      */
-    private static String INVERTED_INDEX_DOCS = "data/invertedIndexDocs";
+    private static String INVERTED_INDEX_DOCS ="../test/data/merger/docids"; //"data/invertedIndexDocs"
     /**
      * path to the frequency file of the inverted index
      */
-    private static String INVERTED_INDEX_FREQS = "data/invertedIndexFreqs";
+    private static String INVERTED_INDEX_FREQS = "../test/data/merger/freqs";  //"data/invertedIndexFreqs";
 
 
     /**
@@ -117,8 +117,8 @@ public class BlockDescriptor {
      * @return ArrayList containing block's postings.
      */
     public ArrayList<Posting> getBlockPostings(Config config) {
-        String invertedIndexDocsPath = config.getInvertedIndexConfig().getInvertedIndexDocs();
-        String invertedIndexFreqsPath = config.getInvertedIndexConfig().getInvertedIndexFreqsFile();
+        //String invertedIndexDocsPath = config.getInvertedIndexConfig().getInvertedIndexDocs();
+        //String invertedIndexFreqsPath = config.getInvertedIndexConfig().getInvertedIndexFreqsFile();
 
         try (
                 // Opening file channels for docid and frequency files

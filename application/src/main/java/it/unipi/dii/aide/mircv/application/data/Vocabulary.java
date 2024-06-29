@@ -30,7 +30,8 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
      */
     public static Vocabulary with(Config config){
         if(instance == null){
-            instance = new Vocabulary(config.getVocabularyConfig().getVocabularyPath());
+            //instance = new Vocabulary(config.getVocabularyConfig().getVocabularyPath());
+            instance = new Vocabulary("../test/data/merger/vocabulary");// TESTING
         }
         return instance;
     }
@@ -77,7 +78,8 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position, VOCABULARY_PATH);
+            //position = entry.readFromDisk(position, VOCABULARY_PATH);
+            position = entry.readFromDisk(position, "../test/data/merger/vocabulary");// TESTING
 
             if(position == 0)
                 return  true;
@@ -154,6 +156,10 @@ public class Vocabulary extends LinkedHashMap<String, VocabularyEntry> {
      */
     public static void unsetInstance(){
         instance = null;
+    }
+
+    public String getPath() {
+        return VOCABULARY_PATH;
     }
 
 }

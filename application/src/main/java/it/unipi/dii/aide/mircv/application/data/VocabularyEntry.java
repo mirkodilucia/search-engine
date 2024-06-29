@@ -20,7 +20,7 @@ import java.util.Objects;
 public class VocabularyEntry
 {
     private Config config;
-    private static String BLOCK_DESCRIPTORS_PATH = "data/blockDescriptors";
+    private static String BLOCK_DESCRIPTORS_PATH ="../test/data/merger/block_descriptors"; // "data/blockDescriptors";
     private String term;
     private int documentFrequency;
     private double inverseDocumentFrequency = 0;

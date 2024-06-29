@@ -18,6 +18,7 @@ public class MergerLoader {
 
     private static Config config;
 
+
     public MergerLoader(Config configuration, int numIndexes) {
         config = configuration;
         this.documentsIdChannels = new FileChannel[numIndexes];
