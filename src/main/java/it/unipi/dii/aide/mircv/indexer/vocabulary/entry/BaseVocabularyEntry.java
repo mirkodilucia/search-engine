@@ -265,12 +265,13 @@ public class BaseVocabularyEntry {
         public ArrayList<BlockDescriptor> readBlocks() {
             ArrayList<BlockDescriptor> blocks = new ArrayList<>();
 
-            try (FileChannel channel = FileChannelHandler.open(Vocabulary.PATH,
-                    StandardOpenOption.READ,
-                    StandardOpenOption.WRITE,
-                    StandardOpenOption.CREATE
-            )) {
-                MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, blockOffset, (long) numBlocks * BLOCK_DESCRIPTOR_ENTRY_BYTES);
+            try (FileChannel blockDescriptor = FileChannelHandler.open(Vocabulary.BLOCK_DESCRIPTOR_PATH,
+                         StandardOpenOption.READ,
+                         StandardOpenOption.WRITE,
+                         StandardOpenOption.CREATE
+                 );
+            ) {
+                MappedByteBuffer buffer = blockDescriptor.map(FileChannel.MapMode.READ_ONLY, blockOffset, (long) numBlocks * BLOCK_DESCRIPTOR_ENTRY_BYTES);
 
                 for (int i = 0; i < numBlocks; i++) {
 

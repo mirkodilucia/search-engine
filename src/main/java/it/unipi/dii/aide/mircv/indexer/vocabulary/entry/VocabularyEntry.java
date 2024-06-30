@@ -48,10 +48,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         super(term, stats, memoryInfo);
     }
 
-    public long readFromDisk(long memoryOffset, FileChannel vocabularyFchan) {
+    public long readFromDisk(long memoryOffset, FileChannel blockDescriptorFile) {
         try {
             // Open the buffer to read the term
-            MappedByteBuffer buffer = vocabularyFchan.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -64,7 +64,7 @@ public class VocabularyEntry extends BaseVocabularyEntry {
             this.term = encodedTerm[0];
 
             // Open the buffer to read the block and stats
-            buffer = vocabularyFchan.map(FileChannel.MapMode.READ_WRITE, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
+            buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -79,10 +79,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         }
     }
 
-    public long writeEntry(long vocOffset, FileChannel vocabularyFchan) {
+    public long writeEntry(long vocOffset, FileChannel blockDescriptorFile) {
         try {
             // Write the term
-            MappedByteBuffer buffer = vocabularyFchan.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 

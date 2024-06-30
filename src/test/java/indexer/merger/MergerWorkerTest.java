@@ -3,6 +3,7 @@ package indexer.merger;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
 import it.unipi.dii.aide.mircv.config.PartialResultsConfig;
+import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerWorker;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
@@ -19,7 +20,13 @@ public class MergerWorkerTest {
     @BeforeAll
     public static void setup() {
         config = new Config();
-        config.setVocabularyPath("data_test/mergerWorkerTest/vocabulary")
+        config.setVocabularyPath(
+                new VocabularyConfig(
+                "data_test/mergerWorkerTest/vocabulary",
+                "data_test/mergerWorkerTest/frequencies.dat",
+                "data_test/mergerWorkerTest/doc_ids.dat",
+                "data_test/mergerWorkerTest/vocabulary"
+                ))
             .setPartialResultConfig(new PartialResultsConfig(
                     "data_test/mergerWorkerTest/partial_results",
                     "data_test/mergerWorkerTest/partial_results",

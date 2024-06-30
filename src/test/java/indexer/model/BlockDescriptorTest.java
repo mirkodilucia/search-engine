@@ -1,12 +1,14 @@
 package indexer.model;
 
 import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,8 @@ import java.util.ArrayList;
 
 public class BlockDescriptorTest {
 
-    private static final String blockDescriptorPath = "data_test/blockDescriptorsTest/vocabulary_0.dat";
+    private static final String vocabularyPath = "data_test/blockDescriptorsTest/vocabulary_0.dat";
+    private static final String blockDescriptorPath = "data_test/blockDescriptorsTest/block_descriptor.dat";
 
     static Config config;
     private static Vocabulary vocabulary;
@@ -30,9 +33,23 @@ public class BlockDescriptorTest {
     @BeforeAll
     static void setTestPaths() {
         config = new Config();
-        config.setVocabularyPath(blockDescriptorPath);
+        config.setVocabularyPath(new VocabularyConfig(
+                vocabularyPath,
+                "data_test/blockDescriptorsTest/frequencies.dat",
+                "data_test/blockDescriptorsTest/doc_ids.dat",
+                "data_test/blockDescriptorsTest/vocabulary"
+        ));
 
         vocabulary = Vocabulary.with(config);
+    }
+
+    @AfterEach
+    void reset() {
+        try {
+            Files.deleteIfExists(Paths.get(vocabularyPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -55,7 +72,7 @@ public class BlockDescriptorTest {
 
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get(blockDescriptorPath),
+                        Paths.get(vocabularyPath),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -113,7 +130,7 @@ public class BlockDescriptorTest {
 
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get(blockDescriptorPath),
+                        Paths.get(vocabularyPath),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -134,11 +151,6 @@ public class BlockDescriptorTest {
 
             ArrayList<BlockDescriptor> blocks = voc.readBlocks();
             assertEquals(33, blocks.size());
-
-            for (int i = 0; i < blocks.size(); i++) {
-                assertEquals(blocks.get(i), blocks.get(i));
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
