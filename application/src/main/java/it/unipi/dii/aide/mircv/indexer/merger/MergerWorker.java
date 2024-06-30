@@ -13,18 +13,21 @@ import java.nio.file.StandardOpenOption;
 
 public class MergerWorker extends BaseMergerWorker {
 
-    private final static String PATH_TO_PARTIAL_VOCABULARIES = "data/vocabulary/vocabulary";
-    private final static String PATH_TO_PARTIAL_INDEXES_DOCS = "data/indexes/partial_index_docs_";
-    private final static String PATH_TO_PARTIAL_INDEXES_FREQS = "data/indexes/partial_index_freqs_";
-
     private Config config;
     private int numIndexes;
 
     private VocabularyEntry[] nextTerm;
     private long[] vocabularyEntryMemOffset;
 
+    private void setupPath(Config config) {
+        PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
+        PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
+        PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
+    }
+
     private MergerWorker(Config config, int numIndexes) {
         super(config, numIndexes);
+        setupPath(config);
         this.config = config;
         this.numIndexes = numIndexes;
 
@@ -104,8 +107,6 @@ public class MergerWorker extends BaseMergerWorker {
 
             if (vocabularyEntry.getTerm().equals(termToProcess)) {
                 PostingList intermediatePostingList = loadList(vocabularyEntry, i);
-
-
                 if (intermediatePostingList == null) {
                     return null;
                 }

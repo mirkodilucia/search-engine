@@ -1,30 +1,38 @@
 package it.unipi.dii.aide.mircv.document.preprocess;
 
+import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.preprocess.Stemmer;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 import java.io.IOException;
-import java.util.List;
 
 public class InitialDocument {
 
     private final static String RAW_COLLECTION_PATH = "data/raw_collection";
 
-    private String docId;
+    private final String docId;
+    private final Stemmer stemmer;
+    private final Config config;
 
     String plainText;
 
     String[] tokens;
+    String[] relevantTokens;
+    String[] stems;
 
-    public static InitialDocument load(int documentId) {
+    public static InitialDocument load(Config config, int documentId) {
         String docId = "doc" + documentId;
         String content = readFileString(docId);
         if (content == null) {
             return null;
         }
-        return new InitialDocument(docId, content);
+        return new InitialDocument(config, docId, content);
     }
 
-    public InitialDocument(String docId, String content) {
+    public InitialDocument(Config config, String docId, String content) {
+        this.config = config;
+        stemmer = Stemmer.with(config);
+
         this.docId = docId;
         this.plainText = content;
     }
@@ -41,15 +49,23 @@ public class InitialDocument {
         this.cleanText();
         this.tokenize();
 
-        /** TODO: Implement the following methods
-         if(config.preprocessConfig.isStemmerEnabled()) {
+        /** TODO: Implement the following methods **/
+        if (config.preprocessConfig.isStemmerEnabled()) {
          removeStopwords();
          stem();
-         }
-         */
+        }
 
         return new FinalDocument(docId, tokens);
     }
+
+    public void removeStopwords() {
+        this.relevantTokens = stemmer.removeStopwords(this.tokens);
+    }
+
+    public void stem() {
+        this.stems = stemmer.getStems(this.relevantTokens);
+    }
+
 
     public void writeFileString() {
         try {

@@ -12,7 +12,7 @@ public class BaseBlockDescriptor {
 
     public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 * Integer.BYTES + 2 * Long.BYTES;
 
-    protected boolean COMPRESSION_ENABLED = true;
+    protected boolean COMPRESSION_ENABLED = false;
 
     private int documentIdSize;
 
@@ -29,7 +29,10 @@ public class BaseBlockDescriptor {
 
     public BaseBlockDescriptor() {}
 
-    public BaseBlockDescriptor(long documentsMemoryOffset, long frequenciesMemoryOffset) {}
+    public BaseBlockDescriptor(long documentsMemoryOffset, long frequenciesMemoryOffset) {
+        this.documentIdOffset = documentsMemoryOffset;
+        this.frequencyOffset = frequenciesMemoryOffset;
+    }
 
     protected boolean writeBlockOnDisk(FileChannel fileChannel) {
         try {
@@ -51,6 +54,10 @@ public class BaseBlockDescriptor {
 
     public void setMaxDocumentsId(int maxDocumentsId) {
         this.maxDocumentsId = maxDocumentsId;
+    }
+
+    public int getMaxDocumentsId() {
+        return maxDocumentsId;
     }
 
     public void setNumPostings(int numPostings) {
@@ -141,5 +148,35 @@ public class BaseBlockDescriptor {
         }
 
         return postings;
+    }
+
+    public void setDocumentIdOffset(int i) {
+        this.documentIdOffset = i;
+    }
+
+
+    public void setFrequenciesOffset(int i) {
+        this.frequencyOffset = i;
+    }
+
+    public double getDocumentIdOffset() {
+        return documentIdOffset;
+    }
+
+    public double getDocumentIdSize() {
+        return documentIdSize;
+    }
+
+
+    public double getFrequenciesOffset() {
+        return frequencyOffset;
+    }
+
+    public double getFrequeanciesSize() {
+        return frequencySize;
+    }
+
+    public double getNumPostings() {
+        return numPostings;
     }
 }

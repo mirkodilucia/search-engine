@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.spimi;
 
+import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,9 +28,22 @@ public class BaseSpimi implements SpimiListener {
     protected int documentsLength = 0;
     protected boolean allDocumentsProcessed;
 
-    private final static String INVERTED_DOCUMENT_INDEX_FILE_NAME = "data/inverted_index/inverted_index";
-    private final static String INVERTED_DOCUMENT_FREQUENCY_FILE_NAME = "data/inverted_index/inverted_index_frequency";
-    private static final String VOCABULARY_FILE_NAME = "data/vocabulary/vocabulary";
+    protected static String PATH_TO_PARTIAL_VOCABULARIES = "data/vocabulary/vocabulary";
+    protected static String PATH_TO_PARTIAL_INDEXES_DOCS = "data/indexes/partial_index_docs_";
+    protected static String PATH_TO_PARTIAL_INDEXES_FREQS = "data/indexes/partial_index_freqs_";
+
+    protected final Config config;
+
+    protected BaseSpimi(Config config) {
+        this.config = config;
+        this.setupPath(config);
+    }
+
+    private void setupPath(Config config) {
+        PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
+        PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
+        PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
+    }
 
     protected boolean saveIndexToDisk(HashMap<String, PostingList> index, boolean debugMode) {
         this.debugMode = debugMode;
@@ -41,22 +56,22 @@ public class BaseSpimi implements SpimiListener {
         }
 
         index = this.getSortedIndex(index);
-        return this.saveInvertedDocuments(index);
+        return this.saveIndexToDisk(index);
     }
 
-    private boolean saveInvertedDocuments(HashMap<String, PostingList> index) {
+    private boolean saveIndexToDisk(HashMap<String, PostingList> index) {
         try (
-                FileChannel docsFchan = FileChannelHandler.open(INVERTED_DOCUMENT_INDEX_FILE_NAME + "_" + numIndexes + ".dat",
+                FileChannel docsFchan = FileChannelHandler.open(PATH_TO_PARTIAL_INDEXES_DOCS + "_" + numIndexes + ".dat",
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE
                 );
-                FileChannel freqsFchan = FileChannelHandler.open(INVERTED_DOCUMENT_FREQUENCY_FILE_NAME + "_" + numIndexes + ".dat",
+                FileChannel freqsFchan = FileChannelHandler.open(PATH_TO_PARTIAL_INDEXES_FREQS + "_" + numIndexes + ".dat",
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE);
 
-                FileChannel vocabularyFchan = FileChannelHandler.open(VOCABULARY_FILE_NAME + "_" + numIndexes + ".dat",
+                FileChannel vocabularyFchan = FileChannelHandler.open(PATH_TO_PARTIAL_VOCABULARIES + "_" + numIndexes + ".dat",
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
@@ -84,7 +99,8 @@ public class BaseSpimi implements SpimiListener {
                             );
 
                     // Write the Posting List in the inverted index files
-                    for (Posting posting : entry.getPostings()) {
+                    ArrayList<Posting> postings = entry.getPostings();
+                    for (Posting posting : postings) {
                         docsBuffer.putInt(posting.getDocumentId());
                         freqsBuffer.putInt(posting.getFrequency());
                     }

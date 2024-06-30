@@ -1,14 +1,8 @@
 package it.unipi.dii.aide.mircv.indexer.vocabulary;
 
-
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
-import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
 import org.junit.platform.commons.util.LruCache;
-
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.file.StandardOpenOption;
 
 public class Vocabulary extends BaseVocabulary {
 
@@ -21,7 +15,7 @@ public class Vocabulary extends BaseVocabulary {
 
     public static Vocabulary with(Config config){
         if(instance == null){
-            instance = new Vocabulary("data/vocabulary/vocabulary_0.dat");
+            instance = new Vocabulary(config.getVocabularyPath());
         }
         return instance;
     }
@@ -39,6 +33,4 @@ public class Vocabulary extends BaseVocabulary {
         entries.put(term, entry);
         return entry;
     }
-
-
 }

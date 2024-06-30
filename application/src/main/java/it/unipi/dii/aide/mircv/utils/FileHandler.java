@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.channels.*;
+import java.util.Collection;
+import java.util.ArrayList;
 
 public class FileHandler {
 
@@ -72,6 +74,32 @@ public class FileHandler {
 
         try {
             Files.createDirectories(Paths.get(s));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Collection<String> readStopwordLines(String stopwordPath) {
+        Collection<String> stopwords = new ArrayList<>();
+
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(stopwordPath), StandardCharsets.UTF_8)) {
+            for (String line; (line = br.readLine()) != null; ) {
+                if (line.isEmpty())
+                    continue;
+
+                //add word to stopwords list
+                stopwords.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stopwords;
+    }
+
+    public static void removeFile(String file) {
+        try {
+            Files.deleteIfExists(Paths.get(file));
         } catch (IOException e) {
             e.printStackTrace();
         }

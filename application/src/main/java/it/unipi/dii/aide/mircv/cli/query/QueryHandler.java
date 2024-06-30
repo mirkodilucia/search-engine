@@ -19,24 +19,20 @@ import java.util.PriorityQueue;
 public class QueryHandler {
 
     private final Config config;
-
     private final Vocabulary vocabulary;
-
     private final Mode mode;
-    private final ScoreFunction scoreFunction;
     private final DocumentIndexTable documentIndex;
 
-    private QueryHandler(Config config, Mode mode, ScoreFunction scoreFunction) {
+    private QueryHandler(Config config, Mode mode) {
         this.config = config;
         this.mode = mode;
-        this.scoreFunction = scoreFunction;
 
         documentIndex = DocumentIndexTable.with(config);
         vocabulary = Vocabulary.with(config);
     }
 
-    public static QueryHandler with(Config config, Mode mode, ScoreFunction scoreFunction) {
-        return new QueryHandler(config, mode, scoreFunction);
+    public static QueryHandler with(Config config, Mode mode) {
+        return new QueryHandler(config, mode);
     }
 
     public boolean setup() {
@@ -73,7 +69,7 @@ public class QueryHandler {
      * @return an array with the top-k document pids
      */
     public String[] processQuery(String queryParam, int maxDocumentResult, Mode mode, ScoreFunction scoreFunction) {
-        FinalDocument queryDoc = new InitialDocument( "query", queryParam).process();
+        FinalDocument queryDoc = new InitialDocument(config,"query", queryParam).process();
         ArrayList<PostingList> queryPosting = getQueryPosting(queryDoc);
 
         if (queryPosting == null || queryPosting.isEmpty()) {

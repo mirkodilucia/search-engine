@@ -41,13 +41,13 @@ public class DAAT extends Scorer {
 
             PostingList currentPostingList = postingScore.get(i);
 
-            if(currentPostingList!=null){
+            if (currentPostingList != null) {
                 Posting currentPosting = currentPostingList.getCurrentPosting();
 
-                if(currentPosting == null){
+                if (currentPosting == null) {
                     return -1;
                 }
-                if(currentPosting.getDocumentId() < next){
+                if (currentPosting.getDocumentId() < next) {
                     currentPosting = currentPostingList.selectPostingScoreIterator(next, config);
 
                     if(currentPosting == null)
@@ -55,14 +55,10 @@ public class DAAT extends Scorer {
 
 
                 }
-                if (currentPosting.getDocumentId() > next){
+                if (currentPosting.getDocumentId() > next) {
                     next = currentPosting.getDocumentId();
                     i=-1;
                 }
-
-
-                if(currentPosting.getDocumentId() == next)
-                    continue;
 
             }
         }

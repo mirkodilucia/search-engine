@@ -29,7 +29,7 @@ public class Merger {
         return new Merger(config);
     }
 
-    public void mergeIndexes(int indexes) {
+    public boolean mergeIndexes(int indexes) {
         try {
             MergerFileChannel margerFileChannels = MergerFileChannel.open(config);
 
@@ -68,12 +68,15 @@ public class Merger {
 
 
             DocumentIndexState.updateVocabularySize(vocabularySize);
+
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    private MergerFileChannel.CompressionResult iteratePostingList(MergerFileChannel margerFileChannels, VocabularyEntry entry, PostingList mergedPostingList, int maxNumPostings) {
+    private MergerFileChannel.CompressionResult iteratePostingList(MergerFileChannel mergerFileChannels, VocabularyEntry entry, PostingList mergedPostingList, int maxNumPostings) {
         Iterator<Posting> postingListIterator = mergedPostingList.getPostings().iterator();
         int numBlocks = entry.getHowManyBlockToWrite();
 
@@ -91,9 +94,9 @@ public class Merger {
             MergerFileChannel.CompressionResult intermediateResult;
 
             if (config.compression) {
-                intermediateResult = processCompressedPostingList(mergerPostingIteration, margerFileChannels);
+                intermediateResult = processCompressedPostingList(mergerPostingIteration, mergerFileChannels);
             }else {
-                intermediateResult = processUncompressedPostingList(mergerPostingIteration, margerFileChannels);
+                intermediateResult = processUncompressedPostingList(mergerPostingIteration, mergerFileChannels);
             }
 
             result.updateCompressionResult(intermediateResult);
@@ -102,7 +105,7 @@ public class Merger {
         return result;
     }
 
-    private MergerFileChannel.CompressionResult processCompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel margerFileChannels) {
+    private MergerFileChannel.CompressionResult processUncompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel margerFileChannels) {
         int postingInBlock = 0;
 
         int[] documentsId = new int[mergerPostingIteration.nPostingsToBeWritten];
@@ -131,7 +134,7 @@ public class Merger {
 
         return result;
     }
-    private MergerFileChannel.CompressionResult processUncompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel mergerFileChannels) {
+    private MergerFileChannel.CompressionResult processCompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel mergerFileChannels) {
         int postingInBlock = 0;
         int nPostingsToBeWritten = mergerPostingIteration.nPostingsToBeWritten * 4;
 

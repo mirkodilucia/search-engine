@@ -22,18 +22,56 @@ public class PostingListTest {
         assertEquals(1, postings.get(0).getDocumentId());
     }
 
-    /*
     @Test
-    public void testUnaryConversion() {
-        PostingList postingList = new PostingList();
-        postingList.add(1);
-        postingList.add(3);
-
-        String unary = postingList.toUnary();
-        PostingList decodedList = PostingList.fromUnary(unary);
-
-        assertTrue(decodedList.getPostings().contains(1));
-        assertTrue(decodedList.getPostings().contains(3));
+    public void testIsEmpty() {
+        Config config = new Config();
+        PostingList postingList = new PostingList(config);
+        assertTrue(postingList.isEmpty());
     }
-    */
+
+    @Test
+    public void testParsePostings() {
+        Config config = new Config();
+        PostingList postingList = new PostingList(config);
+        postingList.parsePostings("1:2 3:4");
+        ArrayList<Posting> postings = postingList.getPostings();
+
+        assertEquals(2, postings.size());
+        assertEquals(1, postings.get(0).getDocumentId());
+        assertEquals(2, postings.get(0).getFrequency());
+        assertEquals(3, postings.get(1).getDocumentId());
+        assertEquals(4, postings.get(1).getFrequency());
+    }
+
+    @Test
+    public void testPostingList() {
+        Config config = new Config();
+        PostingList postingList = new PostingList(config, "term\t1:2 3:4");
+        ArrayList<Posting> postings = postingList.getPostings();
+
+        assertEquals(2, postings.size());
+        assertEquals(1, postings.get(0).getDocumentId());
+        assertEquals(2, postings.get(0).getFrequency());
+        assertEquals(3, postings.get(1).getDocumentId());
+        assertEquals(4, postings.get(1).getFrequency());
+    }
+
+    @Test
+    public void testPostingListConfig() {
+        Config config = new Config();
+        PostingList postingList = new PostingList(config);
+        assertNotNull(postingList);
+    }
+
+    @Test
+    public void testUpdateOrAddPosting() {
+        Config config = new Config();
+        PostingList postingList = new PostingList(config);
+        postingList.add(1);
+        postingList.updateOrAddPosting(1);
+        ArrayList<Posting> postings = postingList.getPostings();
+        assertEquals(1, postings.size());
+        assertEquals(1, postings.get(0).getDocumentId());
+        assertEquals(2, postings.get(0).getFrequency());
+    }
 }

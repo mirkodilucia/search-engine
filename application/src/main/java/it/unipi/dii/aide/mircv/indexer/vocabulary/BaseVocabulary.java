@@ -3,19 +3,27 @@ package it.unipi.dii.aide.mircv.indexer.vocabulary;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
+import org.junit.platform.commons.util.LruCache;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
+    public static String PATH;
+
     private final FileChannel channel;
 
+    private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
+
     public BaseVocabulary(String path) {
+        PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary.dat");
+
         try {
-            channel = FileChannelHandler.open(path,
+            channel = FileChannelHandler.open(PATH,
                     StandardOpenOption.WRITE,
                     StandardOpenOption.READ,
                     StandardOpenOption.CREATE
@@ -53,5 +61,35 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         }
 
         return entry;
+    }
+
+    public boolean readFromDisk(){
+
+        long position = 0;
+
+        //read whole vocabulary from
+        while(position >= 0){
+            VocabularyEntry entry = new VocabularyEntry();
+            //read entry and update position
+            position = entry.readFromDisk(position, channel);
+
+            if(position == 0)
+                return  true;
+
+            if(entry.getTerm()==null){
+                return true;
+            }
+
+            //populate vocabulary
+            this.put(entry.getTerm(),entry);
+            entries.put(entry.getTerm(),entry);
+        }
+
+        //if position == -1 an error occurred during reading
+        return position != -1;
+    }
+
+    public static void clearCache() {
+        entries.clear();
     }
 }

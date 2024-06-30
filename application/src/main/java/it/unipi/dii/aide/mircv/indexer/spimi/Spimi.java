@@ -5,6 +5,7 @@ import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
+import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 
 import java.util.HashMap;
@@ -15,10 +16,9 @@ public class Spimi extends BaseSpimi {
     private final static String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
     private static long MEMORY_LIMIT;
-    private final Config config;
 
     public Spimi(Config config) {
-        this.config = config;
+        super(config);
         MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 0.2);
     }
 
@@ -59,7 +59,7 @@ public class Spimi extends BaseSpimi {
 
         while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
             // Load document
-            InitialDocument initialDocument = InitialDocument.load(documentId);
+            InitialDocument initialDocument = InitialDocument.load(config, documentId);
             if (initialDocument == null) {
                 this.onSpimiFinished();
                 break;
@@ -122,5 +122,23 @@ public class Spimi extends BaseSpimi {
         }
 
         return index;
+    }
+
+    protected void updateOrAddPosting(int docId, PostingList postingList) {
+        if (!postingList.getPostings().isEmpty()) {
+            // last document inserted:
+            Posting posting = postingList.getPostings().get(postingList.getPostings().size() - 1);
+            //If the docId is the same I update the posting
+            if (docId == posting.getDocumentId()) {
+                posting.setFrequency(posting.getFrequency() + 1);
+                return;
+            }
+        }
+        // the document has not been processed (docIds are incremental):
+        // create new pair and add it to the posting list
+        postingList.getPostings().add(new Posting(docId, 1));
+
+        //increment the number of postings
+        numPostings++;
     }
 }

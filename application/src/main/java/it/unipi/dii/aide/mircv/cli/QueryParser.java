@@ -21,20 +21,12 @@ public class QueryParser {
     }
 
     public boolean processQuery(String[] queryParams) {
-        String[] documents = new String[]{};
         if (CommandParser.isConjunctiveMode(queryParams)) {
             return parseConjuntiveQuery(queryParams);
         }
 
         if (CommandParser.isDisjunctiveMode(queryParams)) {
-            ScoreFunction scoreFunction = askForScoringFunction();
-
-            queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE, scoreFunction);
-            queryHandler.setup();
-
-            documents = queryHandler.processQuery(queryParams[0], MAX_DOCUMENT_RESULT, Mode.DISJUNCTIVE, scoreFunction);
-            showDocumentsResults(documents);
-            return true;
+            return parseDisjunctiveQuery(queryParams);
         }
 
         System.out.println("The query you entered is in invalid format.");
@@ -45,10 +37,22 @@ public class QueryParser {
         String[] documents;
         ScoreFunction scoreFunction = askForScoringFunction();
 
-        queryHandler = QueryHandler.with(config, Mode.CONJUNCTIVE, scoreFunction);
+        queryHandler = QueryHandler.with(config, Mode.CONJUNCTIVE);
         queryHandler.setup();
 
         documents = queryHandler.processQuery(queryParams[0], MAX_DOCUMENT_RESULT, Mode.CONJUNCTIVE, scoreFunction);
+        showDocumentsResults(documents);
+        return true;
+    }
+
+    private boolean parseDisjunctiveQuery(String[] queryParams) {
+        String[] documents;
+        ScoreFunction scoreFunction = askForScoringFunction();
+
+        queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE);
+        queryHandler.setup();
+
+        documents = queryHandler.processQuery(queryParams[0], MAX_DOCUMENT_RESULT, Mode.DISJUNCTIVE, scoreFunction);
         showDocumentsResults(documents);
         return true;
     }

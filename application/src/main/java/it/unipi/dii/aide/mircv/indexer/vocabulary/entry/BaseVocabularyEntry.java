@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.indexer.vocabulary.entry;
 
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
+import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
 
@@ -14,8 +15,6 @@ import java.util.ArrayList;
 import java.nio.channels.FileChannel;
 
 public class BaseVocabularyEntry {
-
-    private static final int TERM_SIZE = 64;
 
     protected String term;
     protected VocabularyEntryUpperBoundInfo upperBoundInfo;
@@ -56,7 +55,6 @@ public class BaseVocabularyEntry {
 
     public int getMaxNumberOfPostingInBlock() {
         return memoryInfo.getMaxNumberOfPostingInBlock(documentFrequency);
-
     }
 
     public int getBM25Tf() {
@@ -74,6 +72,30 @@ public class BaseVocabularyEntry {
     public void updateMemoryIdSize(int numPostings) {
         this.memoryInfo.setDocIdSize(numPostings * 4);
         this.memoryInfo.setFrequencySize(numPostings * 4);
+    }
+
+    public void setDocumentIdOffset(int position) {
+        this.memoryInfo.setDocumentIdOffset(position);
+    }
+
+    public void setFrequencyOffset(int position) {
+        this.memoryInfo.setFrequencyOffset(position);
+    }
+
+    public void setBM25Tf(int bm25Tf) {
+        this.upperBoundInfo.setBM25Tf(bm25Tf);
+    }
+
+    public void setDocumentFrequency(int documentFrequency) {
+        this.documentFrequency = documentFrequency;
+    }
+
+    public void setMaxTermFrequency(int maxTermFrequency) {
+        this.maxTermFrequency = maxTermFrequency;
+    }
+
+    public void setBM25Dl(int BM25Dl) {
+        this.upperBoundInfo.setBM25Dl(BM25Dl);
     }
 
     //
@@ -155,6 +177,10 @@ public class BaseVocabularyEntry {
 
     // 36 bytes
     public static class VocabularyMemoryInfo {
+        public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 * 4 + 2 * 8;
+
+        public static long memoryOffset = 0;
+
         private long docIdOffset=0;
         private int docIdSize=0;
         private long frequencyOffset=0;
@@ -201,6 +227,8 @@ public class BaseVocabularyEntry {
             buffer.putInt(memoryInfo.frequencySize);
             buffer.putInt(memoryInfo.numBlocks);
             buffer.putLong(memoryInfo.blockOffset);
+
+            memoryOffset += BLOCK_DESCRIPTOR_ENTRY_BYTES;
         }
 
         public long getDocumentIdOffset() {
@@ -220,9 +248,10 @@ public class BaseVocabularyEntry {
             return frequencySize;
         }
 
-        public void computeBlockInformation() {
-            this.numBlocks = (int) Math.ceil((double) docIdSize / 1024);
-            this.blockOffset = docIdOffset;
+        public void computeBlockInformation(int documentFrequency) {
+            this.blockOffset = memoryOffset;
+            if (documentFrequency >= 1024)
+                this.numBlocks = (int) Math.ceil(Math.sqrt(documentFrequency));
         }
 
         public int getMaxNumberOfPostingInBlock(int documentFrequency) {
@@ -236,15 +265,13 @@ public class BaseVocabularyEntry {
         public ArrayList<BlockDescriptor> readBlocks() {
             ArrayList<BlockDescriptor> blocks = new ArrayList<>();
 
-            try (FileChannel channel = FileChannelHandler.open("data/vocabulary/vocabulary.dat",
+            try (FileChannel channel = FileChannelHandler.open(Vocabulary.PATH,
                     StandardOpenOption.READ,
                     StandardOpenOption.WRITE,
                     StandardOpenOption.CREATE
             )) {
-
-
                 for (int i = 0; i < numBlocks; i++) {
-                    MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, blockOffset, 16);
+                    MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, blockOffset, BLOCK_DESCRIPTOR_ENTRY_BYTES);
                     BlockDescriptor block = new BlockDescriptor();
 
                     block.mapBlockDescriptor(buffer);

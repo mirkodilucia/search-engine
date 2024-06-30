@@ -45,7 +45,7 @@ public class DocumentManager {
                 if (lineCount == 200) {
                     String documentId = "doc" + iteration;
                     documents.add(
-                            new InitialDocument(documentId, document.toString())
+                            new InitialDocument(configuration, documentId, document.toString())
                     );
                     document = new StringBuilder();
                     lineCount = 0;
@@ -61,7 +61,7 @@ public class DocumentManager {
             String documentId = "doc" + iteration;
             if (lineCount > 0) {
                 documents.add(
-                        new InitialDocument(documentId, document.toString())
+                        new InitialDocument(configuration, documentId, document.toString())
                 );
             }
         }

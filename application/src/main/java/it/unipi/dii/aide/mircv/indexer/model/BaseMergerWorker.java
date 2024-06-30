@@ -10,6 +10,10 @@ import java.nio.channels.FileChannel;
 
 public class BaseMergerWorker {
 
+    protected static String PATH_TO_PARTIAL_VOCABULARIES = "data/vocabulary/vocabulary";
+    protected static String PATH_TO_PARTIAL_INDEXES_DOCS = "data/indexes/partial_index_docs_";
+    protected static String PATH_TO_PARTIAL_INDEXES_FREQS = "data/indexes/partial_index_freqs_";
+
     private final Config config;
 
     protected long numIndexes;
@@ -20,8 +24,15 @@ public class BaseMergerWorker {
     public long docummentsMemOffset;
     public long frequencyMemOffset;
 
+    private void setupPath(Config config) {
+        PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
+        PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
+        PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
+    }
+
     protected BaseMergerWorker(Config configuration, int numIndexes) {
         config = configuration;
+        setupPath(config);
 
         this.numIndexes = numIndexes;
 
@@ -30,7 +41,6 @@ public class BaseMergerWorker {
 
         this.docummentsMemOffset = 0;
         this.frequencyMemOffset = 0;
-
 
     }
 

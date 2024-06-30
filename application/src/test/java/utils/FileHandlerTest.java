@@ -13,7 +13,7 @@ public class FileHandlerTest {
 
     @Test
     public void testWriteReadObjectToFile() throws IOException, ClassNotFoundException {
-        String fileName = "test_object.dat";
+        String fileName = "data_test/test_object.dat";
         TestObject originalObject = new TestObject("Test", 123);
 
         // Write the object to file

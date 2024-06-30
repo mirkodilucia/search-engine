@@ -14,7 +14,7 @@ public class PostingList implements Serializable {
 
     private final PostingStats stats = new PostingStats();
 
-    private ArrayList<Posting> postings = new ArrayList<>();
+    private final ArrayList<Posting> postings = new ArrayList<>();
 
 
     private BlockDescriptor currentBlock = null;
@@ -25,14 +25,14 @@ public class PostingList implements Serializable {
 
     public PostingList(Config config, String term) {
         this(config);
-        this.term = term;
+        this.term = term.split("\t")[0];
         String[] termRow = term.split("\t");
         if (termRow.length > 1) {
             parsePostings(termRow[1]);
         }
     }
 
-    private void parsePostings(String rawPosting) {
+    public void parsePostings(String rawPosting) {
         String[] documents = rawPosting.split(" ");
         for (String document : documents) {
             String[] docFreq = document.split(":");
@@ -196,26 +196,6 @@ public class PostingList implements Serializable {
         return (Math.min((this.getPostings().size() - alreadyWrittenPostings), maxNumPostings));
     }
 
-    /*
-    public String toUnary() {
-        StringBuilder builder = new StringBuilder();
-        for (Integer docID : postings) {
-            builder.append(UnaryCompression.encode(docID)).append(" ");
-        }
-        return builder.toString().trim();
-    }
-
-    public static PostingList fromUnary(String unaryString) {
-        PostingList postingList = new PostingList();
-        String[] encodedPostings = unaryString.split(" ");
-        for (String encodedPosting : encodedPostings) {
-            postingList.add(UnaryCompression.decode(encodedPosting));
-        }
-        return postingList;
-    }
-
-     */
-
     @Override
     public String toString() {
 
@@ -276,8 +256,50 @@ public class PostingList implements Serializable {
         return currentPosting;
     }
 
-    public Posting selectPostingScoreIterator(int documentToProcess, Config config) {
+    public Posting selectPostingScoreIterator(int docId, Config config) {
+        // flag to check if the block has changed
+        boolean blockChanged = false;
+        // move to the block with max docid >= docid
+        // current block is null only if it's the first read
+        while(currentBlock == null || currentBlock.getMaxDocumentsId() < docId){
+            // end of list, return null
+            if(!blocksIterator.hasNext()){
+                currentPosting = null;
+                return null;
+            }
+
+            currentBlock = blocksIterator.next();
+            blockChanged = true;
+        }
+        // block changed, load postings and update iterator
+        if(blockChanged){
+            //remove previous postings
+            postings.clear();
+            postings.addAll(currentBlock.getBlockPostings());
+            postingIterator = postings.iterator();
+        }
+        // move to the first GE posting and return it
+        while (postingIterator.hasNext()) {
+            currentPosting = postingIterator.next();
+            if (currentPosting.getDocumentId() >= docId)
+                return currentPosting;
+        }
+        currentPosting = null;
         return null;
+    }
+
+    public void updateBM25Parameters(int documentLength, int termFrequency) {
+        double currentRatio = (double) this.stats.BM25Tf / (double) (this.stats.BM25Dl + this.stats.BM25Tf);
+        double newRatio = (double) termFrequency / (double) (documentLength + termFrequency);
+        if(newRatio > currentRatio){
+            this.stats.BM25Tf = termFrequency;
+            this.stats.BM25Dl = documentLength;
+        }
+    }
+
+    public void setStats(int BM25Dl, int BM25Tf) {
+        this.stats.BM25Dl = BM25Dl;
+        this.stats.BM25Tf = BM25Tf;
     }
 
     public static class PostingStats {

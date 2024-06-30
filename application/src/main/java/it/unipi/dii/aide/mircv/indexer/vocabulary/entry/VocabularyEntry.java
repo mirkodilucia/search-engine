@@ -13,6 +13,8 @@ import java.nio.file.StandardOpenOption;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
+import static it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry.VocabularyMemoryInfo.memoryOffset;
+
 public class VocabularyEntry extends BaseVocabularyEntry {
 
     private static final int TERM_SIZE = 64;
@@ -80,7 +82,7 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     public long writeEntry(long vocOffset, FileChannel vocabularyFchan) {
         try {
             // Write the term
-            MappedByteBuffer buffer = vocabularyFchan.map(FileChannel.MapMode.READ_WRITE, vocOffset, ENTRY_SIZE);
+            MappedByteBuffer buffer = vocabularyFchan.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -135,7 +137,7 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     }
 
     public void computeBlockInformation() {
-        this.memoryInfo.computeBlockInformation();
+        this.memoryInfo.computeBlockInformation(documentFrequency);
     }
 
     public int getHowManyBlockToWrite() {

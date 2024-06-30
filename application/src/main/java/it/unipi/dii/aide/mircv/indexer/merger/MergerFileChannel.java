@@ -15,12 +15,10 @@ import java.nio.file.StandardOpenOption;
 import static java.lang.System.arraycopy;
 
 public class MergerFileChannel {
-    private static final String VOCABULARY_FILE_PATH = "data/inverted/vocabulary.dat";
+    private static final String VOCABULARY_FILE_PATH = "data/vocabulary/vocabulary_0.dat";
     private static final String INVERTED_DOCUMENT_INDEX_FILE_PATH = "data/inverted/inverted_index.dat";
     private static final String INVERTED_DOCUMENT_FREQUENCY_FILE_PATH = "data/inverted/inverted_index_frequency.dat";
     private static final String BLOCK_DESCRIPTOR_FILE_PATH = "data/inverted/block_descriptor.dat";
-
-    public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 * Integer.BYTES + 2 * Long.BYTES;
 
     FileChannel vocabularyChannel;
     FileChannel documentIdChannel;
