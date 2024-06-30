@@ -98,4 +98,12 @@ public class Config {
     public void setInvertedIndexConfig(InvertedIndexConfig invertedIndexConfig) {
         this.invertedIndexConfig = invertedIndexConfig;
     }
+
+    public void setBlockDescriptorPath(BlockDescriptorConfig blockDescriptorConfig) {
+        this.blockDescriptorConfig = blockDescriptorConfig;
+    }
+
+    public String getBlockDescriptorsPath() {
+        return this.blockDescriptorConfig.getBlockDescriptorsPath();
+    }
 }

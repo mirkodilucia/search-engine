@@ -16,22 +16,16 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
     public static String VOCABULARY_PATH;
     public static String BLOCK_DESCRIPTOR_PATH;
 
-    private final FileChannel vocabularyFileChannel;
-    private final FileChannel blockDescriptorFileChannel;
+    private FileChannel vocabularyFileChannel;
 
     private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
 
-    public BaseVocabulary(String path) {
-        VOCABULARY_PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary_0.dat");
-        BLOCK_DESCRIPTOR_PATH = Objects.requireNonNullElse(path, "data/vocabulary/block_descriptor.dat");
+    public BaseVocabulary(String vocabularyPath, String blockDescriptorsPath) {
+        VOCABULARY_PATH = Objects.requireNonNullElse(vocabularyPath, "data/vocabulary/vocabulary_0.dat");
+        BLOCK_DESCRIPTOR_PATH = Objects.requireNonNullElse(blockDescriptorsPath, "data/vocabulary/block_descriptor.dat");
 
         try {
             vocabularyFileChannel = FileChannelHandler.open(VOCABULARY_PATH,
-                    StandardOpenOption.WRITE,
-                    StandardOpenOption.READ,
-                    StandardOpenOption.CREATE
-            );
-            blockDescriptorFileChannel = FileChannelHandler.open(BLOCK_DESCRIPTOR_PATH,
                     StandardOpenOption.WRITE,
                     StandardOpenOption.READ,
                     StandardOpenOption.CREATE
@@ -53,7 +47,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while (start <= end) {
             mid = (start + end) / 2;
 
-            entry.readFromDisk(VocabularyEntry.ENTRY_SIZE * mid, blockDescriptorFileChannel);
+            entry.readVocabularyFromDisk(VocabularyEntry.ENTRY_SIZE * mid, vocabularyFileChannel);
             key = entry.getTerm();
 
             if (key.equals(term)) {
@@ -79,7 +73,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position, vocabularyFileChannel);
+            position = entry.readFromDisk(position, VOCABULARY_PATH, BLOCK_DESCRIPTOR_PATH);
 
             if(position == 0)
                 return  true;
@@ -99,5 +93,23 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
     public static void clearCache() {
         entries.clear();
+    }
+
+    public void reset() {
+        clear();
+        clearCache();
+
+        try {
+            vocabularyFileChannel.close();
+
+            vocabularyFileChannel = FileChannelHandler.open(VOCABULARY_PATH,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.READ,
+                    StandardOpenOption.CREATE
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

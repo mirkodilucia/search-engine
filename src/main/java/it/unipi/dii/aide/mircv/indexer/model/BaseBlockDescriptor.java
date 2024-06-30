@@ -179,4 +179,19 @@ public class BaseBlockDescriptor {
     public double getNumPostings() {
         return numPostings;
     }
+
+    protected static void reset() {
+        memoryOffset = 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Block info : " +
+                "docidOffset = " + documentIdOffset +
+                ", docidSize = " + documentIdSize +
+                ", freqOffset = " + frequencyOffset +
+                ", freqSize = " + frequencySize +
+                ", maxDocid = " + maxDocumentsId +
+                ", numPostings = " + numPostings;
+    }
 }

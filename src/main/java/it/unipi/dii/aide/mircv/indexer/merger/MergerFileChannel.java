@@ -40,8 +40,6 @@ public class MergerFileChannel {
                 FileChannelHandler.open(INVERTED_DOCUMENT_FREQUENCY_FILE_PATH, StandardOpenOption.WRITE, StandardOpenOption.READ, StandardOpenOption.CREATE),
                 FileChannelHandler.open(BLOCK_DESCRIPTOR_FILE_PATH, StandardOpenOption.WRITE, StandardOpenOption.READ, StandardOpenOption.CREATE)
         );
-
-
     }
 
     public CompressionResult writeCompressedBlock(BlockDescriptor blockDescriptor,
