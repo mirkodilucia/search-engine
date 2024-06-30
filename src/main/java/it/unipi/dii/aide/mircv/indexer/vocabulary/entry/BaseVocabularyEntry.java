@@ -277,7 +277,7 @@ public class BaseVocabularyEntry {
                     block.mapBlockDescriptor(buffer);
 
                     blocks.add(block);
-                    blockOffset += 16;
+                    blockOffset += BLOCK_DESCRIPTOR_ENTRY_BYTES;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
