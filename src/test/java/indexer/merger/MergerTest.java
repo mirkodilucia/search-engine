@@ -5,6 +5,7 @@ import java.io.IOException;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
 import it.unipi.dii.aide.mircv.config.PartialResultsConfig;
+import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +23,11 @@ public class MergerTest {
     public static void setup() {
         config = new Config();
         config.setVocabularyPath(
-                "data_test/mergerWorkerTest/vocabulary"
+                new VocabularyConfig(
+                        "data_test/mergerWorkerTest/vocabulary",
+                        "data_test/mergerWorkerTest/frequencies.dat",
+                        "data_test/mergerWorkerTest/doc_ids.dat",
+                        "data_test/mergerWorkerTest/vocabulary")
         ).setPartialResultConfig(
                 new PartialResultsConfig(
                         "data_test/mergerWorkerTest/partial_results",

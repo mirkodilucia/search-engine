@@ -2,6 +2,7 @@ package indexer.spimi;
 
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
+import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
@@ -32,7 +33,12 @@ public class SpimiTest {
     @BeforeAll
     public static void init() {
         config = new Config();
-        config.setVocabularyPath("data_test/spimi/vocabulary_0.dat")
+        config.setVocabularyPath(new VocabularyConfig(
+                "data_test/spimi/vocabulary_0.dat",
+                "data_test/spimi/frequencies.dat",
+                "data_test/spimi/doc_ids.dat",
+                "data_test/spimi/vocabulary"
+                ))
                 .setPartialIndexConfig(new InvertedIndexConfig(
                 "data_test/mergerWorkerTest/indexes_docs",
                 "data_test/mergerWorkerTest/indexes_freqs"));

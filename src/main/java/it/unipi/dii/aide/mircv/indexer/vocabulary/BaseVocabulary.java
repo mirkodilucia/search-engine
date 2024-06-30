@@ -13,17 +13,25 @@ import java.util.Objects;
 
 public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
-    public static String PATH;
+    public static String VOCABULARY_PATH;
+    public static String BLOCK_DESCRIPTOR_PATH;
 
-    private final FileChannel channel;
+    private final FileChannel vocabularyFileChannel;
+    private final FileChannel blockDescriptorFileChannel;
 
     private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
 
     public BaseVocabulary(String path) {
-        PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary_0.dat");
+        VOCABULARY_PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary_0.dat");
+        BLOCK_DESCRIPTOR_PATH = Objects.requireNonNullElse(path, "data/vocabulary/block_descriptor.dat");
 
         try {
-            channel = FileChannelHandler.open(PATH,
+            vocabularyFileChannel = FileChannelHandler.open(VOCABULARY_PATH,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.READ,
+                    StandardOpenOption.CREATE
+            );
+            blockDescriptorFileChannel = FileChannelHandler.open(BLOCK_DESCRIPTOR_PATH,
                     StandardOpenOption.WRITE,
                     StandardOpenOption.READ,
                     StandardOpenOption.CREATE
@@ -45,7 +53,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while (start <= end) {
             mid = (start + end) / 2;
 
-            entry.readFromDisk(VocabularyEntry.ENTRY_SIZE * mid, channel);
+            entry.readFromDisk(VocabularyEntry.ENTRY_SIZE * mid, blockDescriptorFileChannel);
             key = entry.getTerm();
 
             if (key.equals(term)) {
@@ -71,7 +79,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position, channel);
+            position = entry.readFromDisk(position, vocabularyFileChannel);
 
             if(position == 0)
                 return  true;

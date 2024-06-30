@@ -3,6 +3,7 @@ package query;
 import it.unipi.dii.aide.mircv.cli.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
 import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class QueryHandlerTest {
 
-    private static final String blockDescriptorPath = "data_test/queryHandlerTest/vocabulary_0.dat";
+    private static final String vocabularyPath = "data_test/queryHandlerTest/vocabulary_0.dat";
 
     private static Config config;
 
@@ -34,7 +35,12 @@ public class QueryHandlerTest {
     @BeforeAll
     static void setTestPaths() {
         config = new Config();
-        config.setVocabularyPath(blockDescriptorPath);
+        config.setVocabularyPath(new VocabularyConfig(
+                vocabularyPath,
+                "data_test/queryHandlerTest/frequencies.dat",
+                "data_test/queryHandlerTest/doc_ids.dat",
+                "data_test/queryHandlerTest/vocabulary")
+        );
 
         vocabulary = Vocabulary.with(config);
     }

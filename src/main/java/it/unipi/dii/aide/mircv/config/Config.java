@@ -8,6 +8,8 @@ public class Config {
 
     public PreprocessConfig preprocessConfig;
 
+    public VocabularyConfig vocabularyConfig;
+
     private BlockDescriptorConfig blockDescriptorConfig;
 
     public InvertedIndexConfig invertedIndexConfig;
@@ -15,17 +17,23 @@ public class Config {
     public PartialResultsConfig partialResultsConfig;
 
     public ScorerConfig scorerConfig;
-    private String vocabularyPath;
 
     private final String debugDir;
     private final String testDir;
     private final boolean debugEnabled;
 
     public Config() {
+        this.vocabularyConfig = new VocabularyConfig(
+                "data/vocabulary",
+                "data/frequencies.dat",
+                "data/doc_ids.dat",
+                "data/vocabulary"
+        );
         this.preprocessConfig = new PreprocessConfig(
                 "data_resources/stopwords.dat",
                 true,
                 true);
+
         this.partialResultsConfig = new PartialResultsConfig(
                 "data/indexes",
                 "data/indexes",
@@ -43,7 +51,7 @@ public class Config {
     }
 
     public String getVocabularyPath() {
-        return this.vocabularyPath;
+        return this.vocabularyConfig.getVocabularyPath();
     }
 
     public ScorerConfig getScorerConfig() {
@@ -71,8 +79,8 @@ public class Config {
     }
 
 
-    public Config setVocabularyPath(String s) {
-        this.vocabularyPath = s;
+    public Config setVocabularyPath(VocabularyConfig vocabularyConfig) {
+        this.vocabularyConfig = vocabularyConfig;
         return this;
     }
 
