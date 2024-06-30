@@ -62,4 +62,9 @@ public class BlockDescriptor extends BaseBlockDescriptor {
 
         return null;
     }
+
+    public static void reset() {
+        BaseBlockDescriptor.reset();
+    }
+
 }

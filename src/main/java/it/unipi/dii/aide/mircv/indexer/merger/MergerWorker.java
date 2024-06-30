@@ -45,7 +45,7 @@ public class MergerWorker extends BaseMergerWorker {
                 vocabularyEntryMemOffset[i] = 0;
 
                 // read first entry of the vocabulary
-                long ret = nextTerm[i].readFromDisk(vocabularyEntryMemOffset[i], PATH_TO_PARTIAL_VOCABULARIES + "_" + i + ".dat");
+                long ret = nextTerm[i].readVocabularyFromDisk(vocabularyEntryMemOffset[i], PATH_TO_PARTIAL_VOCABULARIES + "_" + i + ".dat");
 
                 if (ret == -1 || ret == 0) {
                     nextTerm[i] = null;
@@ -134,7 +134,7 @@ public class MergerWorker extends BaseMergerWorker {
             }
 
             vocabularyEntryMemOffset[i] += VocabularyEntry.ENTRY_SIZE;
-            long ret = nextTerm[i].readFromDisk(vocabularyEntryMemOffset[i], PATH_TO_PARTIAL_VOCABULARIES+ "_" + i + ".dat");
+            long ret = nextTerm[i].readVocabularyFromDisk(vocabularyEntryMemOffset[i], PATH_TO_PARTIAL_VOCABULARIES+ "_" + i + ".dat");
 
             if (ret == -1 || ret == 0) {
                 nextTerm[i] = null;

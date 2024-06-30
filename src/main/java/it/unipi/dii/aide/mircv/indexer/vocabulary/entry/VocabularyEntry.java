@@ -48,10 +48,25 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         super(term, stats, memoryInfo);
     }
 
-    public long readFromDisk(long memoryOffset, FileChannel blockDescriptorFile) {
+    public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {
+        try (
+                FileChannel vocabularyChannel = FileChannelHandler.open(vocabularyFilePath,
+                        StandardOpenOption.READ,
+                        StandardOpenOption.WRITE,
+                        StandardOpenOption.CREATE
+                );
+        ) {
+            return this.readVocabularyFromDisk(memoryOffset, vocabularyChannel);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public long readVocabularyFromDisk(long memoryOffset, FileChannel vocabularyFile) {
         try {
             // Open the buffer to read the term
-            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer buffer = vocabularyFile.map(FileChannel.MapMode.READ_ONLY, memoryOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -63,8 +78,17 @@ public class VocabularyEntry extends BaseVocabularyEntry {
 
             this.term = encodedTerm[0];
 
+            return ENTRY_SIZE + memoryOffset;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public long readBlockDescriptorFromDisk(long memoryOffset, FileChannel blockDescriptorFile) {
+        try {
             // Open the buffer to read the block and stats
-            buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
+            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -79,10 +103,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         }
     }
 
-    public long writeEntry(long vocOffset, FileChannel blockDescriptorFile) {
+    public long writeEntry(long vocOffset, FileChannel vocabularyFileChannel) {
         try {
             // Write the term
-            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
+            MappedByteBuffer buffer = vocabularyFileChannel.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 
@@ -144,14 +168,21 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         return memoryInfo.getHowManyBlockToWrite();
     }
 
-    public long readFromDisk(long memoryOffset, String vocabularyPath) {
+    public long readFromDisk(long memoryOffset, String vocabularyPath, String blockDescriptorPath) {
         try (
-                FileChannel vocabularyFchan = FileChannelHandler.open(vocabularyPath,
+                FileChannel vocabularyChan = FileChannelHandler.open(vocabularyPath,
                         StandardOpenOption.READ,
                         StandardOpenOption.WRITE,
                         StandardOpenOption.CREATE
-                )) {
-            return this.readFromDisk(memoryOffset, vocabularyFchan);
+                );
+                FileChannel blockDescriptorChan = FileChannelHandler.open(blockDescriptorPath,
+                        StandardOpenOption.READ,
+                        StandardOpenOption.WRITE,
+                        StandardOpenOption.CREATE
+                );
+        ) {
+            this.readVocabularyFromDisk(memoryOffset, vocabularyChan);
+            return this.readBlockDescriptorFromDisk(memoryOffset, blockDescriptorChan);
         }catch (IOException e) {
             e.printStackTrace();
         }

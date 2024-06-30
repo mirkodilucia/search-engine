@@ -1,5 +1,6 @@
 package indexer.model;
 
+import it.unipi.dii.aide.mircv.config.BlockDescriptorConfig;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
@@ -8,23 +9,23 @@ import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 
 
 public class BlockDescriptorTest {
 
-    private static final String vocabularyPath = "data_test/blockDescriptorsTest/vocabulary.dat";
+    private static final String vocabularyPath = "data_test/blockDescriptorsTest/vocabulary_0.dat";
     private static final String blockDescriptorPath = "data_test/blockDescriptorsTest/block_descriptor.dat";
 
     static Config config;
@@ -35,24 +36,29 @@ public class BlockDescriptorTest {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
                 vocabularyPath
+        )).setBlockDescriptorPath(new BlockDescriptorConfig(
+                blockDescriptorPath,
+                false
         ));
 
         vocabulary = Vocabulary.with(config);
     }
 
-    @AfterEach
+    @BeforeEach
     void reset() {
         try {
             Files.deleteIfExists(Paths.get(vocabularyPath));
+            Files.deleteIfExists(Paths.get(blockDescriptorPath));
+            vocabulary.reset();
+            BlockDescriptor.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
     void oneDescriptorBlockTest() {
-        Config config = new Config();
-
         // create a posting list with 1023 elements
         PostingList list = new PostingList(config, "test");
         for (int i = 0; i < 1023; i++) {
@@ -69,11 +75,13 @@ public class BlockDescriptorTest {
 
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get(vocabularyPath),
+                        Paths.get(blockDescriptorPath),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
         ) {
+
+            //voc.writeEntry(0, vocabularyChannel);
 
             BlockDescriptor blockDescriptor = new BlockDescriptor();
             blockDescriptor.setDocumentIdOffset(0);
@@ -95,10 +103,11 @@ public class BlockDescriptorTest {
             BlockDescriptor block = blocks.get(0);
 
             assertEquals(blockDescriptor.getDocumentIdOffset(), block.getDocumentIdOffset());
+            assertEquals(blockDescriptor.getFrequenciesOffset(), block.getFrequenciesOffset());
+
             assertEquals(blockDescriptor.getDocumentIdSize(), block.getDocumentIdSize());
             assertEquals(blockDescriptor.getMaxDocumentsId(), block.getMaxDocumentsId());
 
-            assertEquals(blockDescriptor.getFrequenciesOffset(), block.getFrequenciesOffset());
             assertEquals(blockDescriptor.getFrequeanciesSize(), block.getFrequeanciesSize());
             assertEquals(blockDescriptor.getNumPostings(), block.getNumPostings());
 
@@ -109,7 +118,7 @@ public class BlockDescriptorTest {
 
     @Test
     void multipleDescriptorsTest() {
-        Config config = new Config();
+        vocabulary = Vocabulary.with(config);
 
         // create a posting list with 1025 elements
         PostingList list = new PostingList(config, "test");
@@ -125,29 +134,57 @@ public class BlockDescriptorTest {
         // check the number of blocks
         assertEquals(33, voc.getHowManyBlockToWrite());
 
+        int numBlocks = voc.getHowManyBlockToWrite();
+        int maxNumPostings = voc.getMaxNumberOfPostingInBlock();
+        int docsMemOffset = 0;
+        int freqsMemOffset = 0;
+
         try (
                 FileChannel blockChannel = (FileChannel) Files.newByteChannel(
-                        Paths.get(vocabularyPath),
+                        Paths.get(blockDescriptorPath),
                         StandardOpenOption.WRITE,
                         StandardOpenOption.READ,
                         StandardOpenOption.CREATE)
         ) {
+            Iterator<Posting> plIterator = list.getPostings().iterator();
+            ArrayList<BlockDescriptor> blockList = new ArrayList<>();
 
-            BlockDescriptor blockDescriptor = new BlockDescriptor();
-            blockDescriptor.setDocumentIdOffset(0);
-            blockDescriptor.setDocumentIdSize(voc.getDocumentFrequency() * 4);
+            for (int i = 0; i < numBlocks; i++) {
+                BlockDescriptor blockDescriptor = new BlockDescriptor();
+                blockDescriptor.setDocumentIdOffset(docsMemOffset);
+                blockDescriptor.setFrequenciesOffset(freqsMemOffset);
 
-            blockDescriptor.setMaxDocumentsId(list.getPostings().get(voc.getDocumentFrequency() - 1).getDocumentId());
+                int postingsInBlock = 0;
+                int nPostingsToBeWritten = list.getPostingsToBeWritten(i, maxNumPostings);
 
-            blockDescriptor.setFrequenciesOffset(0);
-            blockDescriptor.setFrequenciesSize(voc.getDocumentFrequency() * 4);
-            blockDescriptor.setNumPostings(list.getPostings().size());
+                blockDescriptor.setDocumentIdSize(nPostingsToBeWritten * 4);
+                blockDescriptor.setFrequenciesSize(nPostingsToBeWritten * 4);
 
-            MergerFileChannel.CompressionResult result = blockDescriptor.writeBlock(blockChannel);
-            assertTrue(result != null);
+                while (true) {
+                    Posting currPosting = plIterator.next();
+                    postingsInBlock++;
+
+                    if (postingsInBlock == nPostingsToBeWritten) {
+                        blockDescriptor.setMaxDocumentsId(currPosting.getDocumentId());
+                        blockDescriptor.setNumPostings(postingsInBlock);
+                        blockDescriptor.writeBlock(blockChannel);
+
+                        blockList.add(blockDescriptor);
+
+                        docsMemOffset += nPostingsToBeWritten * 4;
+                        freqsMemOffset += nPostingsToBeWritten * 4;
+                        break;
+                    }
+                }
+            }
 
             ArrayList<BlockDescriptor> blocks = voc.readBlocks();
             assertEquals(33, blocks.size());
+
+            for (int i = 0; i < blocks.size(); i++) {
+                assertEquals(blockList.get(i).toString(), blocks.get(i).toString());
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

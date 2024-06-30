@@ -98,6 +98,10 @@ public class BaseVocabularyEntry {
         this.upperBoundInfo.setBM25Dl(BM25Dl);
     }
 
+    public int getDocumentIdSize() {
+        return memoryInfo.getDocumentIdSize();
+    }
+
     //
     public static class VocabularyEntryUpperBoundInfo {
         private int BM25Dl = 1;

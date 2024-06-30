@@ -7,7 +7,7 @@ import it.unipi.dii.aide.mircv.utils.FileHandler;
 import java.io.*;
 import java.util.*;
 
-public class PostingList implements Serializable {
+public class PostingList {
 
     private final Config config;
     private String term;

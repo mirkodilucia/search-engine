@@ -9,13 +9,16 @@ public class Vocabulary extends BaseVocabulary {
     private static Vocabulary instance = null;
     private final static LruCache<String, VocabularyEntry> entries= new LruCache<>(1000);
 
-    private Vocabulary(String path){
-        super(path);
+    private Vocabulary(String vocabularyPath, String blockDescriptorsPath){
+        super(vocabularyPath, blockDescriptorsPath);
     }
 
     public static Vocabulary with(Config config){
         if(instance == null){
-            instance = new Vocabulary(config.getVocabularyPath());
+            instance = new Vocabulary(
+                    config.getVocabularyPath(),
+                    config.getBlockDescriptorsPath()
+            );
         }
         return instance;
     }
@@ -32,5 +35,9 @@ public class Vocabulary extends BaseVocabulary {
         VocabularyEntry entry = findEntry(term);
         entries.put(term, entry);
         return entry;
+    }
+
+    public void reset() {
+        super.reset();
     }
 }

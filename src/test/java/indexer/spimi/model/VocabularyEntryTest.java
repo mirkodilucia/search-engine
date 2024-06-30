@@ -46,7 +46,7 @@ public class VocabularyEntryTest {
             vocabularyEntry.writeEntry(0, channel);
 
             VocabularyEntry vocabularyEntryRead = new VocabularyEntry();
-            vocabularyEntryRead.readFromDisk(0, channel);
+            vocabularyEntryRead.readVocabularyFromDisk(0, channel);
 
             assert vocabularyEntryRead.getTerm().equals("test");
         } catch (IOException e) {
@@ -81,14 +81,15 @@ public class VocabularyEntryTest {
             vocabularyEntry1.writeEntry(offset, channel);
 
             VocabularyEntry vocabularyEntryRead = new VocabularyEntry();
-            long size = vocabularyEntryRead.readFromDisk(0, "data_test/vocabularyEntry/vocabulary_test_1.dat");
+            long size = vocabularyEntryRead.readVocabularyFromDisk(0, "data_test/vocabularyEntry/vocabulary_test_1.dat");
 
             assert vocabularyEntryRead.getTerm().equals("test");
 
             VocabularyEntry vocabularyEntryRead1 = new VocabularyEntry();
-            vocabularyEntryRead1.readFromDisk(size, "data_test/vocabularyEntry/vocabulary_test_1.dat");
+            vocabularyEntryRead1.readVocabularyFromDisk(size, "data_test/vocabularyEntry/vocabulary_test_1.dat");
 
-            assert vocabularyEntryRead1.getTerm().equals("test_1");
+            String term = vocabularyEntryRead1.getTerm();
+            assert term.equals("test_1");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
