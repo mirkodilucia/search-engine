@@ -50,7 +50,7 @@ public class InitialDocument {
         this.tokenize();
 
         /** TODO: Implement the following methods **/
-        if (config.preprocessConfig.isStemmerEnabled()) {
+        if (config.getPreprocessConfig().isStemmerEnabled()) {
          removeStopwords();
          stem();
         }

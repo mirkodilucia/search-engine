@@ -36,10 +36,7 @@ public class QueryHandlerTest {
     static void setTestPaths() {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
-                vocabularyPath,
-                "data_test/queryHandlerTest/frequencies.dat",
-                "data_test/queryHandlerTest/doc_ids.dat",
-                "data_test/queryHandlerTest/vocabulary")
+                vocabularyPath)
         );
 
         vocabulary = Vocabulary.with(config);

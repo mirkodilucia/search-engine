@@ -34,10 +34,7 @@ public class SpimiTest {
     public static void init() {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
-                "data_test/spimi/vocabulary_0.dat",
-                "data_test/spimi/frequencies.dat",
-                "data_test/spimi/doc_ids.dat",
-                "data_test/spimi/vocabulary"
+                "data_test/spimi/vocabulary_0.dat"
                 ))
                 .setPartialIndexConfig(new InvertedIndexConfig(
                 "data_test/mergerWorkerTest/indexes_docs",

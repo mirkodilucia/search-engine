@@ -6,9 +6,9 @@ public class Config {
 
     public boolean debug;
 
-    public PreprocessConfig preprocessConfig;
+    private PreprocessConfig preprocessConfig;
 
-    public VocabularyConfig vocabularyConfig;
+    private VocabularyConfig vocabularyConfig;
 
     private BlockDescriptorConfig blockDescriptorConfig;
 
@@ -24,9 +24,6 @@ public class Config {
 
     public Config() {
         this.vocabularyConfig = new VocabularyConfig(
-                "data/vocabulary",
-                "data/frequencies.dat",
-                "data/doc_ids.dat",
                 "data/vocabulary"
         );
         this.preprocessConfig = new PreprocessConfig(
