@@ -20,7 +20,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
     private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
 
     public BaseVocabulary(String path) {
-        PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary.dat");
+        PATH = Objects.requireNonNullElse(path, "data/vocabulary/vocabulary_0.dat");
 
         try {
             channel = FileChannelHandler.open(PATH,

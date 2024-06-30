@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class Spimi extends BaseSpimi {
 
-    private final static String COLLECTION_STATISTICS_FILE = "data/collection/collection_statistics.dat";
     private final static String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
     private static long MEMORY_LIMIT;

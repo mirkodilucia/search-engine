@@ -10,7 +10,6 @@ public class DocumentIndexState {
 
     private final static String COLLECTION_STATISTICS_FILE = "data/collection/collection_statistics.dat";
 
-
     static{
         if(!readFile()){
             collectionSize = 0;
@@ -26,11 +25,12 @@ public class DocumentIndexState {
             totalDocumentLen = ois.readLong();
             return true;
         } catch (FileNotFoundException e) {
-            // TODO: handle exception with logger
-            throw new RuntimeException(e);
+            System.out.println("File not found " + COLLECTION_STATISTICS_FILE );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return false;
     }
 
     public static boolean writeFile() {
