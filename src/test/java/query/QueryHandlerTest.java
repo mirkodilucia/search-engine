@@ -72,7 +72,6 @@ public class QueryHandlerTest {
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testMaxScoreTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected ){
-
         config.getScorerConfig().setMaxScoreEnabled(true);
         config.getBlockDescriptorConfig().setCompressionEnabled(true);
         config.getPreprocessConfig().setStemStopRemovalEnabled(false);

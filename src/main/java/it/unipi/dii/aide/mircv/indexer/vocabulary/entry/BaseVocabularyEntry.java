@@ -270,8 +270,10 @@ public class BaseVocabularyEntry {
                     StandardOpenOption.WRITE,
                     StandardOpenOption.CREATE
             )) {
+                MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, blockOffset * numBlocks, BLOCK_DESCRIPTOR_ENTRY_BYTES);
+
                 for (int i = 0; i < numBlocks; i++) {
-                    MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, blockOffset, BLOCK_DESCRIPTOR_ENTRY_BYTES);
+
                     BlockDescriptor block = new BlockDescriptor();
 
                     block.mapBlockDescriptor(buffer);
