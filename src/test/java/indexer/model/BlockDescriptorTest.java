@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class BlockDescriptorTest {
 
-    private static final String vocabularyPath = "data_test/blockDescriptorsTest/vocabulary_0.dat";
+    private static final String vocabularyPath = "data_test/blockDescriptorsTest/vocabulary.dat";
     private static final String blockDescriptorPath = "data_test/blockDescriptorsTest/block_descriptor.dat";
 
     static Config config;
@@ -34,10 +34,7 @@ public class BlockDescriptorTest {
     static void setTestPaths() {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
-                vocabularyPath,
-                "data_test/blockDescriptorsTest/frequencies.dat",
-                "data_test/blockDescriptorsTest/doc_ids.dat",
-                "data_test/blockDescriptorsTest/vocabulary"
+                vocabularyPath
         ));
 
         vocabulary = Vocabulary.with(config);
