@@ -70,7 +70,7 @@ public class VocabularyEntryTest {
                             0, 0, 0, 0, 0, 0
                     )
             );
-            long offset = vocabularyEntry.writeEntry(0,channel);
+
             VocabularyEntry vocabularyEntry1 = new VocabularyEntry("test_1",
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                             1, 1, 1, 1),
@@ -78,6 +78,7 @@ public class VocabularyEntryTest {
                             0, 0, 0, 0, 0, 0
                     )
             );
+            long offset = vocabularyEntry.writeEntry(0,channel);
             vocabularyEntry1.writeEntry(offset, channel);
 
             VocabularyEntry vocabularyEntryRead = new VocabularyEntry();
