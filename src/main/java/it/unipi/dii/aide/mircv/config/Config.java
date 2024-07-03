@@ -99,8 +99,9 @@ public class Config {
         this.invertedIndexConfig = invertedIndexConfig;
     }
 
-    public void setBlockDescriptorPath(BlockDescriptorConfig blockDescriptorConfig) {
+    public Config setBlockDescriptorPath(BlockDescriptorConfig blockDescriptorConfig) {
         this.blockDescriptorConfig = blockDescriptorConfig;
+        return this;
     }
 
     public String getBlockDescriptorsPath() {

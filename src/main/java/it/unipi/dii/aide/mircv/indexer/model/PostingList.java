@@ -242,14 +242,12 @@ public class PostingList {
             return null;
         }
 
-        BlockDescriptor block = blocksIterator.next();
-
         currentBlock = blocksIterator.next();
         postings.clear();
         postings.addAll(currentBlock.getBlockPostings());
         postingIterator = postings.iterator();
 
-        return null;
+        return currentPosting;
     }
 
     public Posting getCurrentPosting() {

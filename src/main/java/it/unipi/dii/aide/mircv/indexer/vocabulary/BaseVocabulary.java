@@ -16,7 +16,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
     public static String VOCABULARY_PATH;
     public static String BLOCK_DESCRIPTOR_PATH;
 
-    private FileChannel vocabularyFileChannel;
+    protected FileChannel vocabularyFileChannel;
 
     private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
 
