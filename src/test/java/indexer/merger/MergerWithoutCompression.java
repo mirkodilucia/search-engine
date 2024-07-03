@@ -71,8 +71,9 @@ public class MergerWithoutCompression {
             p.openList();
             ArrayList<Posting> postings = new ArrayList<>();
 
-            while(p.next() != null){
-                postings.add(p.getCurrentPosting());
+            while(p.next() != null) {
+                Posting currPosting = p.getCurrentPosting();
+                postings.add(currPosting);
             }
 
             p.closeList();

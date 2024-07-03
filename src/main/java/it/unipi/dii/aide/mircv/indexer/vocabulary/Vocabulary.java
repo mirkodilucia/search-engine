@@ -4,6 +4,8 @@ import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.platform.commons.util.LruCache;
 
+import java.nio.channels.FileChannel;
+
 public class Vocabulary extends BaseVocabulary {
 
     private static Vocabulary instance = null;
@@ -40,5 +42,9 @@ public class Vocabulary extends BaseVocabulary {
 
     public void reset() {
         super.reset();
+    }
+
+    public FileChannel getVocabularyChannel() {
+        return vocabularyFileChannel;
     }
 }

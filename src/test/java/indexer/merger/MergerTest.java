@@ -1,9 +1,13 @@
 package indexer.merger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
+import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
+import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,23 +25,21 @@ public class MergerTest {
         config = new Config();
         config.setVocabularyPath(
                 new VocabularyConfig(
-                        "data_test/mergerWorkerTest/vocabulary")
-        ).setPartialResultConfig(
+                        "data_test/mergerWorkerTest/vocabulary.dat")
+        ).setBlockDescriptorPath(
+                new BlockDescriptorConfig(
+                "data_test/mergerWorkerTest/block_descriptors.dat", false
+                )).setPartialResultConfig(
                 new PartialResultsConfig(
                         "data_test/mergerWorkerTest/partial_results",
                         "data_test/mergerWorkerTest/partial_results",
                         "data_test/mergerWorkerTest/partial_results")
         ).setInvertedIndexConfig(
                 new InvertedIndexConfig(
-                        "data_test/mergerWorkerTest/indexes_docs",
-                        "data_test/mergerWorkerTest/indexes_freqs")
+                        "data_test/mergerWorkerTest/indexes_freqs.dat",
+                        "data_test/mergerWorkerTest/indexes_docs.dat"
+                        )
         );
-        config.setBlockDescriptorConfig(
-                new BlockDescriptorConfig(
-                        "data_test/mergerWorkerTest/block_descriptors.txt",
-                        false)
-        );
-
     }
 
     @Test
@@ -48,8 +50,71 @@ public class MergerTest {
 
     @Test
     public void singleIndexMergeWithoutCompression() {
-
+        createVocabulary();
         MergerWithoutCompression.mergeSingleIndex(config);
+    }
+
+    private void createVocabulary() {
+        Vocabulary vocabulary = Vocabulary.with(config);
+
+        ArrayList<VocabularyEntry> vocabularyEntries = new ArrayList<>(List.of(new VocabularyEntry[]{
+                new VocabularyEntry("alberobello",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("roma",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("praga",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("parigi",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("berlino",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("tokyo",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                ),
+                new VocabularyEntry("zurigo",
+                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                                1, 1, 1, 1),
+                        new BaseVocabularyEntry.VocabularyMemoryInfo(
+                                0, 0, 0, 0, 0, 0
+                        )
+                )
+        }));
+
+        long offset = 0;
+        for (VocabularyEntry vocabularyEntry : vocabularyEntries) {
+            vocabularyEntry.writeEntry(offset, vocabulary.getVocabularyChannel());
+            vocabulary.put(vocabularyEntry.getTerm(), vocabularyEntry);
+            offset += VocabularyEntry.ENTRY_SIZE;
+        }
     }
 
     /*
