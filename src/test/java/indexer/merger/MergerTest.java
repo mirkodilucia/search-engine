@@ -2,10 +2,7 @@ package indexer.merger;
 
 import java.io.IOException;
 
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
-import it.unipi.dii.aide.mircv.config.PartialResultsConfig;
-import it.unipi.dii.aide.mircv.config.VocabularyConfig;
+import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,6 +32,12 @@ public class MergerTest {
                         "data_test/mergerWorkerTest/indexes_docs",
                         "data_test/mergerWorkerTest/indexes_freqs")
         );
+        config.setBlockDescriptorConfig(
+                new BlockDescriptorConfig(
+                        "data_test/mergerWorkerTest/block_descriptors.txt",
+                        false)
+        );
+
     }
 
     @Test
@@ -45,6 +48,7 @@ public class MergerTest {
 
     @Test
     public void singleIndexMergeWithoutCompression() {
+
         MergerWithoutCompression.mergeSingleIndex(config);
     }
 

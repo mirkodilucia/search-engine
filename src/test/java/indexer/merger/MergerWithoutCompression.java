@@ -59,6 +59,7 @@ public class MergerWithoutCompression {
     private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config){
         // get vocabulary from disk
         Vocabulary v = Vocabulary.with(config);
+
         v.readFromDisk();
 
         ArrayList<ArrayList<Posting>> mergedLists = new ArrayList<>(v.size());

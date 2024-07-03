@@ -37,7 +37,7 @@ public class Config {
                 "data/indexes");
 
         this.blockDescriptorConfig = new BlockDescriptorConfig(
-                "data/block_descriptors.dat",
+                "data/block_descriptors.txt.dat",
                 true);
 
         this.scorerConfig = new ScorerConfig(true);
@@ -88,6 +88,11 @@ public class Config {
 
     public Config setPartialResultConfig(PartialResultsConfig config) {
         this.partialResultsConfig = config;
+        return this;
+    }
+
+    public Config setBlockDescriptorConfig(BlockDescriptorConfig config) {
+        this.blockDescriptorConfig = config;
         return this;
     }
 

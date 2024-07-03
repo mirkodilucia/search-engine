@@ -19,6 +19,7 @@ public class Vocabulary extends BaseVocabulary {
                     config.getVocabularyPath(),
                     config.getBlockDescriptorsPath()
             );
+
         }
         return instance;
     }
