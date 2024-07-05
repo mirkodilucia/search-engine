@@ -35,6 +35,10 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         }
     }
 
+    public BaseVocabulary() {
+
+    }
+
     VocabularyEntry findEntry(String term) {
         VocabularyEntry entry = new VocabularyEntry();
 

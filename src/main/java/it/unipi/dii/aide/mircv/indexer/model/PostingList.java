@@ -220,8 +220,9 @@ public class PostingList {
     }
 
     public void openList() {
-        VocabularyEntry entry = Vocabulary.with(config).getEntry(term);
-        blocks = entry.readBlocks();
+        //VocabularyEntry entry = Vocabulary.with(config).getEntry(term);
+        //blocks = entry.readBlocks();
+        blocks = Vocabulary.getInstance().get(term).readBlocks();
 
         if (blocks == null) {
             return;
@@ -299,6 +300,11 @@ public class PostingList {
         this.stats.BM25Dl = BM25Dl;
         this.stats.BM25Tf = BM25Tf;
     }
+
+  public void setTerm(String term) {
+        this.term = term;
+    }
+
 
     public static class PostingStats {
         private int BM25Tf;

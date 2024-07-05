@@ -63,17 +63,23 @@ public class MergerWithoutCompression {
         v.readFromDisk();
 
         ArrayList<ArrayList<Posting>> mergedLists = new ArrayList<>(v.size());
+
         ArrayList<VocabularyEntry> vocEntries = new ArrayList<>(v.values());
 
         for(VocabularyEntry vocabularyEntry: vocEntries){
-            PostingList p = new PostingList(config, vocabularyEntry.getTerm());
-
+            PostingList p = new PostingList(config);
+            p.setTerm(vocabularyEntry.getTerm());
             p.openList();
             ArrayList<Posting> postings = new ArrayList<>();
+            //PostingList p = new PostingList(config, vocabularyEntry.getTerm());
 
-            while(p.next() != null) {
-                Posting currPosting = p.getCurrentPosting();
-                postings.add(currPosting);
+            //p.openList(); //Qua
+            //ArrayList<Posting> postings = new ArrayList<>();
+
+            while(p.next() != null) { //QUA
+                //Posting currPosting = p.getCurrentPosting();
+                //postings.add(currPosting);
+                postings.add(p.getCurrentPosting());
             }
 
             p.closeList();

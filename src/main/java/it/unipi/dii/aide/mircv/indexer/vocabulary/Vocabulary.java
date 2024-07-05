@@ -15,6 +15,20 @@ public class Vocabulary extends BaseVocabulary {
         super(vocabularyPath, blockDescriptorsPath);
     }
 
+    public Vocabulary() {
+        super();
+    }
+
+    /**
+     * singleton pattern
+     */
+    public static Vocabulary getInstance(){
+        if(instance == null){
+            instance = new Vocabulary();
+        }
+        return instance;
+    }
+
     public static Vocabulary with(Config config){
         if(instance == null){
             instance = new Vocabulary(
