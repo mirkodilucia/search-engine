@@ -5,15 +5,22 @@ public class VocabularyConfig {
 
     private final String vocabularyFilePath;  //File
 
-    public VocabularyConfig(String vocabularyFile) {
-        this.vocabularyFilePath = vocabularyFile;
-    }
+    private final String documentIndexStatePath; //File
 
-    public String getVocabularyFile() {
-        return vocabularyFilePath;
+    public VocabularyConfig(
+            String vocabularyFile,
+            String documentIndexStatePath
+    ) {
+        this.vocabularyFilePath = vocabularyFile;
+        this.documentIndexStatePath = documentIndexStatePath;
     }
 
     public String getVocabularyPath() {
         return vocabularyFilePath;
     }
+
+    public String getCollectionStatisticsPath() {
+        return documentIndexStatePath;
+    }
+
 }

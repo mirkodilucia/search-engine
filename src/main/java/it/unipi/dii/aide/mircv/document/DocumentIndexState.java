@@ -1,6 +1,9 @@
 package it.unipi.dii.aide.mircv.document;
 
+import it.unipi.dii.aide.mircv.config.Config;
+
 import java.io.*;
+import java.util.Objects;
 
 public class DocumentIndexState {
 
@@ -8,14 +11,23 @@ public class DocumentIndexState {
     private static long vocabularySize = 0;
     private static long totalDocumentLen = 0;
 
-    private final static String COLLECTION_STATISTICS_FILE = "data/collection/collection_statistics.dat";
+    private static String COLLECTION_STATISTICS_FILE;
 
-    static{
-        if(!readFile()){
-            collectionSize = 0;
-            vocabularySize = 0;
-            totalDocumentLen = 0;
+    private static DocumentIndexState instance = null;
+
+    private DocumentIndexState(Config config) {
+        setupPath(config);
+        readFile();
+    }
+
+    public static void with(Config config) {
+        if (instance == null) {
+            instance = new DocumentIndexState(config);
         }
+    }
+
+    private void setupPath(Config config) {
+        COLLECTION_STATISTICS_FILE = Objects.requireNonNullElse(config.getCollectionStatisticsPath(), "data/collection/collection_statistics.dat");
     }
 
     public static boolean readFile() {

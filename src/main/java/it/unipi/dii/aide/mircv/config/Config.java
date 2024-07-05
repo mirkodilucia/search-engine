@@ -24,7 +24,8 @@ public class Config {
 
     public Config() {
         this.vocabularyConfig = new VocabularyConfig(
-                "data/vocabulary"
+                "data/vocabulary",
+                "data/documentIndexState"
         );
         this.preprocessConfig = new PreprocessConfig(
                 "data_resources/stopwords.dat",
@@ -111,5 +112,9 @@ public class Config {
 
     public String getBlockDescriptorsPath() {
         return this.blockDescriptorConfig.getBlockDescriptorsPath();
+    }
+
+    public String getCollectionStatisticsPath() {
+        return this.vocabularyConfig.getCollectionStatisticsPath();
     }
 }
