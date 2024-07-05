@@ -35,7 +35,8 @@ public class BlockDescriptorTest {
     static void setTestPaths() {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
-                vocabularyPath
+                vocabularyPath,
+                "data_test/blockDescriptorsTest/documentIndexState"
         )).setBlockDescriptorPath(new BlockDescriptorConfig(
                 blockDescriptorPath,
                 false

@@ -26,6 +26,7 @@ public class Merger {
     }
 
     public static Merger with(Config config) {
+        DocumentIndexState.with(config);
         return new Merger(config);
     }
 

@@ -104,7 +104,7 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     public long writeEntry(long vocOffset, FileChannel vocabularyFileChannel) {
         try {
             // Write the term
-            MappedByteBuffer buffer = vocabularyFileChannel.map(FileChannel.MapMode.READ_WRITE, ENTRY_SIZE, ENTRY_SIZE);
+            MappedByteBuffer buffer = vocabularyFileChannel.map(FileChannel.MapMode.READ_WRITE, vocOffset, ENTRY_SIZE);
             if (buffer == null)
                 return -1;
 

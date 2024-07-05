@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipi.dii.aide.mircv.config.*;
+import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
@@ -25,7 +26,9 @@ public class MergerTest {
         config = new Config();
         config.setVocabularyPath(
                 new VocabularyConfig(
-                        "data_test/mergerWorkerTest/vocabulary.dat")
+                        "data_test/mergerWorkerTest/vocabulary.dat",
+                        "data_test/mergerWorkerTest/documentIndexState.dat"
+                )
         ).setBlockDescriptorPath(
                 new BlockDescriptorConfig(
                 "data_test/mergerWorkerTest/block_descriptors.dat", false
@@ -55,6 +58,7 @@ public class MergerTest {
     }
 
     private void createVocabulary() {
+        DocumentIndexState.with(config);
         Vocabulary vocabulary = Vocabulary.with(config);
 
         ArrayList<VocabularyEntry> vocabularyEntries = new ArrayList<>(List.of(new VocabularyEntry[]{
@@ -62,14 +66,14 @@ public class MergerTest {
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
+                                12, 12, 24, 24, 1, 1
                         )
                 ),
                 new VocabularyEntry("roma",
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
+                                13, 13, 25, 25, 1, 1
                         )
                 ),
                 new VocabularyEntry("praga",
@@ -115,6 +119,8 @@ public class MergerTest {
             vocabulary.put(vocabularyEntry.getTerm(), vocabularyEntry);
             offset += VocabularyEntry.ENTRY_SIZE;
         }
+
+        DocumentIndexState.updateVocabularySize(vocabularyEntries.size());
     }
 
     /*

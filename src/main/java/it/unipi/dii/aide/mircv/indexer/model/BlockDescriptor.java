@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.model;
 
+import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
 
 import java.nio.channels.FileChannel;
@@ -11,8 +12,8 @@ import java.nio.MappedByteBuffer;
 
 public class BlockDescriptor extends BaseBlockDescriptor {
 
-    private static final String INVERTED_INDEX_DOCS = "data/inverted_index_docs";
-    private static final String INVERTED_INDEX_FREQS = "data/inverted_index_freqs";
+    private static String INVERTED_INDEX_DOCS = "data/inverted_index_docs";
+    private static String INVERTED_INDEX_FREQS = "data/inverted_index_freqs";
 
     public BlockDescriptor() {
         super();
@@ -20,6 +21,15 @@ public class BlockDescriptor extends BaseBlockDescriptor {
 
     public BlockDescriptor(long documentsMemoryOffset, long frequenciesMemoryOffset) {
         super(documentsMemoryOffset, frequenciesMemoryOffset);
+    }
+
+    public static void init(Config config) {
+        setupPath(config);
+    }
+
+    private static void setupPath(Config config) {
+        INVERTED_INDEX_DOCS = config.invertedIndexConfig.getInvertedIndexDocs();
+        INVERTED_INDEX_FREQS = config.invertedIndexConfig.getInvertedIndexFreqsFile();
     }
 
     public MergerFileChannel.CompressionResult writeBlock(FileChannel descriptorChannel) {

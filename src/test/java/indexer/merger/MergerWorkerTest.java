@@ -22,7 +22,8 @@ public class MergerWorkerTest {
         config = new Config();
         config.setVocabularyPath(
                 new VocabularyConfig(
-                "data_test/mergerWorkerTest/vocabulary"
+                "data_test/mergerWorkerTest/vocabulary",
+                        "data_test/mergerWorkerTest/documentIndexState"
                 ))
             .setPartialResultConfig(new PartialResultsConfig(
                     "data_test/mergerWorkerTest/partial_results",
