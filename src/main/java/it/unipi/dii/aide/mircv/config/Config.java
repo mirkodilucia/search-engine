@@ -22,6 +22,14 @@ public class Config {
     private final String testDir;
     private final boolean debugEnabled;
 
+    public Config(String testDir, String debugDir, boolean debugEnabled) {
+        super();
+
+        this.testDir = testDir;
+        this.debugDir = debugDir;
+        this.debugEnabled = debugEnabled;
+    }
+
     public Config() {
         this.vocabularyConfig = new VocabularyConfig(
                 "data/vocabulary",
@@ -116,5 +124,9 @@ public class Config {
 
     public String getCollectionStatisticsPath() {
         return this.vocabularyConfig.getCollectionStatisticsPath();
+    }
+
+    public String getDebugPath() {
+        return this.debugDir;
     }
 }

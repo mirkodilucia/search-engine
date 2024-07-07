@@ -105,8 +105,8 @@ public class MergerWorker extends BaseMergerWorker {
                 continue;
             }
 
-            if (vocabularyEntry.getTerm().equals(termToProcess)) {
-                PostingList intermediatePostingList = loadList(vocabularyEntry, i);
+            if (nextTerm[i].getTerm().equals(termToProcess)) {
+                PostingList intermediatePostingList = loadList(nextTerm[i], i);
                 if (intermediatePostingList == null) {
                     return null;
                 }

@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.indexer.vocabulary;
 
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
+import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.platform.commons.util.LruCache;
 
@@ -16,21 +17,8 @@ public class Vocabulary extends BaseVocabulary {
         super(vocabularyPath, blockDescriptorsPath);
     }
 
-    public Vocabulary() {
-        super();
-    }
-
-    /**
-     * singleton pattern
-     */
-    public static Vocabulary getInstance(){
-        if(instance == null){
-            instance = new Vocabulary();
-        }
-        return instance;
-    }
-
-    public static Vocabulary with(Config config){
+    public static Vocabulary with(Config config) {
+        BlockDescriptor.init(config);
         DocumentIndexState.with(config);
         if(instance == null) {
             instance = new Vocabulary(

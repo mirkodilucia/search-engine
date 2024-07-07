@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.indexer.merger;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 
+import java.nio.channels.FileChannel;
 import java.util.Iterator;
 
 public class MergerPostingIteration {
@@ -18,4 +19,10 @@ public class MergerPostingIteration {
         this.maxNumPostings = maxNumPostings;
         this.nPostingsToBeWritten = nPostingsToBeWritten;
     }
+
+    public MergerFileChannel.CompressionResult writeBlock(FileChannel descriptorChannel) {
+        return blockDescriptor.writeBlock(descriptorChannel);
+    }
+
+
 }

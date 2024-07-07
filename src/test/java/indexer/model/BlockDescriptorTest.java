@@ -1,8 +1,6 @@
 package indexer.model;
 
-import it.unipi.dii.aide.mircv.config.BlockDescriptorConfig;
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.config.VocabularyConfig;
+import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
@@ -40,7 +38,13 @@ public class BlockDescriptorTest {
         )).setBlockDescriptorPath(new BlockDescriptorConfig(
                 blockDescriptorPath,
                 false
-        ));
+        )).setPartialResultConfig(new PartialResultsConfig(
+                "data_test/blockDescriptorsTest/partial_results",
+                "data_test/blockDescriptorsTest/partial_results",
+                "data_test/blockDescriptorsTest/partial_results"
+        )).setPartialIndexConfig(new InvertedIndexConfig(
+                "data_test/blockDescriptorsTest/indexes_docs",
+                "data_test/blockDescriptorsTest/indexes_freqs"));
 
         vocabulary = Vocabulary.with(config);
     }

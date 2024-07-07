@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.vocabulary.entry;
 
+import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
@@ -16,6 +17,8 @@ import java.nio.channels.FileChannel;
 
 public class BaseVocabularyEntry {
 
+    private static String DEBUG_PATH = "data/debug";
+
     protected String term;
     protected VocabularyEntryUpperBoundInfo upperBoundInfo;
     protected VocabularyMemoryInfo memoryInfo;
@@ -24,13 +27,13 @@ public class BaseVocabularyEntry {
     protected double inverseDocumentFrequency;
     protected int maxTermFrequency;
 
+    public static void setupPath(Config config) {
+        DEBUG_PATH = config.getDebugPath();
+    }
+
     public BaseVocabularyEntry() {
         this.memoryInfo = new VocabularyMemoryInfo();
         this.upperBoundInfo = new VocabularyEntryUpperBoundInfo();
-    }
-
-    public String getTerm() {
-        return term;
     }
 
     public BaseVocabularyEntry(String term,
@@ -41,11 +44,21 @@ public class BaseVocabularyEntry {
         this.memoryInfo = memoryInfo;
     }
 
+    /** Only for test **/
+    public BaseVocabularyEntry(String term, int documentFrequency, VocabularyEntryUpperBoundInfo stats, VocabularyMemoryInfo memoryInfo) {
+        this(term, stats, memoryInfo);
+        this.documentFrequency = documentFrequency;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
     public void debugSaveToDisk(String path) {
-        FileHandler.createFolderIfNotExists("data/debug/");
+        FileHandler.createFolderIfNotExists(DEBUG_PATH);
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("data/debug/" + path, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(DEBUG_PATH + path, true));
             writer.write(this+"\n");
             writer.close();
         } catch (IOException e) {
@@ -100,6 +113,10 @@ public class BaseVocabularyEntry {
 
     public int getDocumentIdSize() {
         return memoryInfo.getDocumentIdSize();
+    }
+
+    public long getBlockOffset() {
+        return memoryInfo.blockOffset;
     }
 
     //
@@ -181,7 +198,7 @@ public class BaseVocabularyEntry {
 
     // 36 bytes
     public static class VocabularyMemoryInfo {
-        public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 * 4 + 2 * 8;
+        public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 + 4 + 4 + 8 + 8 + 8;
 
         public static long memoryOffset = 0;
 
@@ -253,7 +270,7 @@ public class BaseVocabularyEntry {
         }
 
         public void computeBlockInformation(int documentFrequency) {
-            this.blockOffset = memoryOffset;
+            this.blockOffset = BlockDescriptor.getMemoryOffset();
             if (documentFrequency >= 1024)
                 this.numBlocks = (int) Math.ceil(Math.sqrt(documentFrequency));
         }
@@ -275,7 +292,7 @@ public class BaseVocabularyEntry {
                          StandardOpenOption.CREATE
                  );
             ) {
-                MappedByteBuffer buffer = blockDescriptor.map(FileChannel.MapMode.READ_ONLY, blockOffset, (long) numBlocks * BLOCK_DESCRIPTOR_ENTRY_BYTES);
+                MappedByteBuffer buffer = blockDescriptor.map(FileChannel.MapMode.READ_ONLY, blockOffset, (long) numBlocks * BlockDescriptor.BLOCK_DESCRIPTOR_ENTRY_BYTES);
 
                 for (int i = 0; i < numBlocks; i++) {
 
@@ -284,7 +301,7 @@ public class BaseVocabularyEntry {
                     block.mapBlockDescriptor(buffer);
 
                     blocks.add(block);
-                    blockOffset += BLOCK_DESCRIPTOR_ENTRY_BYTES;
+                    blockOffset += BlockDescriptor.BLOCK_DESCRIPTOR_ENTRY_BYTES;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -311,7 +328,7 @@ public class BaseVocabularyEntry {
     }
 
     public String toString() {
-        return ", term='" + term + '\'' +
+        return  ", term='" + term + '\'' +
                 ", df=" + documentFrequency +
                 ", idf=" + inverseDocumentFrequency +
                 ", maxTf=" + maxTermFrequency +

@@ -9,6 +9,8 @@ import java.util.*;
 
 public class PostingList {
 
+    private static String DEBUG_PATH = "data/debug";
+
     private final Config config;
     private String term;
 
@@ -16,12 +18,15 @@ public class PostingList {
 
     private final ArrayList<Posting> postings = new ArrayList<>();
 
-
     private BlockDescriptor currentBlock = null;
     private Posting currentPosting = null;
     private ArrayList<BlockDescriptor> blocks = null;
     private Iterator<Posting> postingIterator = null;
     private Iterator<BlockDescriptor> blocksIterator = null;
+
+    public static void setupPath(Config config) {
+        DEBUG_PATH = config.getDebugPath();
+    }
 
     public PostingList(Config config, String term) {
         this(config);
@@ -95,15 +100,15 @@ public class PostingList {
     }
 
     public void debugSaveToDisk(String docidsPath, String freqsPath, int maxPostingsPerBlock){
-        FileHandler.createFolderIfNotExists("data/debug");
-        FileHandler.createFileIfNotExists("data/debug/"+docidsPath);
-        FileHandler.createFileIfNotExists("data/debug/"+freqsPath);
-        FileHandler.createFileIfNotExists("data/debug/completeList.txt");
+        FileHandler.createFolderIfNotExists(DEBUG_PATH);
+        FileHandler.createFileIfNotExists(DEBUG_PATH + "/" + docidsPath);
+        FileHandler.createFileIfNotExists(DEBUG_PATH + "/" + freqsPath);
+        FileHandler.createFileIfNotExists(DEBUG_PATH + "/" + "completeList.txt");
 
         try {
-            BufferedWriter writerDocids = new BufferedWriter(new FileWriter("data/debug/"+docidsPath, true));
-            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter("data/debug/"+freqsPath, true));
-            BufferedWriter all = new BufferedWriter(new FileWriter("data/debug/completeList.txt", true));
+            BufferedWriter writerDocids = new BufferedWriter(new FileWriter(DEBUG_PATH + "/" + docidsPath, true));
+            BufferedWriter writerFreqs = new BufferedWriter(new FileWriter(DEBUG_PATH + "/" + freqsPath, true));
+            BufferedWriter all = new BufferedWriter(new FileWriter(DEBUG_PATH + "/" + "completeList.txt", true));
             String[] postingInfo = toStringPosting();
             int postingsPerBlock = 0;
             for(Posting p: postings){
@@ -233,21 +238,23 @@ public class PostingList {
     }
 
     public Posting next() {
-        if (postingIterator.hasNext()) {
-            currentPosting = postingIterator.next();
-            return currentPosting;
+        if(!postingIterator.hasNext()) {
+
+            // no new blocks: end of list
+            if (!blocksIterator.hasNext()) {
+                currentPosting = null;
+                return null;
+            }
+
+            // load the new block and update the postings iterator
+            currentBlock = blocksIterator.next();
+            //remove previous postings
+            postings.clear();
+            postings.addAll(currentBlock.getBlockPostings());
+            postingIterator = postings.iterator();
         }
-
-        if (!blocksIterator.hasNext()) {
-            currentPosting = null;
-            return null;
-        }
-
-        currentBlock = blocksIterator.next();
-        postings.clear();
-        postings.addAll(currentBlock.getBlockPostings());
-        postingIterator = postings.iterator();
-
+        // return the next posting to process
+        currentPosting = postingIterator.next();
         return currentPosting;
     }
 

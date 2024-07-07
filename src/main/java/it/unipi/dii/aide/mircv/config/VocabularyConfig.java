@@ -4,7 +4,6 @@ package it.unipi.dii.aide.mircv.config;
 public class VocabularyConfig {
 
     private final String vocabularyFilePath;  //File
-
     private final String documentIndexStatePath; //File
 
     public VocabularyConfig(
