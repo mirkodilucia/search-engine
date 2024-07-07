@@ -19,17 +19,20 @@ public class MergerWorkerTest {
 
     @BeforeAll
     public static void setup() {
-        config = new Config();
+        config = new Config(
+                "data_test/mergerWorkerTest/testDir",
+                "data_test/mergerWorkerTest/debugDir",
+                true
+        );
         config.setVocabularyPath(
                 new VocabularyConfig(
                 "data_test/mergerWorkerTest/vocabulary",
                         "data_test/mergerWorkerTest/documentIndexState"
-                ))
-            .setPartialResultConfig(new PartialResultsConfig(
+                )).setPartialResultConfig(new PartialResultsConfig(
                     "data_test/mergerWorkerTest/partial_results",
                     "data_test/mergerWorkerTest/partial_results",
                     "data_test/mergerWorkerTest/partial_results"
-            )).setPartialIndexConfig(new InvertedIndexConfig(
+                )).setPartialIndexConfig(new InvertedIndexConfig(
                 "data_test/mergerWorkerTest/indexes_docs",
                 "data_test/mergerWorkerTest/indexes_freqs"));
 

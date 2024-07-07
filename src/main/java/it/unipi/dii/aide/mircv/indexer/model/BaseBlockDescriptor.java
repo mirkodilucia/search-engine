@@ -72,7 +72,7 @@ public class BaseBlockDescriptor {
         this.frequencySize = size;
     }
 
-    public long getMemoryOffset() {
+    public static long getMemoryOffset() {
         return memoryOffset;
     }
 

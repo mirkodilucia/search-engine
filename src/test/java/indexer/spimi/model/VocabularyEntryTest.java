@@ -35,7 +35,7 @@ public class VocabularyEntryTest {
                     StandardOpenOption.CREATE
             );
 
-            VocabularyEntry vocabularyEntry = new VocabularyEntry("test",
+            VocabularyEntry vocabularyEntry = new VocabularyEntry("test", 12,
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                             1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
@@ -49,6 +49,8 @@ public class VocabularyEntryTest {
             vocabularyEntryRead.readVocabularyFromDisk(0, channel);
 
             assert vocabularyEntryRead.getTerm().equals("test");
+            assert vocabularyEntryRead.getBlockOffset() == 0;
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

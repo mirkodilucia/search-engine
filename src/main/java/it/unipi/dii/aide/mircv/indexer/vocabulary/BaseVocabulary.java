@@ -47,7 +47,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while (start <= end) {
             mid = (start + end) / 2;
 
-            entry.readVocabularyFromDisk(VocabularyEntry.ENTRY_SIZE * mid, vocabularyFileChannel);
+            entry.readVocabularyFromDisk(VocabularyEntry.ENTRY_SIZE * mid, VOCABULARY_PATH);
             key = entry.getTerm();
 
             if (key.equals(term)) {
@@ -77,6 +77,10 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
             if(position == 0)
                 return  true;
+
+            if (entry.getTerm().isEmpty()) {
+                return true;
+            }
 
             if(entry.getTerm()==null){
                 return true;

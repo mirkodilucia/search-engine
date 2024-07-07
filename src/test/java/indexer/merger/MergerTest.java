@@ -1,6 +1,5 @@
 package indexer.merger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,35 +12,34 @@ import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 public class MergerTest {
 
     static Config config;
 
     @BeforeAll
     public static void setup() {
-        config = new Config();
+        config = new Config(
+                "data_test/mergerWorkerTest/testDir",
+                "data_test/mergerWorkerTest/debugDir",
+                true
+        );
         config.setVocabularyPath(
                 new VocabularyConfig(
                         "data_test/mergerWorkerTest/vocabulary.dat",
                         "data_test/mergerWorkerTest/documentIndexState.dat"
-                )
-        ).setBlockDescriptorPath(
+                )).setBlockDescriptorPath(
                 new BlockDescriptorConfig(
                 "data_test/mergerWorkerTest/block_descriptors.dat", false
                 )).setPartialResultConfig(
                 new PartialResultsConfig(
                         "data_test/mergerWorkerTest/partial_results",
                         "data_test/mergerWorkerTest/partial_results",
-                        "data_test/mergerWorkerTest/partial_results")
-        ).setInvertedIndexConfig(
+                        "data_test/mergerWorkerTest/partial_results"
+                )).setInvertedIndexConfig(
                 new InvertedIndexConfig(
-                        "data_test/mergerWorkerTest/indexes_freqs.dat",
-                        "data_test/mergerWorkerTest/indexes_docs.dat"
-                        )
+                        "data_test/mergerWorkerTest/inverted_indexes_freqs.dat",
+                        "data_test/mergerWorkerTest/inverted_indexes_docs.dat"
+                )
         );
     }
 
@@ -62,53 +60,32 @@ public class MergerTest {
         Vocabulary vocabulary = Vocabulary.with(config);
 
         ArrayList<VocabularyEntry> vocabularyEntries = new ArrayList<>(List.of(new VocabularyEntry[]{
-                new VocabularyEntry("alberobello",
+                new VocabularyEntry("alberobello", 2,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                12, 12, 24, 24, 1, 1
+                                0, 0, 0, 0, 1, 0
                         )
                 ),
-                new VocabularyEntry("roma",
+                new VocabularyEntry("amburgo", 3,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                13, 13, 25, 25, 1, 1
+                                8, 0, 8, 0, 1, 32
                         )
                 ),
-                new VocabularyEntry("praga",
+                new VocabularyEntry("pisa", 3,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
+                                20, 0, 20, 0, 1, 64
                         )
                 ),
-                new VocabularyEntry("parigi",
+                new VocabularyEntry("zurigo", 2,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                                 1, 1, 1, 1),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
-                        )
-                ),
-                new VocabularyEntry("berlino",
-                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
-                        new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
-                        )
-                ),
-                new VocabularyEntry("tokyo",
-                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
-                        new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
-                        )
-                ),
-                new VocabularyEntry("zurigo",
-                        new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
-                        new BaseVocabularyEntry.VocabularyMemoryInfo(
-                                0, 0, 0, 0, 0, 0
+                                32, 0, 32, 0, 1, 96
                         )
                 )
         }));

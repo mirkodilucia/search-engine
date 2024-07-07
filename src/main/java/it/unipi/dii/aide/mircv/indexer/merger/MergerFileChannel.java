@@ -15,15 +15,22 @@ import java.nio.file.StandardOpenOption;
 import static java.lang.System.arraycopy;
 
 public class MergerFileChannel {
-    private static final String VOCABULARY_FILE_PATH = "data/vocabulary/vocabulary_0.dat";
-    private static final String INVERTED_DOCUMENT_INDEX_FILE_PATH = "data/inverted/inverted_index.dat";
-    private static final String INVERTED_DOCUMENT_FREQUENCY_FILE_PATH = "data/inverted/inverted_index_frequency.dat";
-    private static final String BLOCK_DESCRIPTOR_FILE_PATH = "data/inverted/block_descriptor.dat";
+    private static String VOCABULARY_FILE_PATH = "data/vocabulary/vocabulary_0.dat";
+    private static String INVERTED_DOCUMENT_INDEX_FILE_PATH = "data/inverted/inverted_index.dat";
+    private static String INVERTED_DOCUMENT_FREQUENCY_FILE_PATH = "data/inverted/inverted_index_frequency.dat";
+    private static String BLOCK_DESCRIPTOR_FILE_PATH = "data/inverted/block_descriptor.dat";
 
     FileChannel vocabularyChannel;
     FileChannel documentIdChannel;
     FileChannel frequencyChannel;
     FileChannel descriptorChannel;
+
+    public static void setupPath(Config config) {
+        VOCABULARY_FILE_PATH = config.getVocabularyPath();
+        INVERTED_DOCUMENT_INDEX_FILE_PATH = config.invertedIndexConfig.getInvertedIndexDocs();
+        INVERTED_DOCUMENT_FREQUENCY_FILE_PATH = config.invertedIndexConfig.getInvertedIndexFreqsFile();
+        BLOCK_DESCRIPTOR_FILE_PATH = config.getBlockDescriptorsPath();
+    }
 
     private MergerFileChannel(
             FileChannel vocabularyChannel,
@@ -82,16 +89,13 @@ public class MergerFileChannel {
         return null;
     }
 
-
-
     public static class CompressionResult {
         public byte[] compressedDocs;
         public byte[] compressedFreqs;
-        public int docsMemOffset;
-        public int freqsMemOffset;
+        public long docsMemOffset;
+        public long freqsMemOffset;
 
         public CompressionResult(byte[] compressedDocs, byte[] compressedFreqs, int docsMemOffset, int freqsMemOffset) {
-
             this.compressedDocs = compressedDocs;
             this.compressedFreqs = compressedFreqs;
             this.docsMemOffset = docsMemOffset;
@@ -103,13 +107,27 @@ public class MergerFileChannel {
             this.compressedFreqs = new byte[0];
         }
 
+        public CompressionResult(long documentsMemoryOffset, long frequenciesMemoryOffset) {
+            this.docsMemOffset = documentsMemoryOffset;
+            this.freqsMemOffset = frequenciesMemoryOffset;
+        }
+
+
+        public CompressionResult updateCompressionOffset(long docsMemOffset, long freqsMemOffset) {
+            this.docsMemOffset += docsMemOffset;
+            this.freqsMemOffset += freqsMemOffset;
+            return this;
+        }
+
         public void updateCompressionResult(CompressionResult result) {
             if (result.compressedDocs == null || result.compressedDocs.length == 0)
                 this.compressedDocs = result.compressedDocs;
             else {
                 // Append compressedDocs
                 this.compressedDocs = new byte[this.compressedDocs.length + result.compressedDocs.length];
-                arraycopy(this.compressedDocs, 0, this.compressedDocs, 0, this.compressedDocs.length);
+                for (int i = 0; i < result.compressedDocs.length; i++) {
+                    this.compressedDocs[i] = result.compressedDocs[i];
+                }
             }
             docsMemOffset += result.docsMemOffset;
 
@@ -118,10 +136,16 @@ public class MergerFileChannel {
             else {
                 // Append compressedFreqs
                 this.compressedFreqs = new byte[this.compressedFreqs.length + result.compressedFreqs.length];
-                arraycopy(this.compressedFreqs, 0, this.compressedFreqs, 0, this.compressedFreqs.length);
+                for (int i = 0; i < result.compressedFreqs.length; i++) {
+                    this.compressedFreqs[i] = result.compressedFreqs[i];
+                }
             }
             freqsMemOffset += result.freqsMemOffset;
+        }
 
+        public void updateCompressionOffset(CompressionResult intermediateResult) {
+            this.docsMemOffset = intermediateResult.docsMemOffset;
+            this.freqsMemOffset = intermediateResult.freqsMemOffset;
         }
     }
 }

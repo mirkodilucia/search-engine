@@ -46,6 +46,13 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         super(term, stats, memoryInfo);
     }
 
+    public VocabularyEntry(String term, int documentFrequency,
+                           VocabularyEntryUpperBoundInfo stats,
+                           VocabularyMemoryInfo memoryInfo
+    ) {
+        super(term, documentFrequency, stats, memoryInfo);
+    }
+
     public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {
         try (
                 FileChannel vocabularyChannel = FileChannelHandler.open(vocabularyFilePath,
@@ -54,7 +61,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
                         StandardOpenOption.CREATE
                 );
         ) {
-            return this.readVocabularyFromDisk(memoryOffset, vocabularyChannel);
+            long offset = this.readVocabularyFromDisk(memoryOffset, vocabularyChannel);
+            readBlockDescriptorFromDisk(memoryOffset, vocabularyChannel);
+
+            return offset;
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -86,9 +96,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     public long readBlockDescriptorFromDisk(long memoryOffset, FileChannel blockDescriptorFile) {
         try {
             // Open the buffer to read the block and stats
-            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_WRITE, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
+            MappedByteBuffer buffer = blockDescriptorFile.map(FileChannel.MapMode.READ_ONLY, memoryOffset + TERM_SIZE, ENTRY_SIZE - TERM_SIZE);
             if (buffer == null)
                 return -1;
+
+            documentFrequency = buffer.getInt();
+            inverseDocumentFrequency = buffer.getDouble();
 
             // Read the block and stats
             upperBoundInfo.mapVocabularyEntryStats(upperBoundInfo, buffer);
@@ -112,14 +125,14 @@ public class VocabularyEntry extends BaseVocabularyEntry {
             for (int i = 0; i < term.length(); i++) {
                 charBuffer.put(i, term.charAt(i));
             }
-            charBuffer.put(term.length(), '\0');
 
             buffer.put(StandardCharsets.UTF_8.encode(charBuffer));
 
+            buffer.putInt(documentFrequency);
+            buffer.putDouble(inverseDocumentFrequency);
+
             upperBoundInfo.writeBufferWithEntryStats(upperBoundInfo, buffer);
             memoryInfo.writeBufferWithMemoryInfo(memoryInfo, buffer);
-
-            buffer.force();
 
             return vocOffset + ENTRY_SIZE;
         } catch (IOException e) {
@@ -179,8 +192,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
                         StandardOpenOption.CREATE
                 );
         ) {
-            this.readVocabularyFromDisk(memoryOffset, vocabularyChan);
-            return this.readBlockDescriptorFromDisk(memoryOffset, blockDescriptorChan);
+            long result = this.readVocabularyFromDisk(memoryOffset, vocabularyChan);
+            if (result == -1) {
+                return -1;
+            }
+
+            return this.readBlockDescriptorFromDisk(memoryOffset, vocabularyChan);
         }catch (IOException e) {
             e.printStackTrace();
         }

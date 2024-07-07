@@ -56,16 +56,15 @@ public class MergerWithoutCompression {
         return docIndex;
     }
 
-    private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config){
+    private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config) {
         // get vocabulary from disk
         Vocabulary v = Vocabulary.with(config);
-
         v.readFromDisk();
 
         ArrayList<ArrayList<Posting>> mergedLists = new ArrayList<>(v.size());
         ArrayList<VocabularyEntry> vocEntries = new ArrayList<>(v.values());
 
-        for(VocabularyEntry vocabularyEntry: vocEntries){
+        for(VocabularyEntry vocabularyEntry: vocEntries) {
             PostingList p = new PostingList(config, vocabularyEntry.getTerm());
 
             p.openList();
@@ -176,7 +175,7 @@ public class MergerWithoutCompression {
                         vocEntry.updateStatistics(postingList);
                         vocEntry.setBM25Dl(postingList.getBM25Dl());
                         vocEntry.setBM25Tf(postingList.getBM25Tf());
-                        vocEntry.updateMemoryIdSize(numPostings*4);
+                        vocEntry.updateMemoryIdSize(numPostings);
 
                         vocEntry.setDocumentIdOffset((int) docidOffset);
                         vocEntry.setFrequencyOffset((int) freqOffset);
@@ -203,8 +202,8 @@ public class MergerWithoutCompression {
         // building partial index 1
         ArrayList<PostingList> index1 = new ArrayList<>();
 
-        index1.add(new PostingList(config,"alberobello\t1:3 2:3: 4:7"));
-        index1.add(new PostingList(config,"newyork\t1:5 3:2: 4:6"));
+        index1.add(new PostingList(config,"alberobello\t1:3 2:3 4:7"));
+        index1.add(new PostingList(config,"newyork\t1:5 3:2 4:6"));
         index1.add(new PostingList(config,"pisa\t1:1 5:3"));
 
         // insert partial index to array of partial indexes
