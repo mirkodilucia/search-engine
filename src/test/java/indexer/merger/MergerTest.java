@@ -19,26 +19,26 @@ public class MergerTest {
     @BeforeAll
     public static void setup() {
         config = new Config(
-                "data_test/mergerWorkerTest/testDir",
-                "data_test/mergerWorkerTest/debugDir",
+                "data_test/mergerTest/testDir",
+                "data_test/mergerTest/debugDir",
                 true
         );
         config.setVocabularyPath(
                 new VocabularyConfig(
-                        "data_test/mergerWorkerTest/vocabulary.dat",
-                        "data_test/mergerWorkerTest/documentIndexState.dat"
+                        "data_test/mergerTest/vocabulary.dat",
+                        "data_test/mergerTest/documentIndexState.dat"
                 )).setBlockDescriptorPath(
                 new BlockDescriptorConfig(
-                "data_test/mergerWorkerTest/block_descriptors.dat", false
+                "data_test/mergerTest/block_descriptors.dat", false
                 )).setPartialResultConfig(
                 new PartialResultsConfig(
-                        "data_test/mergerWorkerTest/partial_results",
-                        "data_test/mergerWorkerTest/partial_results",
-                        "data_test/mergerWorkerTest/partial_results"
+                        "data_test/mergerTest/partial_results",
+                        "data_test/mergerTest/partial_results",
+                        "data_test/mergerTest/partial_results"
                 )).setInvertedIndexConfig(
                 new InvertedIndexConfig(
-                        "data_test/mergerWorkerTest/inverted_indexes_freqs.dat",
-                        "data_test/mergerWorkerTest/inverted_indexes_docs.dat"
+                        "data_test/mergerTest/inverted_indexes_freqs.dat",
+                        "data_test/mergerTest/inverted_indexes_docs.dat"
                 )
         );
     }
@@ -56,34 +56,33 @@ public class MergerTest {
     }
 
     private void createVocabulary() {
-        DocumentIndexState.with(config);
         Vocabulary vocabulary = Vocabulary.with(config);
 
         ArrayList<VocabularyEntry> vocabularyEntries = new ArrayList<>(List.of(new VocabularyEntry[]{
-                new VocabularyEntry("alberobello", 2,
+                new VocabularyEntry("alberobello", 2, 0.3979400086720376, 3,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
+                                1, 3, 0.5878056449127935, 0.3288142794660968),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
                                 0, 0, 0, 0, 1, 0
                         )
                 ),
-                new VocabularyEntry("amburgo", 3,
+                new VocabularyEntry("amburgo", 3, 0.22184874961635637, 5,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
+                                1, 3, 0.3769143710976413, 0.18331164287548693),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
                                 8, 0, 8, 0, 1, 32
                         )
                 ),
-                new VocabularyEntry("pisa", 3,
+                new VocabularyEntry("pisa", 3, 0.22184874961635637, 2,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
+                                3, 2, 0.2886318777514278, 0.1412129473145704),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
                                 20, 0, 20, 0, 1, 64
                         )
                 ),
-                new VocabularyEntry("zurigo", 2,
+                new VocabularyEntry("zurigo", 2, 0.3979400086720376, 2,
                         new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                                1, 1, 1, 1),
+                                4, 1, 0.5177318877571058, 0.16596550124710574),
                         new BaseVocabularyEntry.VocabularyMemoryInfo(
                                 32, 0, 32, 0, 1, 96
                         )

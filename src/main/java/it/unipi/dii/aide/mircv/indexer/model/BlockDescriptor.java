@@ -15,6 +15,7 @@ public class BlockDescriptor extends BaseBlockDescriptor {
     private static String INVERTED_INDEX_DOCS = "data/inverted_index_docs";
     private static String INVERTED_INDEX_FREQS = "data/inverted_index_freqs";
 
+
     public BlockDescriptor() {
         super();
     }
@@ -28,8 +29,8 @@ public class BlockDescriptor extends BaseBlockDescriptor {
     }
 
     private static void setupPath(Config config) {
-        INVERTED_INDEX_DOCS = config.invertedIndexConfig.getInvertedIndexDocs();
-        INVERTED_INDEX_FREQS = config.invertedIndexConfig.getInvertedIndexFreqsFile();
+        INVERTED_INDEX_DOCS = config.getInvertedIndexDocs();
+        INVERTED_INDEX_FREQS = config.getInvertedIndexFreqsFile();
     }
 
     public MergerFileChannel.CompressionResult writeBlock(FileChannel descriptorChannel) {

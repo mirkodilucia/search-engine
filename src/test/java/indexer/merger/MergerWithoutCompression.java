@@ -86,7 +86,7 @@ public class MergerWithoutCompression {
 
         // try to open a file channel to the file of the inverted index
         try (FileChannel fChan = (FileChannel) Files.newByteChannel(
-                Paths.get(config.getInvertedIndexConfig().getInvertedIndexDocs()),
+                Paths.get(config.getInvertedIndexDocs()),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.READ,
                 StandardOpenOption.CREATE))
@@ -227,12 +227,12 @@ public class MergerWithoutCompression {
 
         assertNotNull(mergedLists, "Error, merged index is empty");
 
-        ArrayList<ArrayList<Posting>> expectedResults = getPostingsResult();
+        ArrayList<ArrayList<Posting>> expectedResults = getPostingsResultForSingleIndex();
 
         assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
     }
 
-    private static ArrayList<ArrayList<Posting>> getPostingsResult() {
+    private static ArrayList<ArrayList<Posting>> getPostingsResultForSingleIndex() {
         ArrayList<ArrayList<Posting>> expectedResults = new ArrayList<>(3);
 
         ArrayList<Posting> postings = new ArrayList<>(List.of(new Posting[]{

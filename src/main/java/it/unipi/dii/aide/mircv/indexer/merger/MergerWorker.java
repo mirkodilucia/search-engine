@@ -75,7 +75,7 @@ public class MergerWorker extends BaseMergerWorker {
         return new MergerWorker(config, numIndexes);
     }
 
-    public String getMinumumTerm() {
+    public String getMinimumTerm() {
         String term = null;
 
         for (int i = 0; i < numIndexes; i++) {
@@ -97,7 +97,9 @@ public class MergerWorker extends BaseMergerWorker {
         return term;
     }
 
-    public PostingList processTerm(VocabularyEntry vocabularyEntry, String termToProcess) throws IOException {
+    public PostingList processTerm(VocabularyEntry vocabularyEntry, String termToProcess,
+                                   long documentMemoryOffset, long frequenciesMemoryOffset
+    ) throws IOException {
         PostingList finalList = new PostingList(config, termToProcess);
 
         for (int i=0; i < numIndexes; i++) {
@@ -118,13 +120,13 @@ public class MergerWorker extends BaseMergerWorker {
         }
 
         moveToNextTerm(termToProcess);
-        vocabularyEntry.update(docummentsMemOffset, frequencyMemOffset);
+        vocabularyEntry.update(documentMemoryOffset, frequenciesMemoryOffset);
 
         return finalList;
     }
 
     private void moveToNextTerm(String termToProcess) {
-        for (int i=0; i< numIndexes; i++) {
+        for (int i=0; i<numIndexes; i++) {
             if (nextTerm[i] == null) {
                 continue;
             }

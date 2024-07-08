@@ -2,7 +2,9 @@ package query;
 
 import it.unipi.dii.aide.mircv.cli.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
+import it.unipi.dii.aide.mircv.config.BlockDescriptorConfig;
 import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
 import it.unipi.dii.aide.mircv.config.VocabularyConfig;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
@@ -37,7 +39,16 @@ public class QueryHandlerTest {
         config = new Config();
         config.setVocabularyPath(new VocabularyConfig(
                 vocabularyPath,
-                "data_test/queryHandlerTest/documentIndexState"
+                "data_test/queryHandlerTest/documentIndexState.dat"
+                ))
+                .setBlockDescriptorPath(new BlockDescriptorConfig(
+                        "data_test/queryHandlerTest/block_descriptor.dat",
+                        false
+                ))
+                .setInvertedIndexConfig(
+                new InvertedIndexConfig(
+                "data_test/queryHandlerTest/inverted_indexes_freqs.dat",
+                "data_test/queryHandlerTest/inverted_indexes_docs.dat"
                 )
         );
 

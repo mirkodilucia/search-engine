@@ -21,9 +21,6 @@ public class BaseMergerWorker {
     public FileChannel[] documentsIdChannels;
     public FileChannel[] frequencyChannels;
 
-    public long docummentsMemOffset;
-    public long frequencyMemOffset;
-
     private void setupPath(Config config) {
         PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
         PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
@@ -38,10 +35,6 @@ public class BaseMergerWorker {
 
         this.documentsIdChannels = new FileChannel[numIndexes];
         this.frequencyChannels = new FileChannel[numIndexes];
-
-        this.docummentsMemOffset = 0;
-        this.frequencyMemOffset = 0;
-
     }
 
     private MappedByteBuffer loadDocumentsIdChannels(VocabularyEntry term, int index) throws IOException {

@@ -59,7 +59,6 @@ public class BlockDescriptorTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
