@@ -39,13 +39,13 @@ public class Merger {
 
             MergerWorker worker = MergerWorker.with(config, indexes);
             while (true) {
-                String termToProcess = worker.getMinumumTerm();
+                String termToProcess = worker.getMinimumTerm();
                 if (termToProcess == null) {
                     break;
                 }
 
                 VocabularyEntry vocabularyEntry = new VocabularyEntry(termToProcess);
-                PostingList mergedPostingList = worker.processTerm(vocabularyEntry, termToProcess);
+                PostingList mergedPostingList = worker.processTerm(vocabularyEntry, termToProcess, documentsMemoryOffset, frequenciesMemoryOffset);
 
                 if (mergedPostingList == null) {
                     throw new IOException("Error while processing term " + termToProcess);

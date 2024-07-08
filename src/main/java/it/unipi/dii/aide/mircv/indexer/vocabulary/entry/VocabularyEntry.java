@@ -46,11 +46,14 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         super(term, stats, memoryInfo);
     }
 
-    public VocabularyEntry(String term, int documentFrequency,
+    public VocabularyEntry(String term,
+                           int documentFrequency,
+                           double inverseDocumentFrequency,
+                           int maxTermFrequency,
                            VocabularyEntryUpperBoundInfo stats,
                            VocabularyMemoryInfo memoryInfo
     ) {
-        super(term, documentFrequency, stats, memoryInfo);
+        super(term, documentFrequency, inverseDocumentFrequency, maxTermFrequency, stats, memoryInfo);
     }
 
     public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {

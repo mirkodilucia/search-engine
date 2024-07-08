@@ -45,9 +45,16 @@ public class BaseVocabularyEntry {
     }
 
     /** Only for test **/
-    public BaseVocabularyEntry(String term, int documentFrequency, VocabularyEntryUpperBoundInfo stats, VocabularyMemoryInfo memoryInfo) {
+    public BaseVocabularyEntry(String term,
+                               int documentFrequency,
+                               double inverseDocumentFrequency,
+                               int maxTermFrequency,
+                               VocabularyEntryUpperBoundInfo stats, VocabularyMemoryInfo memoryInfo) {
         this(term, stats, memoryInfo);
+
         this.documentFrequency = documentFrequency;
+        this.inverseDocumentFrequency = inverseDocumentFrequency;
+        this.maxTermFrequency = maxTermFrequency;
     }
 
     public String getTerm() {
@@ -130,7 +137,7 @@ public class BaseVocabularyEntry {
 
         public VocabularyEntryUpperBoundInfo() {}
 
-        public VocabularyEntryUpperBoundInfo(int BM25Dl, int BM25Tf, int maxTfIdf, int maxBM25) {
+        public VocabularyEntryUpperBoundInfo(int BM25Dl, int BM25Tf, double maxTfIdf, double maxBM25) {
             this.BM25Dl = BM25Dl;
             this.BM25Tf = BM25Tf;
             this.maxTfIdf = maxTfIdf;

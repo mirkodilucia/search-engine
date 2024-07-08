@@ -78,11 +78,11 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
             if(position == 0)
                 return  true;
 
-            if (entry.getTerm().isEmpty()) {
+            if(entry.getTerm()==null){
                 return true;
             }
 
-            if(entry.getTerm()==null){
+            if (entry.getTerm().isEmpty()) {
                 return true;
             }
 

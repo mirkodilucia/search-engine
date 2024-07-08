@@ -1,107 +1,98 @@
 package indexer.merger;
 
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
-import it.unipi.dii.aide.mircv.config.PartialResultsConfig;
-import it.unipi.dii.aide.mircv.config.VocabularyConfig;
+import it.unipi.dii.aide.mircv.config.*;
+import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerWorker;
+import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class MergerWorkerTest {
 
-    static Config config;
-    private static Vocabulary vocabulary;
-
-    @BeforeAll
-    public static void setup() {
-        config = new Config(
-                "data_test/mergerWorkerTest/testDir",
-                "data_test/mergerWorkerTest/debugDir",
+    public Config setupGetMinimumTerm(int i) {
+        Config config = new Config(
+                "data_test/mergerWorkerTest/testDir_" + i,
+                "data_test/mergerWorkerTest/debugDir_" + i,
                 true
         );
         config.setVocabularyPath(
                 new VocabularyConfig(
-                "data_test/mergerWorkerTest/vocabulary",
-                        "data_test/mergerWorkerTest/documentIndexState"
-                )).setPartialResultConfig(new PartialResultsConfig(
-                    "data_test/mergerWorkerTest/partial_results",
-                    "data_test/mergerWorkerTest/partial_results",
-                    "data_test/mergerWorkerTest/partial_results"
+                "data_test/mergerWorkerTest/vocabulary_" + i + ".dat",
+                        "data_test/mergerWorkerTest/documentIndexState_" + i + ".dat"
+                ))
+                .setBlockDescriptorPath(
+                        new BlockDescriptorConfig(
+                                "data_test/mergerWorkerTest/block_descriptors_" + i + ".dat", false
+                        ))
+                .setPartialResultConfig(new PartialResultsConfig(
+                    "data_test/mergerWorkerTest/partial_results_" + i,
+                    "data_test/mergerWorkerTest/partial_results_" + i,
+                    "data_test/mergerWorkerTest/partial_results_" + i
                 )).setPartialIndexConfig(new InvertedIndexConfig(
-                "data_test/mergerWorkerTest/indexes_docs",
-                "data_test/mergerWorkerTest/indexes_freqs"));
+                "data_test/mergerWorkerTest/indexes_docs_" + i,
+                "data_test/mergerWorkerTest/indexes_freqs_" + i));
 
-        vocabulary = Vocabulary.with(config);
+        return config;
     }
 
     @Test
     public void testGetMinimumTerm() {
-        try {
-            VocabularyEntry[] nextTerms = new VocabularyEntry[1];
-            nextTerms[0] = new VocabularyEntry("term");
-            int numIndexes = 1;
+        Config config = setupGetMinimumTerm(0);
 
-            vocabulary.put("term", nextTerms[0]);
+        long offset = 0;
+        Vocabulary vocabulary = Vocabulary.with(config);
 
-            MergerWorker mergerWorker = MergerWorker.with(config, numIndexes);
-            mergerWorker.processTerm(nextTerms[0], nextTerms[0].getTerm());
+        VocabularyEntry[] nextTerms = new VocabularyEntry[1];
+        nextTerms[0] = new VocabularyEntry("term");
+        int numIndexes = 1;
 
-            String result = mergerWorker.getMinumumTerm();
+        nextTerms[0].writeEntry(offset, vocabulary.getVocabularyChannel());
 
-            assert result.equals("term");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        vocabulary.put("term", nextTerms[0]);
+
+        DocumentIndexState.updateVocabularySize(vocabulary.size());
+
+        MergerWorker mergerWorker = MergerWorker.with(config, numIndexes);
+        String result = mergerWorker.getMinimumTerm();
+
+        assert result.equals("term");
     }
 
     @Test
     public void testGetMinimumTermWithMultipleTerm() {
-        try {
-            VocabularyEntry[] nextTerms = new VocabularyEntry[2];
-            nextTerms[0] = new VocabularyEntry("Apple");
-            nextTerms[1] = new VocabularyEntry("apple");
-            int numIndexes = 1;
-            MergerWorker mergerWorker = MergerWorker.with(config, numIndexes);
+        Config config = setupGetMinimumTerm(1);
+        long offset = 0;
 
-            vocabulary.put("Apple", nextTerms[0]);
-            vocabulary.put("apple", nextTerms[1]);
+        Vocabulary vocabulary = Vocabulary.with(config);
 
-            for (int i = 0; i < numIndexes; i++) {
-                mergerWorker.processTerm(nextTerms[i], nextTerms[i].getTerm());
-            }
+        VocabularyEntry[] nextTerms = new VocabularyEntry[2];
+        nextTerms[0] = new VocabularyEntry("Apple");
+        nextTerms[1] = new VocabularyEntry("apple");
+        int numIndexes = 1;
+        MergerWorker mergerWorker = MergerWorker.with(config, numIndexes);
 
-            String result = mergerWorker.getMinumumTerm();
-            assert result.equals("Apple");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        nextTerms[0].writeEntry(offset, vocabulary.getVocabularyChannel());
+        offset += VocabularyEntry.ENTRY_SIZE;
+
+        nextTerms[1].writeEntry(offset, vocabulary.getVocabularyChannel());
+
+        vocabulary.put("Apple", nextTerms[0]);
+        vocabulary.put("apple", nextTerms[1]);
+
+        //for (int i = 0; i < numIndexes; i++) {
+        //    mergerWorker.processTerm(nextTerms[i], nextTerms[i].getTerm(), 0, 0);
+        //}
+
+        String result = mergerWorker.getMinimumTerm();
+        assert result.equals("Apple");
     }
-
-    /*
-    @Test
-    public void processTermTest() {
-        VocabularyEntry[] nextTerms = new VocabularyEntry[1];
-        nextTerms[0] = new VocabularyEntry("term", "../test/data/processTermTest");
-
-        MergerWorker mergerWorker = MergerWorker.with(config, 1);
-
-        VocabularyEntry vocabularyEntry = new VocabularyEntry("term", "../test/data/processTermTest");
-        PostingList result = null;
-
-        try {
-            MergerLoader mergerLoader = MergerLoaderMock.load(config);
-            result = mergerWorker.processTerm(mergerLoader, vocabularyEntry, "term");
-
-            assert result.getTerm().equals("term");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-     */
 
 }

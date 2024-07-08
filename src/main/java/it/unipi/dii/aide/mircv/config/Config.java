@@ -105,10 +105,6 @@ public class Config {
         return this;
     }
 
-    public InvertedIndexConfig getInvertedIndexConfig() {
-        return this.invertedIndexConfig;
-    }
-
     public void setInvertedIndexConfig(InvertedIndexConfig invertedIndexConfig) {
         this.invertedIndexConfig = invertedIndexConfig;
     }
@@ -128,5 +124,13 @@ public class Config {
 
     public String getDebugPath() {
         return this.debugDir;
+    }
+
+    public String getInvertedIndexDocs() {
+        return this.invertedIndexConfig.getInvertedIndexDocs();
+    }
+
+    public String getInvertedIndexFreqsFile() {
+        return this.invertedIndexConfig.getInvertedIndexFreqsFile();
     }
 }

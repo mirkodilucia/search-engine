@@ -35,7 +35,7 @@ public class VocabularyEntryTest {
                     StandardOpenOption.CREATE
             );
 
-            VocabularyEntry vocabularyEntry = new VocabularyEntry("test", 12,
+            VocabularyEntry vocabularyEntry = new VocabularyEntry("test", 12, 0.1, 23,
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
                             1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
