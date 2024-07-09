@@ -24,4 +24,8 @@ public class BlockDescriptorConfig {
     public void setCompressionEnabled(boolean compressionEnabled) {
         this.compressionEnabled = compressionEnabled;
     }
+
+    public boolean getCompressionEnabled() {
+        return compressionEnabled;
+    }
 }

@@ -29,6 +29,7 @@ public class BlockDescriptor extends BaseBlockDescriptor {
     }
 
     private static void setupPath(Config config) {
+        COMPRESSION_ENABLED = config.getCompressionEnabled();
         INVERTED_INDEX_DOCS = config.getInvertedIndexDocs();
         INVERTED_INDEX_FREQS = config.getInvertedIndexFreqsFile();
     }
@@ -69,9 +70,8 @@ public class BlockDescriptor extends BaseBlockDescriptor {
             return getBlockPosting(documentsBuffer, frequencyBuffer);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     public static void reset() {

@@ -2,10 +2,8 @@ package query;
 
 import it.unipi.dii.aide.mircv.cli.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
-import it.unipi.dii.aide.mircv.config.BlockDescriptorConfig;
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.config.InvertedIndexConfig;
-import it.unipi.dii.aide.mircv.config.VocabularyConfig;
+import it.unipi.dii.aide.mircv.config.*;
+import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
@@ -23,10 +21,11 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QueryHandlerTest {
 
-    private static final String vocabularyPath = "data_test/queryHandlerTest/vocabulary_0.dat";
+    private static final String vocabularyPath = "data_test/queryHandlerTest/vocabulary.dat";
 
     private static Config config;
 
@@ -36,29 +35,48 @@ public class QueryHandlerTest {
 
     @BeforeAll
     static void setTestPaths() {
-        config = new Config();
+        DocumentIndexState.setCollectionSize(61);
+        DocumentIndexState.setTotalDocumentLen(8);
+
+        config = new Config(
+                "data_test/queryHandlerTest/documentIndex.dat",
+                "data_test/queryHandlerTest/testDir",
+                "data_test/queryHandlerTest/debugDir",
+                true
+        );
         config.setVocabularyPath(new VocabularyConfig(
                 vocabularyPath,
                 "data_test/queryHandlerTest/documentIndexState.dat"
                 ))
                 .setBlockDescriptorPath(new BlockDescriptorConfig(
-                        "data_test/queryHandlerTest/block_descriptor.dat",
-                        false
+                        "data_test/queryHandlerTest/blockDescriptors.dat",
+                        true
                 ))
                 .setInvertedIndexConfig(
                 new InvertedIndexConfig(
-                "data_test/queryHandlerTest/inverted_indexes_freqs.dat",
-                "data_test/queryHandlerTest/inverted_indexes_docs.dat"
+                        "data_test/queryHandlerTest/invertedIndexFreqs.dat",
+                "data_test/queryHandlerTest/invertedIndexDocs.dat"
                 )
         );
+        config.setPreprocessConfig(new PreprocessConfig("data_resources/stopwords.dat", true, true));
+        config.setScorerConfig(new ScorerConfig(true));
 
         vocabulary = Vocabulary.with(config);
+
+        docIndex = DocumentIndexTable.with(config);
+        boolean success = docIndex.load();
+        assertTrue(success);
+
+        System.out.println("x");
     }
 
     @BeforeEach
-    public void init() {
+    public void initVocab(){
+        Vocabulary.unset();
 
-
+        vocabulary = Vocabulary.with(config);
+        boolean success = vocabulary.readFromDisk();
+        assertTrue(success);
     }
 
     public Object[] reformatQueue(PriorityQueue<Map.Entry<Double, Integer>> queue) {
@@ -88,22 +106,20 @@ public class QueryHandlerTest {
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testMaxScoreTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected ){
-        config.getScorerConfig().setMaxScoreEnabled(true);
-        config.getBlockDescriptorConfig().setCompressionEnabled(true);
-        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
+        config.setScorerConfig(true, true, false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.TFIDF);
 
-        assertArrayEquals(reformatQueue(expected), reformatQueue(scorer.scoreQuery(postings, k)));
+        Object[] result = reformatQueue(scorer.scoreQuery(postings, k));
+
+        assertArrayEquals(reformatQueue(expected), result);
     }
 
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testMaxScoreBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.getScorerConfig().setMaxScoreEnabled(true);
-        config.getBlockDescriptorConfig().setCompressionEnabled(true);
-        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
+        config.setScorerConfig(true, true, false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.BM25);
@@ -116,9 +132,8 @@ public class QueryHandlerTest {
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testDAATTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.getScorerConfig().setMaxScoreEnabled(false);
-        config.getBlockDescriptorConfig().setCompressionEnabled(true);
-        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
+        config.setScorerConfig(false, true, false);
+
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.TFIDF);
@@ -129,9 +144,7 @@ public class QueryHandlerTest {
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
     void testDAATBM25(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
-        config.getScorerConfig().setMaxScoreEnabled(false);
-        config.getBlockDescriptorConfig().setCompressionEnabled(true);
-        config.getPreprocessConfig().setStemStopRemovalEnabled(false);
+        config.setScorerConfig(false, true, false);
 
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.BM25);

@@ -19,6 +19,7 @@ public class MergerTest {
     @BeforeAll
     public static void setup() {
         config = new Config(
+                "data_test/mergerWorkerTest/documentIndex",
                 "data_test/mergerTest/testDir",
                 "data_test/mergerTest/debugDir",
                 true

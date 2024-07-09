@@ -12,7 +12,7 @@ public class BaseBlockDescriptor {
 
     public static final int BLOCK_DESCRIPTOR_ENTRY_BYTES = 4 * Integer.BYTES + 2 * Long.BYTES;
 
-    protected boolean COMPRESSION_ENABLED = false;
+    protected static boolean COMPRESSION_ENABLED = false;
 
     private int documentIdSize;
 
@@ -77,25 +77,29 @@ public class BaseBlockDescriptor {
     }
 
     public void mapBlockDescriptor(MappedByteBuffer buffer) {
-        documentIdSize = buffer.getInt();
         documentIdOffset = buffer.getLong();
-        frequencySize = buffer.getInt();
+        documentIdSize = buffer.getInt();
+
         frequencyOffset = buffer.getLong();
+        frequencySize = buffer.getInt();
+
         maxDocumentsId = buffer.getInt();
         numPostings = buffer.getInt();
     }
 
     public void writeBufferWithBlockDescriptor(MappedByteBuffer buffer) {
-        buffer.putInt(documentIdSize);
         buffer.putLong(documentIdOffset);
-        buffer.putInt(frequencySize);
+        buffer.putInt(documentIdSize);
+
         buffer.putLong(frequencyOffset);
+        buffer.putInt(frequencySize);
+
         buffer.putInt(maxDocumentsId);
         buffer.putInt(numPostings);
     }
 
     protected MappedByteBuffer readDocumentsBuffer(FileChannel docsFChan) throws IOException {
-        return  docsFChan.map(
+        return docsFChan.map(
                 FileChannel.MapMode.READ_ONLY,
                 documentIdOffset,
                 documentIdSize
