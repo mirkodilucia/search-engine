@@ -225,9 +225,9 @@ public class PostingList {
     }
 
     public void openList() {
-        //VocabularyEntry entry = Vocabulary.with(config).getEntry(term);
-        //blocks = entry.readBlocks();
-        blocks = Vocabulary.getInstance().get(term).readBlocks();
+        VocabularyEntry entry = Vocabulary.with(config).getEntry(term);
+        blocks = entry.readBlocks();
+
 
         if (blocks == null) {
             return;
