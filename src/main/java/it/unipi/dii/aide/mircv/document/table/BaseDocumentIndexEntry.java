@@ -13,8 +13,6 @@ public class BaseDocumentIndexEntry {
     public static final int DOC_ID_SIZE = 64;
     public static final int ENTRY_SIZE = DOC_ID_SIZE + 4 + 4;
 
-    private String DOCUMENT_INDEX_FILE;
-
     protected String pId;
     protected int documentId;
 
@@ -29,7 +27,6 @@ public class BaseDocumentIndexEntry {
         this.pId = pId;
         this.documentId = documentId;
         this.documentLength = documentLength;
-        this.DOCUMENT_INDEX_FILE = DOCUMENT_INDEX_FILE;
     }
 
     public long writeFile(FileChannel fc) {

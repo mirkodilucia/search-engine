@@ -11,16 +11,19 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
 
     private Config config;
 
-    private static final String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
+    protected String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
     public DocumentIndexEntry(Config config, int documentId) {
-        super(DOCUMENT_INDEX_FILE);
+        super(config.getDocumentIndexFile());
+
+        DOCUMENT_INDEX_FILE = config.getDocumentIndexFile();
+
         this.config = config;
         this.documentId = documentId;
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
-        super(pId, documentId, documentLength, DOCUMENT_INDEX_FILE);
+        super(pId, documentId, documentLength, config.getDocumentIndexFile());
         this.config = config;
     }
 

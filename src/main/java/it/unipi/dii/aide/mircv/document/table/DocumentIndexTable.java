@@ -10,7 +10,11 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
     private static DocumentIndexTable INSTANCE = null;
     private final Config config;
 
-    private static final String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
+    private static String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
+
+    private static void setupPath(Config config) {
+        DOCUMENT_INDEX_FILE = config.getDocumentIndexFile();
+    }
 
     private DocumentIndexTable(Config config) {
         super();
@@ -19,6 +23,8 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
     }
 
    public static DocumentIndexTable with(Config config) {
+       setupPath(config);
+
         if (INSTANCE == null) {
             INSTANCE = new DocumentIndexTable(config);
         }
@@ -40,7 +46,8 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
     }
 
     public int getDocumentLength(int docId) {
-        return this.get(docId).getDocumentLenght();
+        DocumentIndexEntry documentIndexEntry =  this.get(docId);
+        return documentIndexEntry.getDocumentLenght();
     }
 
 }

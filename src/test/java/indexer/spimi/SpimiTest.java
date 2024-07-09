@@ -174,7 +174,7 @@ public class SpimiTest {
     /*
     @AfterEach
     void cleanup() {
-        documentIndex = null;
+        documentIndex.dat = null;
         vocabulary = null;
         config = null;
         index = null;

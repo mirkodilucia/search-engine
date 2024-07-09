@@ -18,13 +18,16 @@ public class Config {
 
     public ScorerConfig scorerConfig;
 
+    private final String documentIndexFile;
+
     private final String debugDir;
     private final String testDir;
     private final boolean debugEnabled;
 
-    public Config(String testDir, String debugDir, boolean debugEnabled) {
+    public Config(String documentIndexFile, String testDir, String debugDir, boolean debugEnabled) {
         super();
 
+        this.documentIndexFile = documentIndexFile;
         this.testDir = testDir;
         this.debugDir = debugDir;
         this.debugEnabled = debugEnabled;
@@ -51,6 +54,7 @@ public class Config {
 
         this.scorerConfig = new ScorerConfig(true);
 
+        this.documentIndexFile = "data/documents/document_index.dat";
         this.testDir = "data_test/test";
         this.debugDir = "data_test/debug";
         this.debugEnabled = true;
@@ -58,6 +62,11 @@ public class Config {
 
     public String getVocabularyPath() {
         return this.vocabularyConfig.getVocabularyPath();
+    }
+
+    public Config setScorerConfig(ScorerConfig config) {
+        this.scorerConfig = config;
+        return this;
     }
 
     public ScorerConfig getScorerConfig() {
@@ -70,6 +79,10 @@ public class Config {
 
     public BlockDescriptorConfig getBlockDescriptorConfig() {
         return this.blockDescriptorConfig;
+    }
+
+    public String getDocumentIndexFile() {
+        return documentIndexFile;
     }
 
     public String getPartialIndexesDocumentsPath() {
@@ -132,5 +145,20 @@ public class Config {
 
     public String getInvertedIndexFreqsFile() {
         return this.invertedIndexConfig.getInvertedIndexFreqsFile();
+    }
+
+    public void setScorerConfig(boolean maxScoreEnabled, boolean compressionEnabled, boolean stopwordRemoval) {
+        this.scorerConfig.setMaxScoreEnabled(maxScoreEnabled);
+        this.blockDescriptorConfig.setCompressionEnabled(compressionEnabled);
+        this.preprocessConfig.setStemStopRemovalEnabled(stopwordRemoval);
+    }
+
+    public Config setPreprocessConfig(PreprocessConfig preprocessConfig) {
+        this.preprocessConfig = preprocessConfig;
+        return this;
+    }
+
+    public boolean getCompressionEnabled() {
+        return this.blockDescriptorConfig.getCompressionEnabled();
     }
 }

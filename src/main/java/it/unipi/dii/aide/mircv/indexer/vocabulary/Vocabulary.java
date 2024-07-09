@@ -29,6 +29,10 @@ public class Vocabulary extends BaseVocabulary {
         return instance;
     }
 
+    public static void unset() {
+        instance = null;
+    }
+
     public double getIdf(String term){
         return getEntry(term).getIdf();
     }

@@ -19,6 +19,7 @@ public class MergerWorkerTest {
 
     public Config setupGetMinimumTerm(int i) {
         Config config = new Config(
+                "data_test/mergerWorkerTest/documentIndex",
                 "data_test/mergerWorkerTest/testDir_" + i,
                 "data_test/mergerWorkerTest/debugDir_" + i,
                 true
