@@ -35,13 +35,18 @@ public class Config {
 
     public Config() {
         this.vocabularyConfig = new VocabularyConfig(
-                "data/vocabulary",
-                "data/documentIndexState"
+                "data/vocabulary.dat",
+                "data/documentIndexState.dat"
         );
         this.preprocessConfig = new PreprocessConfig(
                 "data_resources/stopwords.dat",
                 true,
                 true);
+
+        this.invertedIndexConfig = new InvertedIndexConfig(
+                "data/indexes/inverted_index_freqs.dat",
+                "data/indexes/inverted_index_docs.dat"
+        );
 
         this.partialResultsConfig = new PartialResultsConfig(
                 "data/indexes",

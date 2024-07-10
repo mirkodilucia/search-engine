@@ -81,6 +81,4 @@ public class DocumentIndeEntryTest {
     void resetDocumentIndexEntry() {
         DocumentIndexEntry.reset();
     }
-
-
 }
