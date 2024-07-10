@@ -6,10 +6,12 @@ import java.util.List;
 import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
+import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MergerTest {
@@ -52,7 +54,7 @@ public class MergerTest {
 
     @Test
     public void singleIndexMergeWithoutCompression() {
-        createVocabulary();
+        //createVocabulary();
         MergerWithoutCompression.mergeSingleIndex(config);
     }
 
@@ -119,6 +121,16 @@ public class MergerTest {
         assert(vocabularyEntry.compareTo("alberobello") == 0);
     }
     */
+
+    @BeforeEach
+    void setUp() {
+        //FileUtils.createDirectory(TEST_DIRECTORY);
+        //createDirectory(TEST_DIRECTORY+"/partial_freqs");
+        //createDirectory(TEST_DIRECTORY+"/partial_docids");
+        //createDirectory(TEST_DIRECTORY+"/partial_vocabulary");
+        BlockDescriptor.setMemoryOffset(0);
+        Vocabulary.unset();
+    }
 
     @Test
     public void mergeIndexes() {

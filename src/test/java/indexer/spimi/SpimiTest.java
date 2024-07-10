@@ -11,6 +11,7 @@ import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,7 @@ import java.util.LinkedHashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SpimiTest {
+
 
     private static HashMap<String, PostingList> index = new LinkedHashMap<>();
     private static ArrayList<FinalDocument> testDocuments = new ArrayList<>();
@@ -171,16 +173,7 @@ public class SpimiTest {
         //FileHandler.removeFile("test/data/testDocumentFreqs");
     }
 
-    /*
     @AfterEach
     void cleanup() {
-        documentIndex.dat = null;
-        vocabulary = null;
-        config = null;
-        index = null;
-        testDocuments = null;
-
-
     }
-    */
 }

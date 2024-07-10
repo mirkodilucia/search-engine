@@ -29,6 +29,10 @@ public class BaseBlockDescriptor {
 
     public BaseBlockDescriptor() {}
 
+    public static void setMemoryOffset(int i) {
+        memoryOffset = i;
+    }
+
     public BaseBlockDescriptor(long documentsMemoryOffset, long frequenciesMemoryOffset) {
         this.documentIdOffset = documentsMemoryOffset;
         this.frequencyOffset = frequenciesMemoryOffset;

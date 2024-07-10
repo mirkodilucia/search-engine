@@ -22,6 +22,7 @@ public class Spimi extends BaseSpimi {
     }
 
     public static Spimi with(Config config) {
+        DocumentIndexState.with(config);
         return new Spimi(config);
     }
 

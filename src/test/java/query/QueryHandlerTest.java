@@ -5,6 +5,7 @@ import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
 import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
+import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
@@ -76,6 +77,9 @@ public class QueryHandlerTest {
 
         vocabulary = Vocabulary.with(config);
         boolean success = vocabulary.readFromDisk();
+
+        BlockDescriptor.setMemoryOffset(0);
+
         assertTrue(success);
     }
 
