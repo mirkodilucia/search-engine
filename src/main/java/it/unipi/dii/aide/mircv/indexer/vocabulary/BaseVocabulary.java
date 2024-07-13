@@ -73,7 +73,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         while(position >= 0){
             VocabularyEntry entry = new VocabularyEntry();
             //read entry and update position
-            position = entry.readFromDisk(position, VOCABULARY_PATH, BLOCK_DESCRIPTOR_PATH);
+            position = entry.readVocabularyFromDisk(position, VOCABULARY_PATH);
 
             if(position == 0)
                 return  true;

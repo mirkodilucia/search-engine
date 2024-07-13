@@ -71,7 +71,7 @@ public class QueryHandlerTest {
 
     @BeforeEach
     public void initVocab(){
-        Vocabulary.unset();
+        Vocabulary.with(config).unset();
 
         vocabulary = Vocabulary.with(config);
         boolean success = vocabulary.readFromDisk();
@@ -105,7 +105,6 @@ public class QueryHandlerTest {
         return returnList.toArray();
     }
 
-    /*
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testMaxScoreTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected ){
@@ -119,7 +118,6 @@ public class QueryHandlerTest {
 
         assertArrayEquals(reformatQueue(expected), result);
     }
-     */
 
     @ParameterizedTest
     @MethodSource("getBM25Parameters")
@@ -135,7 +133,6 @@ public class QueryHandlerTest {
         assertArrayEquals(reformatQueue(expected), result);
     }
 
-    /*
     @ParameterizedTest
     @MethodSource("getTFIDFParameters")
     void testDAATTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
@@ -163,7 +160,6 @@ public class QueryHandlerTest {
 
         assertArrayEquals(reformatQueue(expected), result);
     }
-    */
 
     @AfterAll
     static void cleanup() {

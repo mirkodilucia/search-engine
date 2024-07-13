@@ -123,6 +123,10 @@ public class BaseVocabularyEntry {
         return memoryInfo.blockOffset;
     }
 
+    public void computeIDF() {
+        this.inverseDocumentFrequency = this.upperBoundInfo.computeIDF();
+    }
+
     //
     public static class VocabularyEntryUpperBoundInfo {
 
@@ -174,8 +178,8 @@ public class BaseVocabularyEntry {
             }
         }
 
-        public double getIdf() {
-            return Math.log((double) BM25Dl / (double) BM25Tf);
+        public double computeIDF() {
+            return Math.log10((double) BM25Dl / (double) BM25Tf);
         }
 
         public void setBM25Tf(int bm25Tf) {
@@ -252,6 +256,8 @@ public class BaseVocabularyEntry {
             memoryInfo.frequencySize = buffer.getInt();
             memoryInfo.numBlocks = buffer.getInt();
             memoryInfo.blockOffset = buffer.getLong();
+
+            System.out.println("x");
         }
 
         public void writeBufferWithMemoryInfo(VocabularyMemoryInfo memoryInfo, MappedByteBuffer buffer) {
@@ -314,7 +320,6 @@ public class BaseVocabularyEntry {
                     block.mapBlockDescriptor(buffer);
 
                     blocks.add(block);
-                    blockOffset += BlockDescriptor.BLOCK_DESCRIPTOR_ENTRY_BYTES;
                 }
             } catch (IOException e) {
                 e.printStackTrace();

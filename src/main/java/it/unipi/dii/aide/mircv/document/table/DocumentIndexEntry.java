@@ -86,4 +86,17 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
     public String getPId() {
         return pId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == this)
+            return true;
+
+        if (!(o instanceof DocumentIndexEntry de)) {
+            return false;
+        }
+
+        return de.getDocumentId() == this.getDocumentId() && de.getPId().equals(this.getPId()) && de.getDocumentLenght() == this.getDocumentLenght();
+    }
 }

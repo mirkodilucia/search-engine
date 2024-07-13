@@ -129,7 +129,7 @@ public class MergerTest {
         //createDirectory(TEST_DIRECTORY+"/partial_docids");
         //createDirectory(TEST_DIRECTORY+"/partial_vocabulary");
         BlockDescriptor.setMemoryOffset(0);
-        Vocabulary.unset();
+        Vocabulary.with(config).unset();
     }
 
     @Test

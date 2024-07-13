@@ -6,6 +6,7 @@ import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
+import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -104,8 +105,14 @@ public class DAAT extends Scorer {
             Posting posting = postingList.getCurrentPosting();
             if (posting != null && posting.getDocumentId() == documentId) {
                 // Call Scoorer Algorithm
+                String term = postingList.getTerm();
+
                 Vocabulary vocabulary = Vocabulary.with(config);
-                score += this.scoreDocument(config, posting, vocabulary.getIdf(postingList.getTerm()));
+                VocabularyEntry entry = vocabulary.get(term);
+
+                double idf = entry.getIdf();
+
+                score += this.scoreDocument(config, posting, idf);
                 postingList.next();
             }
         }

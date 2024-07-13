@@ -49,6 +49,7 @@ public class MergerWorkerTest {
         Config config = setupGetMinimumTerm(0);
 
         long offset = 0;
+        Vocabulary.with(config).unset();
         Vocabulary vocabulary = Vocabulary.with(config);
 
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
