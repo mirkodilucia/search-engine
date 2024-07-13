@@ -35,7 +35,7 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         long numDocuments = DocumentIndexState.getCollectionSize();
 
         for(int i = 0; i < numDocuments; i++) {
-            DocumentIndexEntry entry = new DocumentIndexEntry(this.config, i);
+            DocumentIndexEntry entry = new DocumentIndexEntry(this.config);
             if (entry.readFile((long) i * DocumentIndexEntry.ENTRY_SIZE, DOCUMENT_INDEX_FILE)) {
                 this.put(entry.getDocumentId(), entry);
             }

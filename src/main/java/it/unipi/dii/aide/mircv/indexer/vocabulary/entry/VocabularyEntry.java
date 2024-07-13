@@ -49,11 +49,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     public VocabularyEntry(String term,
                            int documentFrequency,
                            double inverseDocumentFrequency,
-                           int maxTermFrequency,
                            VocabularyEntryUpperBoundInfo stats,
                            VocabularyMemoryInfo memoryInfo
     ) {
-        super(term, documentFrequency, inverseDocumentFrequency, maxTermFrequency, stats, memoryInfo);
+        super(term, documentFrequency, inverseDocumentFrequency, stats, memoryInfo);
     }
 
     public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {
@@ -150,8 +149,8 @@ public class VocabularyEntry extends BaseVocabularyEntry {
 
     public void updateStatistics(PostingList entry) {
         for (int i = 0; i < entry.getPostings().size(); i++) {
-            if (this.maxTermFrequency < entry.getPostings().get(i).getFrequency()) {
-                this.maxTermFrequency = entry.getPostings().get(i).getFrequency();
+            if (this.upperBoundInfo.maxTermFrequency < entry.getPostings().get(i).getFrequency()) {
+                this.upperBoundInfo.maxTermFrequency = entry.getPostings().get(i).getFrequency();
             }
 
             this.documentFrequency++;

@@ -14,7 +14,7 @@ public class VocabularyEntryTest {
     @Test
     public void testVocabularyEntry() {
         VocabularyEntry vocabularyEntry = new VocabularyEntry("test",
-                    new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
+                    new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(1,
                     1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
                         0, 0, 0, 0, 0, 0
@@ -35,9 +35,9 @@ public class VocabularyEntryTest {
                     StandardOpenOption.CREATE
             );
 
-            VocabularyEntry vocabularyEntry = new VocabularyEntry("test", 12, 0.1, 23,
+            VocabularyEntry vocabularyEntry = new VocabularyEntry("test", 12, 0.1,
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                            1, 1, 1, 1),
+                            23, 1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
                             23, 12, 1224, 232, 10, 0
                     )
@@ -67,7 +67,7 @@ public class VocabularyEntryTest {
 
             VocabularyEntry vocabularyEntry = new VocabularyEntry("test",
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                            1, 1, 1, 1),
+                            1, 1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
                             0, 0, 0, 0, 0, 0
                     )
@@ -75,7 +75,7 @@ public class VocabularyEntryTest {
 
             VocabularyEntry vocabularyEntry1 = new VocabularyEntry("test_1",
                     new BaseVocabularyEntry.VocabularyEntryUpperBoundInfo(
-                            1, 1, 1, 1),
+                            1, 1, 1, 1, 1),
                     new BaseVocabularyEntry.VocabularyMemoryInfo(
                             0, 0, 0, 0, 0, 0
                     )

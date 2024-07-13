@@ -261,7 +261,7 @@ public class PostingList {
         return currentPosting;
     }
 
-    public Posting selectPostingScoreIterator(int docId, Config config) {
+    public Posting selectPostingScoreIterator(int docId) {
         // flag to check if the block has changed
         boolean blockChanged = false;
         // move to the block with max docid >= docid

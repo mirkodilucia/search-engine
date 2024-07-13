@@ -25,7 +25,6 @@ public class BaseVocabularyEntry {
 
     protected int documentFrequency;
     protected double inverseDocumentFrequency;
-    protected int maxTermFrequency;
 
     public static void setupPath(Config config) {
         DEBUG_PATH = config.getDebugPath();
@@ -48,13 +47,11 @@ public class BaseVocabularyEntry {
     public BaseVocabularyEntry(String term,
                                int documentFrequency,
                                double inverseDocumentFrequency,
-                               int maxTermFrequency,
                                VocabularyEntryUpperBoundInfo stats, VocabularyMemoryInfo memoryInfo) {
         this(term, stats, memoryInfo);
 
         this.documentFrequency = documentFrequency;
         this.inverseDocumentFrequency = inverseDocumentFrequency;
-        this.maxTermFrequency = maxTermFrequency;
     }
 
     public String getTerm() {
@@ -111,7 +108,7 @@ public class BaseVocabularyEntry {
     }
 
     public void setMaxTermFrequency(int maxTermFrequency) {
-        this.maxTermFrequency = maxTermFrequency;
+        this.upperBoundInfo.maxTermFrequency = maxTermFrequency;
     }
 
     public void setBM25Dl(int BM25Dl) {
@@ -128,6 +125,8 @@ public class BaseVocabularyEntry {
 
     //
     public static class VocabularyEntryUpperBoundInfo {
+
+        public int maxTermFrequency = 0;
         private int BM25Dl = 1;
         private int BM25Tf = 0;
 
@@ -137,7 +136,8 @@ public class BaseVocabularyEntry {
 
         public VocabularyEntryUpperBoundInfo() {}
 
-        public VocabularyEntryUpperBoundInfo(int BM25Dl, int BM25Tf, double maxTfIdf, double maxBM25) {
+        public VocabularyEntryUpperBoundInfo(int maxTermFrequency, int BM25Dl, int BM25Tf, double maxTfIdf, double maxBM25) {
+            this.maxTermFrequency = maxTermFrequency;
             this.BM25Dl = BM25Dl;
             this.BM25Tf = BM25Tf;
             this.maxTfIdf = maxTfIdf;
@@ -146,15 +146,21 @@ public class BaseVocabularyEntry {
 
 
         public void mapVocabularyEntryStats(VocabularyEntryUpperBoundInfo stats, MappedByteBuffer buffer) {
+            stats.maxTermFrequency = buffer.getInt();
+
             stats.BM25Dl = buffer.getInt();
             stats.BM25Tf = buffer.getInt();
+
             stats.maxTfIdf = buffer.getDouble();
             stats.maxBM25 = buffer.getDouble();
         }
 
         public void writeBufferWithEntryStats(VocabularyEntryUpperBoundInfo stats, MappedByteBuffer buffer) {
+            buffer.putInt(stats.maxTermFrequency);
+
             buffer.putInt(stats.BM25Dl);
             buffer.putInt(stats.BM25Tf);
+
             buffer.putDouble(stats.maxTfIdf);
             buffer.putDouble(stats.maxBM25);
         }
@@ -338,7 +344,7 @@ public class BaseVocabularyEntry {
         return  ", term='" + term + '\'' +
                 ", df=" + documentFrequency +
                 ", idf=" + inverseDocumentFrequency +
-                ", maxTf=" + maxTermFrequency +
+                ", maxTf=" + upperBoundInfo.maxTermFrequency +
                 ", BM25Dl=" + upperBoundInfo.BM25Dl +
                 ", BM25Tf=" + upperBoundInfo.BM25Tf +
                 ", maxTFIDF=" + upperBoundInfo.maxTfIdf +

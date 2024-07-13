@@ -63,10 +63,6 @@ public class DocumentIndexState {
         DocumentIndexState.collectionSize = collectionSize;
     }
 
-    public static void setVocabularySize(long vocabularySize) {
-        DocumentIndexState.vocabularySize = vocabularySize;
-    }
-
     public static void setTotalDocumentLen(long totalDocumentLen) {
         DocumentIndexState.totalDocumentLen = totalDocumentLen;
     }

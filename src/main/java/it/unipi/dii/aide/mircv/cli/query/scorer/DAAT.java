@@ -48,7 +48,7 @@ public class DAAT extends Scorer {
                     return -1;
                 }
                 if (currentPosting.getDocumentId() < next) {
-                    currentPosting = currentPostingList.selectPostingScoreIterator(next, config);
+                    currentPosting = currentPostingList.selectPostingScoreIterator(next);
 
                     if(currentPosting == null)
                         return -1;

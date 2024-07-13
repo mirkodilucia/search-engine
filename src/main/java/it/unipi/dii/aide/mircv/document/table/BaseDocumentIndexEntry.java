@@ -29,6 +29,10 @@ public class BaseDocumentIndexEntry {
         this.documentLength = documentLength;
     }
 
+    public BaseDocumentIndexEntry() {
+
+    }
+
     public long writeFile(FileChannel fc) {
         try {
             MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, memoryOffset, ENTRY_SIZE);

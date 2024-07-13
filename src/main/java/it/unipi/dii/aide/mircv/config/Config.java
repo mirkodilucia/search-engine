@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.config;
 
+import it.unipi.dii.aide.mircv.utils.FileHandler;
+
 public class Config {
 
     public boolean compression;
@@ -165,5 +167,13 @@ public class Config {
 
     public boolean getCompressionEnabled() {
         return this.blockDescriptorConfig.getCompressionEnabled();
+    }
+
+    public void cleanup() {
+        FileHandler.removeFile(vocabularyConfig.getVocabularyPath());
+        FileHandler.removeFile(documentIndexFile);
+        FileHandler.removeFile(invertedIndexConfig.getInvertedIndexDocs());
+        FileHandler.removeFile(invertedIndexConfig.getInvertedIndexFreqsFile());
+        FileHandler.removeFile(blockDescriptorConfig.getBlockDescriptorsPath());
     }
 }

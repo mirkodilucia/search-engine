@@ -45,8 +45,14 @@ public class Scorer {
      */
     private double computeBM25(Config config, Posting posting, double idf) {
         double tf = (1 + Math.log10(posting.getFrequency()));
+
         int docLen = DocumentIndexTable.with(config).getDocumentLength(posting.getDocumentId());
-        double avgDocLen = (double) DocumentIndexState.getTotalDocumentLen() / DocumentIndexState.getCollectionSize();
+
+        long documentLength = DocumentIndexState.getTotalDocumentLen();
+        long collectionSize =  DocumentIndexState.getCollectionSize();
+
+        double avgDocLen = (double)  documentLength / collectionSize;
+
         return idf * tf / (tf + k1 * (1 - b + b * docLen / avgDocLen));
     }
 

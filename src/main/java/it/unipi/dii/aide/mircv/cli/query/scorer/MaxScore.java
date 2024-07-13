@@ -114,8 +114,8 @@ public class MaxScore extends Scorer {
 
             // check if current threshold has been updated or not
             newThresholdFound = (threshold == documentUpperBound);
-
         }
+
         clean(queryPostings);
         return topKDocuments;
     }
@@ -129,16 +129,22 @@ public class MaxScore extends Scorer {
     private double getNonEssentialPartialScoreWithSkipping(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstNonEssentialPostingListIndex, int documentToProcess) {
         double nonEssentialPartialScore = 0;
 
-        for (int i=0; i<firstNonEssentialPostingListIndex; i++) {
+        for (int i=0; i < firstNonEssentialPostingListIndex; i++) {
             Map.Entry<PostingList, Double> postingListDoubleEntry = sortedLists.get(i);
 
             Posting nextPosting = postingListDoubleEntry.getKey().getCurrentPosting();
             if (nextPosting != null && nextPosting.getDocumentId() == documentToProcess) {
+                Vocabulary vocabulary = Vocabulary.with(config);
+                double idf = vocabulary
+                        .get(postingListDoubleEntry.getKey().getTerm())
+                        .getInverseDocumentFrequency();
+
+                nonEssentialPartialScore += this.scoreDocument(config, nextPosting, idf);
                 postingListDoubleEntry.getKey().next();
                 continue;
             }
 
-            Posting posting = postingListDoubleEntry.getKey().selectPostingScoreIterator(documentToProcess, config);
+            Posting posting = postingListDoubleEntry.getKey().selectPostingScoreIterator(documentToProcess);
             if (posting != null && posting.getDocumentId() == documentToProcess) {
                 Vocabulary vocabulary = Vocabulary.with(config);
                 double idf = vocabulary
@@ -258,7 +264,7 @@ public class MaxScore extends Scorer {
                 }
 
                 if (currentPosting.getDocumentId() < next) {
-                    currentPosting = currentPostingList.selectPostingScoreIterator(next, config);
+                    currentPosting = currentPostingList.selectPostingScoreIterator(next);
 
                     if (currentPosting == null) {
                         return -1;
@@ -298,9 +304,10 @@ public class MaxScore extends Scorer {
         PriorityQueue<Map.Entry<PostingList, Double>> sortedPostingLists = new PriorityQueue<>(queryPostings.size(), Map.Entry.comparingByValue());
 
         for (PostingList postingList : queryPostings) {
+            String termToSearch = postingList.getTerm();
             double termUpperBound = 0;
             Vocabulary vocabulary = Vocabulary.with(config);
-            VocabularyEntry entry = vocabulary.get(postingList.getTerm());
+            VocabularyEntry entry = vocabulary.get(termToSearch);
 
             if (SCORE_FUNCTION == ScoreFunction.BM25) {
                 termUpperBound = entry.getMaxBM25Tf();

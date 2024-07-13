@@ -27,6 +27,11 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         this.config = config;
     }
 
+    public DocumentIndexEntry(Config config) {
+        super();
+        this.config = config;
+    }
+
     public static void reset() {
         memoryOffset = 0;
     }
