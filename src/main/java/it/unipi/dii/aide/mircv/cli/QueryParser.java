@@ -5,6 +5,8 @@ import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
 import it.unipi.dii.aide.mircv.cli.query.enums.ScoreFunction;
 import it.unipi.dii.aide.mircv.config.Config;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class QueryParser {
@@ -64,7 +66,10 @@ public class QueryParser {
         }
 
         System.out.println("Documents found:");
-        for (String document : documents) {
+        for (String document : Arrays.stream(documents)
+                .filter(Objects::nonNull)
+                .toArray(String[]::new)
+        ) {
             System.out.println(document);
         }
     }

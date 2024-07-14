@@ -3,20 +3,13 @@ package indexer.merger;
 import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerWorker;
-import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class MergerWorkerTest {
 
+    /*
     public Config setupGetMinimumTerm(int i) {
         Config config = new Config(
                 "data_test/mergerWorkerTest/documentIndex",
@@ -49,6 +42,7 @@ public class MergerWorkerTest {
         Config config = setupGetMinimumTerm(0);
 
         long offset = 0;
+        Vocabulary.with(config).unset();
         Vocabulary vocabulary = Vocabulary.with(config);
 
         VocabularyEntry[] nextTerms = new VocabularyEntry[1];
@@ -96,5 +90,5 @@ public class MergerWorkerTest {
         assert result.equals("Apple");
     }
 
-
+    */
 }

@@ -49,11 +49,10 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     public VocabularyEntry(String term,
                            int documentFrequency,
                            double inverseDocumentFrequency,
-                           int maxTermFrequency,
                            VocabularyEntryUpperBoundInfo stats,
                            VocabularyMemoryInfo memoryInfo
     ) {
-        super(term, documentFrequency, inverseDocumentFrequency, maxTermFrequency, stats, memoryInfo);
+        super(term, documentFrequency, inverseDocumentFrequency, stats, memoryInfo);
     }
 
     public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {
@@ -64,10 +63,18 @@ public class VocabularyEntry extends BaseVocabularyEntry {
                         StandardOpenOption.CREATE
                 );
         ) {
-            long offset = this.readVocabularyFromDisk(memoryOffset, vocabularyChannel);
-            readBlockDescriptorFromDisk(memoryOffset, vocabularyChannel);
+            long readVocabularyResult = readVocabularyFromDisk(memoryOffset, vocabularyChannel);
+            long readBlockResult = readBlockDescriptorFromDisk(memoryOffset, vocabularyChannel);
 
-            return offset;
+            if (readVocabularyResult == -1 || readBlockResult == -1) {
+                return -1;
+            }
+
+            if (readVocabularyResult == 0 || readBlockResult == 0) {
+                return 0;
+            }
+
+            return memoryOffset + ENTRY_SIZE;
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -145,13 +152,13 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     }
 
     public double getIdf() {
-        return upperBoundInfo.getIdf();
+        return inverseDocumentFrequency;// upperBoundInfo.getIdf();
     }
 
     public void updateStatistics(PostingList entry) {
         for (int i = 0; i < entry.getPostings().size(); i++) {
-            if (this.maxTermFrequency < entry.getPostings().get(i).getFrequency()) {
-                this.maxTermFrequency = entry.getPostings().get(i).getFrequency();
+            if (this.upperBoundInfo.maxTermFrequency < entry.getPostings().get(i).getFrequency()) {
+                this.upperBoundInfo.maxTermFrequency = entry.getPostings().get(i).getFrequency();
             }
 
             this.documentFrequency++;
@@ -180,32 +187,6 @@ public class VocabularyEntry extends BaseVocabularyEntry {
 
     public int getHowManyBlockToWrite() {
         return memoryInfo.getHowManyBlockToWrite();
-    }
-
-    public long readFromDisk(long memoryOffset, String vocabularyPath, String blockDescriptorPath) {
-        try (
-                FileChannel vocabularyChan = FileChannelHandler.open(vocabularyPath,
-                        StandardOpenOption.READ,
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.CREATE
-                );
-                FileChannel blockDescriptorChan = FileChannelHandler.open(blockDescriptorPath,
-                        StandardOpenOption.READ,
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.CREATE
-                );
-        ) {
-            long result = this.readVocabularyFromDisk(memoryOffset, vocabularyChan);
-            if (result == -1) {
-                return -1;
-            }
-
-            return this.readBlockDescriptorFromDisk(memoryOffset, vocabularyChan);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
     }
 
     public double getInverseDocumentFrequency() {

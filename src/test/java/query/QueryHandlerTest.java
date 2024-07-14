@@ -36,8 +36,8 @@ public class QueryHandlerTest {
 
     @BeforeAll
     static void setTestPaths() {
-        DocumentIndexState.setCollectionSize(61);
-        DocumentIndexState.setTotalDocumentLen(8);
+        DocumentIndexState.setTotalDocumentLen(61);
+        DocumentIndexState.setCollectionSize(8);
 
         config = new Config(
                 "data_test/queryHandlerTest/documentIndex.dat",
@@ -67,13 +67,11 @@ public class QueryHandlerTest {
         docIndex = DocumentIndexTable.with(config);
         boolean success = docIndex.load();
         assertTrue(success);
-
-        System.out.println("x");
     }
 
     @BeforeEach
     public void initVocab(){
-        Vocabulary.unset();
+        Vocabulary.with(config).unset();
 
         vocabulary = Vocabulary.with(config);
         boolean success = vocabulary.readFromDisk();
@@ -115,7 +113,8 @@ public class QueryHandlerTest {
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.TFIDF);
 
-        Object[] result = reformatQueue(scorer.scoreQuery(postings, k));
+        PriorityQueue<Map.Entry<Double, Integer>> queue = scorer.scoreQuery(postings, k);
+        Object[] result = reformatQueue(queue);
 
         assertArrayEquals(reformatQueue(expected), result);
     }
@@ -128,7 +127,8 @@ public class QueryHandlerTest {
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         MaxScore scorer = MaxScore.with(config, mode, ScoreFunction.BM25);
 
-        Object[] result = reformatQueue(scorer.scoreQuery(postings, k));
+        PriorityQueue<Map.Entry<Double, Integer>> queue = scorer.scoreQuery(postings, k);
+        Object[] result = reformatQueue(queue);
 
         assertArrayEquals(reformatQueue(expected), result);
     }
@@ -138,11 +138,13 @@ public class QueryHandlerTest {
     void testDAATTFIDF(int k, ArrayList<PostingList> postings, boolean isConjunctive, PriorityQueue<Map.Entry<Double, Integer>> expected) {
         config.setScorerConfig(false, true, false);
 
-
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.TFIDF);
 
-        assertArrayEquals(reformatQueue(expected), reformatQueue(scorer.scoreQuery(postings, k)));
+        PriorityQueue<Map.Entry<Double, Integer>> queue = scorer.scoreQuery(postings, k);
+        Object[] result = reformatQueue(queue);
+
+        assertArrayEquals(reformatQueue(expected), result);
     }
 
     @ParameterizedTest
@@ -153,13 +155,15 @@ public class QueryHandlerTest {
         Mode mode = isConjunctive ? Mode.CONJUNCTIVE : Mode.DISJUNCTIVE;
         DAAT scorer = DAAT.with(config, mode, ScoreFunction.BM25);
 
-        assertArrayEquals(reformatQueue(expected), reformatQueue(scorer.scoreQuery(postings, k)));
+        PriorityQueue<Map.Entry<Double, Integer>> queue = scorer.scoreQuery(postings, k);
+        Object[] result = reformatQueue(queue);
+
+        assertArrayEquals(reformatQueue(expected), result);
     }
 
     @AfterAll
     static void cleanup() {
-        //config.cleanUpVocabulary();
-        //config.cleanUpInvertedIndex();
+        //config.cleanup();
     }
 
     public static Stream<Arguments> getBM25Parameters() {
@@ -191,7 +195,7 @@ public class QueryHandlerTest {
 
         //postings for query "another example"
         ArrayList<PostingList> queryPostingsAnotherExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "another")}).toList());
+                new PostingList[]{new PostingList(config,"example"), new PostingList(config, "another")}).toList());
 
         //postings for query "example"
         ArrayList<PostingList> queryPostingsExample = new ArrayList<>(Arrays.stream(
@@ -199,10 +203,9 @@ public class QueryHandlerTest {
 
         //postings for query "simple example"
         ArrayList<PostingList> queryPostingsSimpleExample = new ArrayList<>(Arrays.stream(
-                new PostingList[]{new PostingList(config, "example"), new PostingList(config, "simple")}).toList());
+                new PostingList[]{new PostingList(config,"example"), new PostingList(config, "simple")}).toList());
 
-        return Stream.of(
-                Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
+        return Stream.of(Arguments.arguments(3, queryPostingsAnotherExample, true, expectedResultsAnotherExampleConjBM25),
                 Arguments.arguments(3, queryPostingsAnotherExample, false, expectedResultsAnotherExampleDisBM25),
                 Arguments.arguments(3, queryPostingsExample, false, expectedResultsExampleDisBM25),
                 Arguments.arguments(3, queryPostingsExample, true, expectedResultsExampleConjBM25),

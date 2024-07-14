@@ -56,7 +56,7 @@ public class MergerWithoutCompression {
         return docIndex;
     }
 
-    private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config) {
+    public static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config) {
         // get vocabulary from disk
         Vocabulary v = Vocabulary.with(config);
         v.readFromDisk();
@@ -127,7 +127,7 @@ public class MergerWithoutCompression {
         return true;
     }
 
-    private static boolean writeIntermediateIndexesToDisk(Config config, ArrayList<ArrayList<PostingList>> intermediateIndexes) {
+    public static boolean writeIntermediateIndexesToDisk(Config config, ArrayList<ArrayList<PostingList>> intermediateIndexes) {
         for (ArrayList<PostingList> intermediateIndex : intermediateIndexes) {
 
             int i = intermediateIndexes.indexOf(intermediateIndex);
@@ -232,6 +232,71 @@ public class MergerWithoutCompression {
         assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
     }
 
+    public static void mergeTwoIndexes(Config config) {
+        setupPath(config);
+
+        ArrayList<PostingList> index1 = new ArrayList<>();
+
+        PostingList pl = new PostingList(config,"amburgo\t1:3 2:2: 3:5");
+        pl.updateBM25Parameters(1,3);
+        index1.add(pl);
+        pl = new PostingList(config,"pisa\t2:1 3:2");
+        pl.updateBM25Parameters(4,1);
+        index1.add(pl);
+        pl = new PostingList(config,"zurigo\t2:1 3:2");
+        pl.updateBM25Parameters(4,1);
+        index1.add(pl);
+
+        // building partial index 2
+        ArrayList<PostingList> index2 = new ArrayList<>();
+        pl = new PostingList(config, "alberobello\t4:3 5:1");
+        pl.updateBM25Parameters(1,3);
+        index2.add(pl);
+        pl = new PostingList(config,"pisa\t5:2");
+        pl.updateBM25Parameters(3, 2);
+        index2.add(pl);
+
+        // insert partial index to array of partial indexes
+        ArrayList<ArrayList<PostingList>> intermediateIndexes = new ArrayList<>();
+        intermediateIndexes.add(index1);
+        intermediateIndexes.add(index2);
+
+        // build document index for intermediate indexes
+        LinkedHashMap<Integer, DocumentIndexEntry> docIndex = MergerWithoutCompression.buildDocIndex(config, intermediateIndexes);
+
+        // write document index to disk
+        assertTrue(writeDocumentIndexToDisk(config, docIndex), "Error while writing document index to disk");
+
+        // write intermediate indexes to disk
+        assertTrue(writeIntermediateIndexesToDisk(config, intermediateIndexes), "Error while writing intermediate indexes to disk");
+
+        // merging intermediate indexes
+        Merger merger = Merger.with(config);
+        assertTrue(merger.mergeIndexes(intermediateIndexes.size()), "Error: merging failed");
+    }
+
+    public static LinkedHashMap<Integer, DocumentIndexEntry> buildDocIndex(Config config, ArrayList<ArrayList<PostingList>> indexes){
+        LinkedHashMap<Integer, DocumentIndexEntry> docIndex = new LinkedHashMap<>();
+        int docCounter = 0;
+
+        for(ArrayList<PostingList> index: indexes){
+            for(PostingList postingList: index){
+                for(Posting posting: postingList.getPostings()){
+                    DocumentIndexEntry docEntry = docIndex.get(posting.getDocumentId());
+                    if(docEntry!=null){
+                        docEntry.setDocumentLength(docEntry.getDocumentLenght() + posting.getFrequency());
+                    } else {
+                        docEntry = new DocumentIndexEntry(config, Integer.toString(posting.getDocumentId()), docCounter, posting.getFrequency());
+                        docIndex.put(posting.getDocumentId(), docEntry);
+                        docCounter++;
+                    }
+                }
+            }
+
+        }
+        return docIndex;
+    }
+
     private static ArrayList<ArrayList<Posting>> getPostingsResultForSingleIndex() {
         ArrayList<ArrayList<Posting>> expectedResults = new ArrayList<>(3);
 
@@ -255,4 +320,40 @@ public class MergerWithoutCompression {
         expectedResults.add(postings);
         return expectedResults;
     }
+
+    public static ArrayList<ArrayList<Posting>> getPostingsResultForTwoIndex() {
+        ArrayList<ArrayList<Posting>> expectedResults = new ArrayList<>(4);
+
+        ArrayList<Posting> expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(4,3),
+                new Posting(5,1),
+        }));
+        expectedResults.add(expectedPostings);
+        expectedPostings = new ArrayList<>();
+
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(1, 3),
+                new Posting(2, 2),
+                new Posting(3,5)
+        }));
+        expectedResults.add(expectedPostings);
+
+        expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(2,1),
+                new Posting(3,2),
+                new Posting(5,2)
+        }));
+        expectedResults.add(expectedPostings);
+        expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(2,1),
+                new Posting(3,2),
+        }));
+        expectedResults.add(expectedPostings);
+
+        return expectedResults;
+    }
+
 }

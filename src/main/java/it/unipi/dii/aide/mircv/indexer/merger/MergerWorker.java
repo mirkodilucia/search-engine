@@ -120,6 +120,7 @@ public class MergerWorker extends BaseMergerWorker {
         }
 
         moveToNextTerm(termToProcess);
+        vocabularyEntry.computeIDF();
         vocabularyEntry.update(documentMemoryOffset, frequenciesMemoryOffset);
 
         return finalList;

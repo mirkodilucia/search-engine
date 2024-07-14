@@ -27,6 +27,11 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         this.config = config;
     }
 
+    public DocumentIndexEntry(Config config) {
+        super();
+        this.config = config;
+    }
+
     public static void reset() {
         memoryOffset = 0;
     }
@@ -63,7 +68,7 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         }
     }
 
-    public boolean writeFile(String documentIndexFile) {
+    public long writeFile(String documentIndexFile) {
         try (
                 FileChannel documentIndexFileChannel = FileChannelHandler.open(
                         documentIndexFile,
@@ -71,14 +76,27 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
                         StandardOpenOption.WRITE,
                         StandardOpenOption.CREATE
                 )) {
-            return this.readFile(memoryOffset, documentIndexFileChannel);
+            return this.writeFile(documentIndexFileChannel);
         }catch (IOException ex) {
             ex.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
     public String getPId() {
         return pId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == this)
+            return true;
+
+        if (!(o instanceof DocumentIndexEntry de)) {
+            return false;
+        }
+
+        return de.getDocumentId() == this.getDocumentId() && de.getPId().equals(this.getPId()) && de.getDocumentLenght() == this.getDocumentLenght();
     }
 }

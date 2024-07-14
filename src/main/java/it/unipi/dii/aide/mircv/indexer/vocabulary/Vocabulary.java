@@ -6,7 +6,10 @@ import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.platform.commons.util.LruCache;
 
+import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Vocabulary extends BaseVocabulary {
 
@@ -29,12 +32,19 @@ public class Vocabulary extends BaseVocabulary {
         return instance;
     }
 
-    public static void unset() {
+    public void unset() {
         instance = null;
+        this.clear();
+
+        try {
+            vocabularyFileChannel.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public double getIdf(String term){
-        return getEntry(term).getIdf();
+        return get(term).getIdf();
     }
 
     public VocabularyEntry getEntry(String term){
@@ -52,5 +62,9 @@ public class Vocabulary extends BaseVocabulary {
 
     public FileChannel getVocabularyChannel() {
         return vocabularyFileChannel;
+    }
+
+    public VocabularyEntry[] getVocabularyEntries() {
+        return this.values().toArray(new VocabularyEntry[0]);
     }
 }

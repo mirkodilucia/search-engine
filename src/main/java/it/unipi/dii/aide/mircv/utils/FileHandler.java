@@ -104,4 +104,23 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+    public static void deleteFile(String pathToPartialVocabularies) {
+        // Delete all file matching pathToPartialVocabularies * with regex
+        String[] dir = pathToPartialVocabularies.split("(?<=/)(?!.*?/)");
+        if (dir.length == 0) { return; }
+        try {
+            Files.walk(Paths.get(dir[0]))
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        try {
+                            Files.deleteIfExists(file);
+                        } catch (IOException e) {
+                            System.out.println("File to delete not found: " + file);
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

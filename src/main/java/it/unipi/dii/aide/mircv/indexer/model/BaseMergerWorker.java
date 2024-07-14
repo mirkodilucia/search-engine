@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.indexer.model;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
+import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -21,7 +22,7 @@ public class BaseMergerWorker {
     public FileChannel[] documentsIdChannels;
     public FileChannel[] frequencyChannels;
 
-    private void setupPath(Config config) {
+    private static void setupPath(Config config) {
         PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
         PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
         PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
@@ -86,4 +87,13 @@ public class BaseMergerWorker {
         }
     }
 
+    public static void unset(Config config) {
+        setupPath(config);
+
+        // Delete PATH_TO_PARTIAL_VOCABULARIES, PATH_TO_PARTIAL_INDEXES_DOCS, PATH_TO_PARTIAL_INDEXES_FREQS
+        FileHandler.deleteFile(PATH_TO_PARTIAL_VOCABULARIES);
+        FileHandler.deleteFile(PATH_TO_PARTIAL_INDEXES_FREQS);
+        FileHandler.deleteFile(PATH_TO_PARTIAL_INDEXES_DOCS);
+
+    }
 }
