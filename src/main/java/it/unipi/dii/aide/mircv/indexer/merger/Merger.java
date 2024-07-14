@@ -167,9 +167,6 @@ public class Merger {
             int[] freqs = new int[nPostingsToBeWritten];
 
             while (mergerPostingIteration.postingListIterator.hasNext()) {
-                MappedByteBuffer docsBuffer = mergerFileChannels.documentIdChannel.map(FileChannel.MapMode.READ_WRITE, documentsMemoryOffset, nPostingsToBeWritten);
-                MappedByteBuffer freqsBuffer = mergerFileChannels.frequencyChannel.map(FileChannel.MapMode.READ_WRITE, frequenciesMemoryOffset, nPostingsToBeWritten);
-
                 Posting currentPosting = mergerPostingIteration.postingListIterator.next();
 
                 docIds[postingInBlock] = currentPosting.getDocumentId();
@@ -180,6 +177,9 @@ public class Merger {
                 if (postingInBlock == mergerPostingIteration.nPostingsToBeWritten) {
                     byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docIds);
                     byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
+
+                    MappedByteBuffer docsBuffer = mergerFileChannels.documentIdChannel.map(FileChannel.MapMode.READ_WRITE, documentsMemoryOffset, compressedDocs.length);
+                    MappedByteBuffer freqsBuffer = mergerFileChannels.frequencyChannel.map(FileChannel.MapMode.READ_WRITE, frequenciesMemoryOffset, compressedFreqs.length);
 
                     docsBuffer.put(compressedDocs);
                     freqsBuffer.put(compressedFreqs);
