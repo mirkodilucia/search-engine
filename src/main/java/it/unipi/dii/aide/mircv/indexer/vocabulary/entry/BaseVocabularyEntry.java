@@ -256,8 +256,6 @@ public class BaseVocabularyEntry {
             memoryInfo.frequencySize = buffer.getInt();
             memoryInfo.numBlocks = buffer.getInt();
             memoryInfo.blockOffset = buffer.getLong();
-
-            System.out.println("x");
         }
 
         public void writeBufferWithMemoryInfo(VocabularyMemoryInfo memoryInfo, MappedByteBuffer buffer) {
