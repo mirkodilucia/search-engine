@@ -11,6 +11,7 @@ import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
+import it.unipi.dii.aide.mircv.utils.FileHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,6 +105,13 @@ public class MergerTest {
         //createDirectory(TEST_DIRECTORY+"/partial_freqs");
         //createDirectory(TEST_DIRECTORY+"/partial_docids");
         //createDirectory(TEST_DIRECTORY+"/partial_vocabulary");
+
+        FileHandler.deleteFile(config.getBlockDescriptorsPath());
+        FileHandler.deleteFile(config.getVocabularyPath());
+        FileHandler.deleteFile(config.getInvertedIndexDocs());
+        FileHandler.deleteFile(config.getInvertedIndexFreqsFile());
+        FileHandler.deleteFile(config.getDocumentIndexFile());
+
         BlockDescriptor.setMemoryOffset(0);
         Vocabulary.with(config).unset();
         Merger.with(config).unset();
@@ -137,7 +145,6 @@ public class MergerTest {
 
     public void mergeTwoIndexes(boolean vocabularyTest) {
 
-
         if(vocabularyTest){
             Vocabulary expectedVocabulary = createVocabulary();
             expectedVocabulary.readFromDisk();
@@ -151,6 +158,18 @@ public class MergerTest {
             ArrayList<ArrayList<Posting>> expectedResults = getPostingsResultForTwoIndex();
             assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
         }
+    }
+
+    @Test
+    void twoIndexesMergeWithoutCompression() {
+        config.setScorerConfig(false, false, true);
+        mergeTwoIndexes( false);
+    }
+
+    @Test
+    void twoIndexesMergeWithCompression() {
+        config.setScorerConfig(false, true, true);
+        mergeTwoIndexes(false);
     }
 
     @Test
