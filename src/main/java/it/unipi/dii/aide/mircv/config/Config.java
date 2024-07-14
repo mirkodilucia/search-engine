@@ -155,8 +155,25 @@ public class Config {
     }
 
     public void setScorerConfig(boolean maxScoreEnabled, boolean compressionEnabled, boolean stopwordRemoval) {
+        if (this.scorerConfig == null) {
+            this.scorerConfig = new ScorerConfig(maxScoreEnabled);
+        }
         this.scorerConfig.setMaxScoreEnabled(maxScoreEnabled);
+
+        if (this.blockDescriptorConfig == null) {
+            this.blockDescriptorConfig = new BlockDescriptorConfig(
+                    "data/block_descriptors.txt.dat",
+                    compressionEnabled);
+        }
         this.blockDescriptorConfig.setCompressionEnabled(compressionEnabled);
+
+        if (this.preprocessConfig == null) {
+            this.preprocessConfig = new PreprocessConfig(
+                    "data_resources/stopwords.dat",
+                    true,
+                    true
+            );
+        }
         this.preprocessConfig.setStemStopRemovalEnabled(stopwordRemoval);
     }
 

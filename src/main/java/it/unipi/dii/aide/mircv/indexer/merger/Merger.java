@@ -185,4 +185,10 @@ public class Merger {
             throw new RuntimeException(e);
         }
     }
+
+    public void unset() {
+        MergerWorker.unset(config);
+
+
+    }
 }

@@ -55,7 +55,9 @@ public class QueryHandler {
         while (i >= 0) {
             if (priorityQueue.peek() == null)
                 break;
-            output[i] = documentIndex.get(priorityQueue.poll().getValue()).getPId();
+
+            int pollingValue = priorityQueue.poll().getValue();
+            output[i] = documentIndex.get(pollingValue).getPId();
             i--;
         }
         return output;

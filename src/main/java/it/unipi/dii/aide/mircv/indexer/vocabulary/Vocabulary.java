@@ -8,6 +8,8 @@ import org.junit.platform.commons.util.LruCache;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Vocabulary extends BaseVocabulary {
 
@@ -60,5 +62,9 @@ public class Vocabulary extends BaseVocabulary {
 
     public FileChannel getVocabularyChannel() {
         return vocabularyFileChannel;
+    }
+
+    public VocabularyEntry[] getVocabularyEntries() {
+        return this.values().toArray(new VocabularyEntry[0]);
     }
 }

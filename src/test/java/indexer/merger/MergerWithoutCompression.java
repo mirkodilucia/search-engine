@@ -56,7 +56,7 @@ public class MergerWithoutCompression {
         return docIndex;
     }
 
-    private static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config) {
+    public static ArrayList<ArrayList<Posting>> retrieveIndexFromDisk(Config config) {
         // get vocabulary from disk
         Vocabulary v = Vocabulary.with(config);
         v.readFromDisk();
@@ -232,6 +232,10 @@ public class MergerWithoutCompression {
         assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
     }
 
+    private void mergeTwoIndexes(boolean compressionMode, boolean vocabularyTest) {
+
+    }
+
     private static ArrayList<ArrayList<Posting>> getPostingsResultForSingleIndex() {
         ArrayList<ArrayList<Posting>> expectedResults = new ArrayList<>(3);
 
@@ -255,4 +259,40 @@ public class MergerWithoutCompression {
         expectedResults.add(postings);
         return expectedResults;
     }
+
+    public static ArrayList<ArrayList<Posting>> getPostingsResultForTwoIndex() {
+        ArrayList<ArrayList<Posting>> expectedResults = new ArrayList<>(4);
+
+        ArrayList<Posting> expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(4,3),
+                new Posting(5,1),
+        }));
+        expectedResults.add(expectedPostings);
+        expectedPostings = new ArrayList<>();
+
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(1, 3),
+                new Posting(2, 2),
+                new Posting(3,5)
+        }));
+        expectedResults.add(expectedPostings);
+
+        expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(2,1),
+                new Posting(3,2),
+                new Posting(5,2)
+        }));
+        expectedResults.add(expectedPostings);
+        expectedPostings = new ArrayList<>();
+        expectedPostings.addAll(List.of(new Posting[]{
+                new Posting(2,1),
+                new Posting(3,2),
+        }));
+        expectedResults.add(expectedPostings);
+
+        return expectedResults;
+    }
+
 }

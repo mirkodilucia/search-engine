@@ -68,7 +68,7 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         }
     }
 
-    public boolean writeFile(String documentIndexFile) {
+    public long writeFile(String documentIndexFile) {
         try (
                 FileChannel documentIndexFileChannel = FileChannelHandler.open(
                         documentIndexFile,
@@ -76,10 +76,10 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
                         StandardOpenOption.WRITE,
                         StandardOpenOption.CREATE
                 )) {
-            return this.readFile(memoryOffset, documentIndexFileChannel);
+            return this.writeFile(documentIndexFileChannel);
         }catch (IOException ex) {
             ex.printStackTrace();
-            return false;
+            return -1;
         }
     }
 

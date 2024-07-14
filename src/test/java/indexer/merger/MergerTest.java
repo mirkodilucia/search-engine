@@ -7,12 +7,18 @@ import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
+import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static indexer.merger.MergerWithoutCompression.getPostingsResultForTwoIndex;
+import static indexer.merger.MergerWithoutCompression.retrieveIndexFromDisk;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MergerTest {
 
@@ -46,19 +52,7 @@ public class MergerTest {
         );
     }
 
-    @Test
-    public void initializeMerger() {
-        Merger merger = Merger.with(config);
-        assert(merger != null);
-    }
-
-    @Test
-    public void singleIndexMergeWithoutCompression() {
-        //createVocabulary();
-        MergerWithoutCompression.mergeSingleIndex(config);
-    }
-
-    private void createVocabulary() {
+    private Vocabulary createVocabulary() {
         Vocabulary vocabulary = Vocabulary.with(config);
 
         ArrayList<VocabularyEntry> vocabularyEntries = new ArrayList<>(List.of(new VocabularyEntry[]{
@@ -100,27 +94,9 @@ public class MergerTest {
         }
 
         DocumentIndexState.updateVocabularySize(vocabularyEntries.size());
+
+        return vocabulary;
     }
-
-    /*
-    @Test
-    public void initializeMergerWithConfig() {
-        Merger merger = Merger.with(config);
-
-        VocabularyEntry vocabularyEntry = merger.getNextTerms(0);
-        assert(vocabularyEntry.getTerm().compareTo("alberobello") == 0);
-    }
-
-
-    @Test
-    public void mergerGetMinimumTerm() {
-        Merger merger = Merger.with(config);
-        merger.mergeIndexes(3);
-
-        String vocabularyEntry = merger.getMinimumTerm();
-        assert(vocabularyEntry.compareTo("alberobello") == 0);
-    }
-    */
 
     @BeforeEach
     void setUp() {
@@ -130,13 +106,62 @@ public class MergerTest {
         //createDirectory(TEST_DIRECTORY+"/partial_vocabulary");
         BlockDescriptor.setMemoryOffset(0);
         Vocabulary.with(config).unset();
+        Merger.with(config).unset();
     }
 
     @Test
-    public void mergeIndexes() {
+    public void initializeMerger() {
+        Merger merger = Merger.with(config);
+        assert(merger != null);
+    }
+
+    @Test
+    public void singleIndexMergeWithoutCompression() {
+        config.setScorerConfig(false, false, true);
+        MergerWithoutCompression.mergeSingleIndex(config);
+    }
+
+    @Test
+    void singleIndexMergeWithCompression() {
+        config.setScorerConfig(false, true, true);
+        MergerWithoutCompression.mergeSingleIndex(config);
+    }
+
+    @Test
+    public void mergeSingleIndex() {
         Merger merger = Merger.with(config);
         boolean result = merger.mergeIndexes(3);
 
         assert(result);
+    }
+
+    public void mergeTwoIndexes(boolean vocabularyTest) {
+
+
+        if(vocabularyTest){
+            Vocabulary expectedVocabulary = createVocabulary();
+            expectedVocabulary.readFromDisk();
+
+            ArrayList<VocabularyEntry> retrievedVocabulary = new ArrayList<>();
+            retrievedVocabulary.addAll(expectedVocabulary.values());
+
+            assertArrayEquals(expectedVocabulary.getVocabularyEntries(), retrievedVocabulary.toArray(), "Vocabulary after merging is different from the expected vocabulary.");
+        }else{
+            ArrayList<ArrayList<Posting>> mergedLists = retrieveIndexFromDisk(config);
+            ArrayList<ArrayList<Posting>> expectedResults = getPostingsResultForTwoIndex();
+            assertEquals(expectedResults.toString(), mergedLists.toString(), "Error, expected results are different from actual results.");
+        }
+    }
+
+    @Test
+    void vocabularyTest(){
+        config.setScorerConfig(false, false, true);
+        mergeTwoIndexes(true);
+    }
+
+    @Test
+    void vocabularyTest2() {
+        config.setScorerConfig(false, true, true);
+        mergeTwoIndexes(true);
     }
 }
