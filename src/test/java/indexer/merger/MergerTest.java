@@ -1,13 +1,16 @@
 package indexer.merger;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import it.unipi.dii.aide.mircv.config.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
+import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
+import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
@@ -16,10 +19,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static indexer.merger.MergerWithoutCompression.getPostingsResultForTwoIndex;
-import static indexer.merger.MergerWithoutCompression.retrieveIndexFromDisk;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static indexer.merger.MergerWithoutCompression.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MergerTest {
 
@@ -144,6 +146,7 @@ public class MergerTest {
     }
 
     public void mergeTwoIndexes(boolean vocabularyTest) {
+        MergerWithoutCompression.mergeTwoIndexes(config);
 
         if(vocabularyTest){
             Vocabulary expectedVocabulary = createVocabulary();
@@ -163,7 +166,7 @@ public class MergerTest {
     @Test
     void twoIndexesMergeWithoutCompression() {
         config.setScorerConfig(false, false, true);
-        mergeTwoIndexes( false);
+        mergeTwoIndexes(false);
     }
 
     @Test

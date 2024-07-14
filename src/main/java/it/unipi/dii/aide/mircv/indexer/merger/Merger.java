@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.indexer.merger;
 
+import it.unipi.dii.aide.mircv.compress.UnaryCompressor;
+import it.unipi.dii.aide.mircv.compress.VariableByteCompressor;
 import it.unipi.dii.aide.mircv.config.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
@@ -58,8 +60,8 @@ public class Merger {
 
                 vocabularyMemoryOffset = vocabularyEntry.writeEntry(vocabularyMemoryOffset, margerFileChannels.vocabularyChannel);
 
-                documentsMemoryOffset += compressionResult.docsMemOffset;
-                frequenciesMemoryOffset += compressionResult.freqsMemOffset;
+                // documentsMemoryOffset += compressionResult.docsMemOffset;
+                // frequenciesMemoryOffset += compressionResult.freqsMemOffset;
 
                 vocabularySize++;
 
@@ -98,7 +100,7 @@ public class Merger {
 
             MergerFileChannel.CompressionResult intermediateResult;
 
-            if (config.compression) {
+            if (config.getBlockDescriptorConfig().isCompressionEnabled()) {
                 intermediateResult = processCompressedPostingList(mergerPostingIteration, mergerFileChannels);
                 result.updateCompressionResult(intermediateResult);
             }else {
@@ -142,6 +144,9 @@ public class Merger {
                             mergerPostingIteration.nPostingsToBeWritten * 4L,
                             mergerPostingIteration.nPostingsToBeWritten * 4L
                             );
+
+                    documentsMemoryOffset += mergerPostingIteration.nPostingsToBeWritten * 4L;
+                    frequenciesMemoryOffset += mergerPostingIteration.nPostingsToBeWritten * 4L;
                     break;
                 }
             }
@@ -158,25 +163,41 @@ public class Merger {
         MergerFileChannel.CompressionResult result = new MergerFileChannel.CompressionResult();
 
         try {
-            MappedByteBuffer docsBuffer = mergerFileChannels.documentIdChannel.map(FileChannel.MapMode.READ_WRITE, documentsMemoryOffset, nPostingsToBeWritten);
-            MappedByteBuffer freqsBuffer = mergerFileChannels.frequencyChannel.map(FileChannel.MapMode.READ_WRITE, frequenciesMemoryOffset, nPostingsToBeWritten);
-
-            // Posting list must not be compressed
-            // Set docs and freqs num bytes as (number of postings)*4
-            mergerPostingIteration.blockDescriptor.setDocumentIdSize(nPostingsToBeWritten);
-            mergerPostingIteration.blockDescriptor.setFrequenciesSize(nPostingsToBeWritten);
+            int[] docIds = new int[nPostingsToBeWritten];
+            int[] freqs = new int[nPostingsToBeWritten];
 
             while (mergerPostingIteration.postingListIterator.hasNext()) {
+                MappedByteBuffer docsBuffer = mergerFileChannels.documentIdChannel.map(FileChannel.MapMode.READ_WRITE, documentsMemoryOffset, nPostingsToBeWritten);
+                MappedByteBuffer freqsBuffer = mergerFileChannels.frequencyChannel.map(FileChannel.MapMode.READ_WRITE, frequenciesMemoryOffset, nPostingsToBeWritten);
+
                 Posting currentPosting = mergerPostingIteration.postingListIterator.next();
+
+                docIds[postingInBlock] = currentPosting.getDocumentId();
+                freqs[postingInBlock] = currentPosting.getFrequency();
 
                 postingInBlock++;
 
                 if (postingInBlock == mergerPostingIteration.nPostingsToBeWritten) {
+                    byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(docIds);
+                    byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(freqs);
+
+                    docsBuffer.put(compressedDocs);
+                    freqsBuffer.put(compressedFreqs);
+
+                    mergerPostingIteration.blockDescriptor.setDocumentIdSize(compressedDocs.length);
+                    mergerPostingIteration.blockDescriptor.setFrequenciesSize(compressedFreqs.length);
+
                     mergerPostingIteration.blockDescriptor.setMaxDocumentsId(currentPosting.getDocumentId());
                     mergerPostingIteration.blockDescriptor.setNumPostings(postingInBlock);
 
-                    MergerFileChannel.CompressionResult intermediateResult = mergerPostingIteration.writeBlock(mergerFileChannels.descriptorChannel);
-                    result.updateCompressionResult(intermediateResult);
+                    mergerPostingIteration.writeBlock(mergerFileChannels.descriptorChannel);
+                    result.updateCompressionOffset(
+                            compressedDocs.length,
+                            compressedFreqs.length
+                    );
+
+                    documentsMemoryOffset += compressedDocs.length;
+                    frequenciesMemoryOffset += compressedFreqs.length;
                 }
             }
 

@@ -3,9 +3,6 @@ package it.unipi.dii.aide.mircv.config;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 public class Config {
-
-    public boolean compression;
-
     public boolean debug;
 
     private PreprocessConfig preprocessConfig;

@@ -24,5 +24,8 @@ public class MergerPostingIteration {
         return blockDescriptor.writeBlock(descriptorChannel);
     }
 
+    public MergerFileChannel.CompressionResult writeCompressedBlock(FileChannel descriptorChannel) {
+        return blockDescriptor.writeBlock(descriptorChannel);
+    }
 
 }

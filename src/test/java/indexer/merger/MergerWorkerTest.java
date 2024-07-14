@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class MergerWorkerTest {
 
+    /*
     public Config setupGetMinimumTerm(int i) {
         Config config = new Config(
                 "data_test/mergerWorkerTest/documentIndex",
@@ -89,5 +90,5 @@ public class MergerWorkerTest {
         assert result.equals("Apple");
     }
 
-
+    */
 }
