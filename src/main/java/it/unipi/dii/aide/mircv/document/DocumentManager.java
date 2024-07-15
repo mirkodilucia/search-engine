@@ -24,10 +24,7 @@ public class DocumentManager {
 
     public void start() throws IOException {
         List<InitialDocument> documents = this.loadDocumentsFromTSV("data/collection.tsv");
-        for (InitialDocument document : documents) {
-            // Write raw processed document to disk
-            document.writeFileString();
-        }
+
     }
 
     private List<InitialDocument> loadDocumentsFromTSV(String filePath) throws IOException {
@@ -39,10 +36,13 @@ public class DocumentManager {
             StringBuilder document = new StringBuilder();
             int lineCount = 0;
             int iteration = 0;
+
+            long MEMORY_THRESHOLD = Runtime.getRuntime().totalMemory() * 20 / 100;
+
             while ((line = br.readLine()) != null) {
                 document.append(line).append("\n");
                 lineCount++;
-                if (lineCount == 200) {
+                if (Runtime.getRuntime().freeMemory() > MEMORY_THRESHOLD) {
                     String documentId = "doc" + iteration;
                     documents.add(
                             new InitialDocument(configuration, documentId, document.toString())
@@ -53,9 +53,9 @@ public class DocumentManager {
                 }
 
                 // Exit after 10 documents
-                if (documents.size() > 10) {
-                    break;
-                }
+                // if (documents.size() > 10) {
+                //    break;
+                //}
             }
 
             String documentId = "doc" + iteration;
@@ -64,6 +64,11 @@ public class DocumentManager {
                         new InitialDocument(configuration, documentId, document.toString())
                 );
             }
+        }
+
+        for (InitialDocument document : documents) {
+            // Write raw processed document to disk
+            document.writeFileString();
         }
 
         return documents;
