@@ -1,0 +1,75 @@
+<!-- Add XML Schema (XSD) Data -->
+<schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema">
+    <element name="Config">
+        <complexType>
+            <sequence>
+                <element name="debug" type="boolean"/>
+                <element name="debugDir" type="string" />
+                <element name="testDir" type="string" />
+                <element name="documentIndexFile" type="string" />
+                <element name="datasetPath" type="string" />
+
+                <element name="preprocessConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="stopwordsPath" type="string" />
+                            <element name="removeStopwords" type="boolean" />
+                            <element name="stemmerEnabled" type="boolean" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="vocabularyConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="vocabularyFilePath" type="string" />
+                            <element name="documentIndexStatePath" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="blockDescriptorConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="blockDescriptorsPath" type="string" />
+                            <element name="compressionEnabled" type="boolean" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="invertedIndexConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="invertedIndexFreqs" type="string" />
+                            <element name="invertedIndexDocId" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="partialResultsConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="partialVocabularyDir" type="string" />
+                            <element name="frequencyDir" type="string" />
+                            <element name="docIdDir" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="scorerConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="maxScoreEnabled" type="boolean" />
+                        </sequence>
+                    </complexType>
+                </element>
+                <!--
+                <element name="collectionConfig">
+                    <complexType>
+                        <sequence>
+                            <element name="rawCollectionPath" type="string" />
+                            <element name="compressedCollectionPath" type="string" />
+                            <element name="collectionStatisticsPath" type="string" />
+                        </sequence>
+                    </complexType>
+                </element>
+                -->
+            </sequence>
+        </complexType>
+    </element>
+</schema>
