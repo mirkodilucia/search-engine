@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Config>
+    <debug>true</debug>
+    <debugDir>data/debug</debugDir>
+    <testDir>data/test</testDir>
+
+    <documentIndexFile>data/documents/document_index.dat</documentIndexFile>
+    <datasetPath>data/collection.tsv</datasetPath>
+
+    <preprocessConfig>
+        <stopwordsPath>data_resources/stopwords.dat</stopwordsPath>
+        <removeStopwords>true</removeStopwords>
+        <stemmerEnabled>true</stemmerEnabled>
+    </preprocessConfig>
+
+    <vocabularyConfig>
+        <vocabularyFilePath>data/vocabulary.dat</vocabularyFilePath>
+        <documentIndexStatePath>data/document_index_state.dat</documentIndexStatePath>
+    </vocabularyConfig>
+
+    <blockDescriptorConfig>
+        <blockDescriptorsPath>data/block_descriptors.dat</blockDescriptorsPath>
+        <compressionEnabled>true</compressionEnabled>
+    </blockDescriptorConfig>
+
+    <invertedIndexConfig>
+        <invertedIndexFreqs>data/indexes/inverted_index_freqs.dat</invertedIndexFreqs>
+        <invertedIndexDocId>data/indexes/inverted_index_docs.dat</invertedIndexDocId>
+    </invertedIndexConfig>
+
+    <partialResultsConfig>
+        <partialVocabularyDir>data/indexes</partialVocabularyDir>
+        <frequencyDir>data/indexes</frequencyDir>
+        <docIdDir>data/indexes</docIdDir>
+    </partialResultsConfig>
+
+    <scorerConfig>
+        <maxScoreEnabled>true</maxScoreEnabled>
+    </scorerConfig>
+
+</Config>
