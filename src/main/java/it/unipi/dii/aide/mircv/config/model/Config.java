@@ -2,6 +2,8 @@ package it.unipi.dii.aide.mircv.config.model;
 
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
+import java.io.File;
+
 public class Config {
     public boolean debug;
     private final String debugDir;
@@ -190,5 +192,9 @@ public class Config {
         FileHandler.removeFile(invertedIndexConfig.getInvertedIndexDocs());
         FileHandler.removeFile(invertedIndexConfig.getInvertedIndexFreqsFile());
         FileHandler.removeFile(blockDescriptorConfig.getBlockDescriptorsPath());
+    }
+
+    public String getDatasetPath() {
+        return this.datasetPath;
     }
 }

@@ -123,4 +123,15 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+    public static void deleteDirectory(String partialIndexesDocumentsPath) {
+        try {
+            Files.walk(Paths.get(partialIndexesDocumentsPath))
+                    .sorted(java.util.Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

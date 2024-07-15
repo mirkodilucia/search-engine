@@ -133,6 +133,8 @@ public class VocabularyEntry extends BaseVocabularyEntry {
 
             CharBuffer charBuffer = CharBuffer.allocate(TERM_SIZE);
             for (int i = 0; i < term.length(); i++) {
+                if (i >= TERM_SIZE)
+                    break;
                 charBuffer.put(i, term.charAt(i));
             }
 

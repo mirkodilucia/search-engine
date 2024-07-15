@@ -36,12 +36,10 @@ public class DocumentManager {
             int lineCount = 0;
             int iteration = 0;
 
-            long MEMORY_THRESHOLD = Runtime.getRuntime().totalMemory() * 20 / 100;
-
             while ((line = br.readLine()) != null) {
                 document.append(line).append("\n");
                 lineCount++;
-                if (Runtime.getRuntime().freeMemory() > MEMORY_THRESHOLD) {
+                if (lineCount >= 200) {
                     String documentId = "doc" + iteration;
                     documents.add(
                             new InitialDocument(configuration, documentId, document.toString())
@@ -52,9 +50,9 @@ public class DocumentManager {
                 }
 
                 // Exit after 10 documents
-                // if (documents.size() > 10) {
-                //    break;
-                //}
+                if (documents.size() > 10) {
+                    break;
+                }
             }
 
             String documentId = "doc" + iteration;
