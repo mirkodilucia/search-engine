@@ -2,7 +2,7 @@ package it.unipi.dii.aide.mircv.indexer.merger;
 
 import it.unipi.dii.aide.mircv.compress.UnaryCompressor;
 import it.unipi.dii.aide.mircv.compress.VariableByteCompressor;
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;

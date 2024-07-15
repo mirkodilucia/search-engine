@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.config;
+package it.unipi.dii.aide.mircv.config.model;
 
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 

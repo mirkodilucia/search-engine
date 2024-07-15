@@ -1,6 +1,6 @@
 package indexer.model;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import org.junit.jupiter.api.Test;

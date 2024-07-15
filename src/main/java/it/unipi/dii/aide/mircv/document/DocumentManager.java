@@ -1,7 +1,6 @@
 package it.unipi.dii.aide.mircv.document;
 
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 
 import java.io.BufferedReader;
@@ -24,10 +23,7 @@ public class DocumentManager {
 
     public void start() throws IOException {
         List<InitialDocument> documents = this.loadDocumentsFromTSV("data/collection.tsv");
-        for (InitialDocument document : documents) {
-            // Write raw processed document to disk
-            document.writeFileString();
-        }
+
     }
 
     private List<InitialDocument> loadDocumentsFromTSV(String filePath) throws IOException {
@@ -39,10 +35,11 @@ public class DocumentManager {
             StringBuilder document = new StringBuilder();
             int lineCount = 0;
             int iteration = 0;
+
             while ((line = br.readLine()) != null) {
                 document.append(line).append("\n");
                 lineCount++;
-                if (lineCount == 200) {
+                if (lineCount >= 200) {
                     String documentId = "doc" + iteration;
                     documents.add(
                             new InitialDocument(configuration, documentId, document.toString())
@@ -64,6 +61,11 @@ public class DocumentManager {
                         new InitialDocument(configuration, documentId, document.toString())
                 );
             }
+        }
+
+        for (InitialDocument document : documents) {
+            // Write raw processed document to disk
+            document.writeFileString();
         }
 
         return documents;

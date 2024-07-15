@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.document;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 
 import java.io.*;
 import java.util.Objects;

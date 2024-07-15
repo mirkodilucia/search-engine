@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.merger;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
-
-import static java.lang.System.arraycopy;
 
 public class MergerFileChannel {
     private static String VOCABULARY_FILE_PATH = "data/vocabulary/vocabulary_0.dat";

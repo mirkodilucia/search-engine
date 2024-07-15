@@ -1,13 +1,18 @@
 package it.unipi.dii.aide.mircv.indexer.spimi;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
+import it.unipi.dii.aide.mircv.utils.FileHandler;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Spimi extends BaseSpimi {
@@ -27,19 +32,9 @@ public class Spimi extends BaseSpimi {
     }
 
     public int executeSpimi() {
-        boolean debugEnabled = true;
         numPostings = 0;
 
-        while (!allDocumentsProcessed) {
-
-            HashMap<String, PostingList> index = spimiIteration();
-            boolean writeResult = saveIndexToDisk(index, debugEnabled);
-
-            if (!writeResult) {
-                System.err.println("Couldn't write index to disk.");
-                return -1;
-            }
-        }
+        spimiIteration();
 
         this.updateIndexState();
         return numIndexes;
@@ -54,40 +49,80 @@ public class Spimi extends BaseSpimi {
     }
 
 
-    private HashMap<String, PostingList> spimiIteration() {
+    private int spimiIteration() {
         HashMap<String, PostingList> index = new HashMap<>();
 
-        while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
-            // Load document
-            InitialDocument initialDocument = InitialDocument.load(config, documentId);
-            if (initialDocument == null) {
-                this.onSpimiFinished();
-                break;
+        try (BufferedReader br = new BufferedReader(new FileReader(config.getDatasetPath()))) {
+            boolean allDocumentsProcessed = false;
+            int documentId = 1;
+            int documentLength = 0;
+            boolean writeSuccess;
+            while (!allDocumentsProcessed ) {
+
+                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                    String line;
+                    // if we reach the end of file (br.readline() -> null)
+                    if ((line = br.readLine()) == null) {
+                        System.out.println("all documents processed");
+                        allDocumentsProcessed = true;
+                        break;
+                    }
+
+                    if (line.isBlank())
+                        continue;
+
+                    String[] split = line.split("\t");
+
+                    // Load document
+                    InitialDocument initialDocument = new InitialDocument(config, split[0], split[1].replaceAll("[^\\x00-\\x7F]", ""));
+
+                    // Process document
+                    FinalDocument finalDocument = initialDocument.process();
+                    if (finalDocument.isEmpty())
+                        continue;
+
+                    // Build document index entry
+                    DocumentIndexEntry documentIndexEntry = buildDocumentIndexEntry(finalDocument);
+
+                    // Update document length
+                    this.updateDocumentLength(documentIndexEntry.getDocumentLenght());
+                    documentIndexEntry.writeFile(DOCUMENT_INDEX_FILE);
+
+                    // Build posting list
+                    HashMap<String, PostingList> partialIndex = this.buildPostingList(finalDocument);
+                    index.putAll(partialIndex);
+
+                    this.incrementDocumentId();
+                }
+
+                writeSuccess = saveIndexToDisk(index, config.debug);
+
+                //error during data structures creation. Rollback previous operations and end algorithm
+                if (!writeSuccess) {
+                    System.out.println("Couldn't write index to disk.");
+                    rollback();
+                    return -1;
+                }
+                index.clear();
             }
 
-            // Process document
-            FinalDocument finalDocument = initialDocument.process();
-            if (finalDocument.isEmpty())
-                continue;
-
-            // Build document index entry
-            DocumentIndexEntry documentIndexEntry = buildDocumentIndexEntry(finalDocument);
-
-            // Update document length
-            this.updateDocumentLength(documentIndexEntry.getDocumentLenght());
-            documentIndexEntry.writeFile(DOCUMENT_INDEX_FILE);
-
-            // Build posting list
-            HashMap<String, PostingList> partialIndex = this.buildPostingList(finalDocument);
-            index.putAll(partialIndex);
-
-            this.incrementDocumentId();
+            return numIndexes;
         }
-
-        return index;
+        catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private DocumentIndexEntry buildDocumentIndexEntry(FinalDocument finalDocument) {
+    private void rollback() {
+        FileHandler.deleteDirectory(config.getPartialIndexesDocumentsPath());
+        FileHandler.deleteDirectory(config.getPartialIndexesFrequenciesPath());
+        FileHandler.deleteDirectory(config.getPartialVocabularyPath());
+        FileHandler.removeFile(config.getDocumentIndexFile());
+    }
+
+        private DocumentIndexEntry buildDocumentIndexEntry(FinalDocument finalDocument) {
         int documentsLength = finalDocument.getTokens().size();
         return new DocumentIndexEntry(
                 this.config,

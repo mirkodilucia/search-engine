@@ -2,14 +2,14 @@ package it.unipi.dii.aide.mircv;
 
 import it.unipi.dii.aide.mircv.cli.CommandParser;
 import it.unipi.dii.aide.mircv.cli.QueryParser;
-import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.ConfigLoader;
+import it.unipi.dii.aide.mircv.config.model.Config;
 
 import java.util.Scanner;
 
 public class CommandLine {
 
-    private static Config config;
+    private static Config configLoaded;
 
     private static final int k = 10;
     private static final Scanner scanner = new Scanner(System.in);
@@ -18,7 +18,8 @@ public class CommandLine {
         System.out.println("****** SEARCH ENGINE ******");
         System.out.println("Starting...");
 
-        config = new Config();
+        configLoaded = ConfigLoader.load();
+        Config config = FlagManager.parseArgs(configLoaded, args);
 
         System.out.println("What are you looking for? " + """
                 Please insert a query specifying your preferred mode:\s

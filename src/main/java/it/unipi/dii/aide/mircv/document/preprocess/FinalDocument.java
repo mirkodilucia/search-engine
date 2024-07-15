@@ -28,4 +28,8 @@ public class FinalDocument {
     public boolean isEmpty() {
         return tokens.isEmpty();
     }
+
+    public int getPid() {
+        return Integer.parseInt(docId);
+    }
 }

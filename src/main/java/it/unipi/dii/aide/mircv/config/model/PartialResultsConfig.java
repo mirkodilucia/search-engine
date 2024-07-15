@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.config;
+package it.unipi.dii.aide.mircv.config.model;
 
 public class PartialResultsConfig {
     private final String partialVocabularyDir; //Directory

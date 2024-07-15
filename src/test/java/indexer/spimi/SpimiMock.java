@@ -1,6 +1,6 @@
 package indexer.spimi;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;

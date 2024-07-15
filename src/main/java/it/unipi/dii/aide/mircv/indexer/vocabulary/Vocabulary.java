@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.vocabulary;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
@@ -8,8 +8,6 @@ import org.junit.platform.commons.util.LruCache;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Vocabulary extends BaseVocabulary {
 

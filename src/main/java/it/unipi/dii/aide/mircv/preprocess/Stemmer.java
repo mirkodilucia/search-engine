@@ -2,7 +2,7 @@ package it.unipi.dii.aide.mircv.preprocess;
 
 import ca.rmen.porterstemmer.PorterStemmer;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 import java.util.ArrayList;

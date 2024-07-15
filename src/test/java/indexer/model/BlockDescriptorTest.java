@@ -1,6 +1,6 @@
 package indexer.model;
 
-import it.unipi.dii.aide.mircv.config.*;
+import it.unipi.dii.aide.mircv.config.model.*;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.io.IOException;

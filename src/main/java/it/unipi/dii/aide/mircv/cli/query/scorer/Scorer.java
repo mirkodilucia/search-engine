@@ -2,7 +2,7 @@ package it.unipi.dii.aide.mircv.cli.query.scorer;
 
 import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
 import it.unipi.dii.aide.mircv.cli.query.enums.ScoreFunction;
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
