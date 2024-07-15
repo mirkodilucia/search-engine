@@ -24,6 +24,14 @@ public class FlagManager {
             }
         }
 
+        if (booleanFlags.containsKey("--debug")) {
+            config.debug = Boolean.parseBoolean(flags.get("--debug"));
+        }
+
+        if(booleanFlags.containsKey("--compressed-reading")) {
+            config.compressedReading = Boolean.parseBoolean(flags.get("--compressed-reading"));
+        }
+
         if (booleanFlags.containsKey("--stem")) {
             config.getPreprocessConfig().setStemStopRemovalEnabled(Boolean.parseBoolean(flags.get("--stem")));
         }

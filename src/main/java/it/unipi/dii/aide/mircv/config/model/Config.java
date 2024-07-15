@@ -5,6 +5,7 @@ import it.unipi.dii.aide.mircv.utils.FileHandler;
 import java.io.File;
 
 public class Config {
+    public boolean compressedReading;
     public boolean debug;
     private final String debugDir;
     private final String testDir;
@@ -24,6 +25,7 @@ public class Config {
     public PartialResultsConfig partialResultsConfig;
 
     public ScorerConfig scorerConfig;
+    private String compressedCollectionFile;
 
     public Config(String documentIndexFile, String datasetPath, String testDir, String debugDir, boolean debugEnabled) {
         super();
@@ -32,6 +34,7 @@ public class Config {
         this.datasetPath = datasetPath;
         this.testDir = testDir;
         this.debugDir = debugDir;
+
     }
 
     public Config() {
@@ -57,6 +60,9 @@ public class Config {
         this.blockDescriptorConfig = new BlockDescriptorConfig(
                 "data/block_descriptors.dat",
                 true);
+
+        this.compressedReading = false;
+        this.compressedCollectionFile = "data/compressed_collection.tar.gz";
 
         this.scorerConfig = new ScorerConfig(true);
 
@@ -196,5 +202,9 @@ public class Config {
 
     public String getDatasetPath() {
         return this.datasetPath;
+    }
+
+    public String getCompressedCollectionPath() {
+        return this.compressedCollectionFile;
     }
 }

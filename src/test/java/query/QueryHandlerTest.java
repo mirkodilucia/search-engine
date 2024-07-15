@@ -41,6 +41,7 @@ public class QueryHandlerTest {
 
         config = new Config(
                 "data_test/queryHandlerTest/documentIndex.dat",
+                "data/collection.tsv",
                 "data_test/queryHandlerTest/testDir",
                 "data_test/queryHandlerTest/debugDir",
                 true

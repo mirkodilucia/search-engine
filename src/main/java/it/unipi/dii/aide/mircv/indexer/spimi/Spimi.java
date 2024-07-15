@@ -8,11 +8,11 @@ import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 public class Spimi extends BaseSpimi {
@@ -48,11 +48,30 @@ public class Spimi extends BaseSpimi {
         }
     }
 
+    //For reading compressed tar.gz dataset
+    private BufferedReader loadBuffer() throws IOException {
+        BufferedReader br;
+
+        if (config.compressedReading){
+
+            TarArchiveInputStream tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(config.getCompressedCollectionPath())));
+            tarInput.getNextTarEntry();
+            br = new BufferedReader(new InputStreamReader(tarInput, StandardCharsets.UTF_8));
+        }
+
+        else
+        {
+            br = new BufferedReader(new FileReader(config.getDatasetPath()));
+        }
+
+    return br;
+
+    }
 
     private int spimiIteration() {
         HashMap<String, PostingList> index = new HashMap<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(config.getDatasetPath()))) {
+        try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             int documentId = 1;
             int documentLength = 0;

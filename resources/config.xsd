@@ -6,7 +6,8 @@
                 <element name="debugDir" type="string" />
                 <element name="testDir" type="string" />
                 <element name="debugEnabled" type="string" />
-
+                <element name="compressedReading" type="string" />
+                <element name="compressedCollectionFile" type="string" />
                 <element name="datasetConfig">
                     <complexType>
                         <sequence>

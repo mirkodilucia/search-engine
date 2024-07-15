@@ -3,6 +3,8 @@
     <debugDir>debugDir</debugDir>
     <testDir>data/test</testDir>
     <debugEnabled>true</debugEnabled>
+        <compressedReading>false</compressedReading>
+        <compressedCollectionFile>data/collection.tar.gz</compressedCollectionFile>
 
         <datasetConfig>
             <datasetPath>resources/dataset/</datasetPath>
@@ -42,4 +44,5 @@
         <documentIndexConfig>
             <documentIndexPath>data/documentIndex</documentIndexPath>
         </documentIndexConfig>
+
 </Config>
