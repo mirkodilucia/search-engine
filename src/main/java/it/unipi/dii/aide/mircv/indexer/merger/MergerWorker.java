@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.merger;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.indexer.model.BaseMergerWorker;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;

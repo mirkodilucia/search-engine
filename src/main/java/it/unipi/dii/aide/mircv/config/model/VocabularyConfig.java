@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.config;
+package it.unipi.dii.aide.mircv.config.model;
 
 //Related to the paths of the vocabulary file
 public class VocabularyConfig {

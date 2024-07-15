@@ -3,7 +3,7 @@ package it.unipi.dii.aide.mircv.cli;
 import it.unipi.dii.aide.mircv.cli.query.QueryHandler;
 import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
 import it.unipi.dii.aide.mircv.cli.query.enums.ScoreFunction;
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 
 import java.util.Arrays;
 import java.util.Objects;

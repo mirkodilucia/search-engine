@@ -1,6 +1,6 @@
 package preprocess;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.preprocess.Stemmer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;

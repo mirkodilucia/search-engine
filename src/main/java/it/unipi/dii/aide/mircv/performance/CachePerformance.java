@@ -6,7 +6,7 @@ import it.unipi.dii.aide.mircv.cli.query.enums.Mode;
 import it.unipi.dii.aide.mircv.cli.query.enums.ScoreFunction;
 import it.unipi.dii.aide.mircv.cli.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;

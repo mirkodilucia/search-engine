@@ -1,9 +1,15 @@
-package it.unipi.dii.aide.mircv.config;
+package it.unipi.dii.aide.mircv.config.model;
 
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 public class Config {
     public boolean debug;
+    private final String debugDir;
+    private final String testDir;
+
+    private final String documentIndexFile;
+
+    private final String datasetPath;
 
     private PreprocessConfig preprocessConfig;
 
@@ -17,19 +23,13 @@ public class Config {
 
     public ScorerConfig scorerConfig;
 
-    private final String documentIndexFile;
-
-    private final String debugDir;
-    private final String testDir;
-    private final boolean debugEnabled;
-
-    public Config(String documentIndexFile, String testDir, String debugDir, boolean debugEnabled) {
+    public Config(String documentIndexFile, String datasetPath, String testDir, String debugDir, boolean debugEnabled) {
         super();
 
         this.documentIndexFile = documentIndexFile;
+        this.datasetPath = datasetPath;
         this.testDir = testDir;
         this.debugDir = debugDir;
-        this.debugEnabled = debugEnabled;
     }
 
     public Config() {
@@ -53,15 +53,16 @@ public class Config {
                 "data/indexes");
 
         this.blockDescriptorConfig = new BlockDescriptorConfig(
-                "data/block_descriptors.txt.dat",
+                "data/block_descriptors.dat",
                 true);
 
         this.scorerConfig = new ScorerConfig(true);
 
         this.documentIndexFile = "data/documents/document_index.dat";
-        this.testDir = "data_test/test";
-        this.debugDir = "data_test/debug";
-        this.debugEnabled = true;
+        this.datasetPath = "data/dataset.tsv";
+        this.testDir = "data/test";
+        this.debugDir = "data/debug";
+        this.debug = false;
     }
 
     public String getVocabularyPath() {

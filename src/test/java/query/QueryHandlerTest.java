@@ -2,7 +2,7 @@ package query;
 
 import it.unipi.dii.aide.mircv.cli.query.scorer.DAAT;
 import it.unipi.dii.aide.mircv.cli.query.scorer.MaxScore;
-import it.unipi.dii.aide.mircv.config.*;
+import it.unipi.dii.aide.mircv.config.model.*;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexTable;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;

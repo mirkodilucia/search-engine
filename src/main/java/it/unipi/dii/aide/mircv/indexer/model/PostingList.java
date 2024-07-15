@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.indexer.model;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import it.unipi.dii.aide.mircv.utils.FileHandler;

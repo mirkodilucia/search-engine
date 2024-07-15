@@ -1,6 +1,6 @@
 package indexer.merger;
 
-import it.unipi.dii.aide.mircv.config.Config;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.indexer.merger.Merger;

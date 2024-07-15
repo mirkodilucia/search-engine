@@ -1,7 +1,6 @@
 package it.unipi.dii.aide.mircv.document;
 
-import it.unipi.dii.aide.mircv.config.Config;
-import it.unipi.dii.aide.mircv.document.preprocess.FinalDocument;
+import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 
 import java.io.BufferedReader;
