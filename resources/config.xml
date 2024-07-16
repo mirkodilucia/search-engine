@@ -39,7 +39,7 @@
         </partialResultsConfig>
         <blockDescriptorConfig>
             <blockDescriptorsPath>data/blockDescriptors</blockDescriptorsPath>
-            <compressionEnabled>true</compressionEnabled>
+            <compressionEnabled>false</compressionEnabled>
         </blockDescriptorConfig>
         <documentIndexConfig>
             <documentIndexPath>data/documentIndex</documentIndexPath>
