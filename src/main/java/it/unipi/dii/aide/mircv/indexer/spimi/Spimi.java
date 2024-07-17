@@ -73,8 +73,6 @@ public class Spimi extends BaseSpimi {
 
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
-            int documentId = 1;
-            int documentLength = 0;
             boolean writeSuccess;
             while (!allDocumentsProcessed ) {
 
@@ -102,14 +100,16 @@ public class Spimi extends BaseSpimi {
 
                     // Build document index entry
                     DocumentIndexEntry documentIndexEntry = buildDocumentIndexEntry(finalDocument);
+                    this.documentsLength += documentIndexEntry.getDocumentLenght();
 
                     // Update document length
-                    this.updateDocumentLength(documentIndexEntry.getDocumentLenght());
                     documentIndexEntry.writeFile(DOCUMENT_INDEX_FILE);
 
                     // Build posting list
                     HashMap<String, PostingList> partialIndex = this.buildPostingList(finalDocument);
                     index.putAll(partialIndex);
+
+                    this.documentId++;
 
                     this.incrementDocumentId();
                 }
