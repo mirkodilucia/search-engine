@@ -89,6 +89,10 @@ public class BaseVocabularyEntry {
     public void updateMemoryIdSize(int numPostings) {
         this.memoryInfo.setDocIdSize(numPostings * 4);
         this.memoryInfo.setFrequencySize(numPostings * 4);
+
+        if (this.memoryInfo.getDocumentIdSize() < 0) {
+            System.out.println("sdasdsdas");
+        }
     }
 
     public void setDocumentIdOffset(int position) {
@@ -256,6 +260,10 @@ public class BaseVocabularyEntry {
             memoryInfo.frequencySize = buffer.getInt();
             memoryInfo.numBlocks = buffer.getInt();
             memoryInfo.blockOffset = buffer.getLong();
+
+            if (frequencySize < 0 || docIdSize < 0) {
+                System.out.println("----------------> ");
+            }
         }
 
         public void writeBufferWithMemoryInfo(VocabularyMemoryInfo memoryInfo, MappedByteBuffer buffer) {
@@ -265,6 +273,10 @@ public class BaseVocabularyEntry {
             buffer.putInt(memoryInfo.frequencySize);
             buffer.putInt(memoryInfo.numBlocks);
             buffer.putLong(memoryInfo.blockOffset);
+
+            if (frequencySize < 0 || docIdSize < 0) {
+                System.out.println("----------------> ");
+            }
 
             memoryOffset += BLOCK_DESCRIPTOR_ENTRY_BYTES;
         }

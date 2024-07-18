@@ -22,7 +22,7 @@ public class BaseSpimi implements SpimiListener {
     private boolean debugMode = false;
 
     protected int numIndexes;
-    protected int numPostings = 0;
+    protected long numPostings = 0;
     protected int documentId = 0;
 
     protected int documentsLength = 0;
@@ -94,8 +94,8 @@ public class BaseSpimi implements SpimiListener {
                             new BaseVocabularyEntry.VocabularyMemoryInfo(
                                     docsBuffer.position(),
                                     freqsBuffer.position(),
-                                    numPostings * 4,
-                                    numPostings * 4)
+                                    (int) numPostings,
+                                    (int) numPostings)
                             );
 
                     // Write the Posting List in the inverted index files
@@ -108,12 +108,12 @@ public class BaseSpimi implements SpimiListener {
                     // Update the statistics of the Vocabulary Entry, BM25Dl, BM25Tf
                     vocEntry.updateStatistics(entry);
                     vocEntry.updateBM25Statistics(entry.getBM25Tf(), entry.getBM25Dl());
-                    vocEntry.updateMemoryIdSize(numPostings * 4);
+                    vocEntry.updateMemoryIdSize((int) numPostings * 4);
 
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 
                     if(debugMode){
-                        entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", numPostings);
+                        entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
                         vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
                     }
                 }

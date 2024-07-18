@@ -68,14 +68,15 @@ public class Spimi extends BaseSpimi {
 
     }
 
-    private int spimiIteration() {
+    private void spimiIteration() {
         HashMap<String, PostingList> index = new HashMap<>();
 
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed ) {
-
+            while (!allDocumentsProcessed) {
+                int lines = 0;
+                //while (lines <= 2000) {
                 while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
@@ -85,6 +86,7 @@ public class Spimi extends BaseSpimi {
                         break;
                     }
 
+                    lines++;
                     if (line.isBlank())
                         continue;
 
@@ -120,12 +122,11 @@ public class Spimi extends BaseSpimi {
                 if (!writeSuccess) {
                     System.out.println("Couldn't write index to disk.");
                     rollback();
-                    return -1;
+                    numIndexes = -1;
+                    return;
                 }
                 index.clear();
             }
-
-            return numIndexes;
         }
         catch (FileNotFoundException e) {
             throw new RuntimeException(e);
