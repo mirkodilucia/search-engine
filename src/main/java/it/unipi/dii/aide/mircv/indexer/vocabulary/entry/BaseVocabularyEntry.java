@@ -82,8 +82,8 @@ public class BaseVocabularyEntry {
         return upperBoundInfo.BM25Dl;
     }
 
-    public void updateBM25Statistics(double bm25Tf, double bm25Dl) {
-        upperBoundInfo.updateBM25Parameters((int) bm25Dl, (int) bm25Tf);
+    public void updateBM25Statistics(int bm25Tf, int bm25Dl) {
+        upperBoundInfo.updateBM25Parameters(bm25Dl, bm25Tf);
     }
 
     public void updateMemoryIdSize(int numPostings) {
@@ -195,7 +195,7 @@ public class BaseVocabularyEntry {
         }
 
         public void computeUpperBounds(double inverseDocumentFrequency) {
-            this.maxTfIdf = (1 + Math.log10(this.maxTfIdf)) * inverseDocumentFrequency;
+            this.maxTfIdf = (1 + Math.log10(this.maxTermFrequency)) * inverseDocumentFrequency;
 
             double k1 = 1.5;
             double b = 0.75;
@@ -239,11 +239,11 @@ public class BaseVocabularyEntry {
             this.blockOffset = blockOffset;
         }
 
-        public VocabularyMemoryInfo(int documentIdPosition, int freqsPosition, int documentIdSize, int frequencyOffset) {
+        public VocabularyMemoryInfo(int documentIdPosition, int freqsPosition, int documentIdSize, int frequencySize) {
             this.docIdOffset = documentIdPosition;
             this.docIdSize = documentIdSize;
             this.frequencyOffset = freqsPosition;
-            this.frequencySize = frequencyOffset;
+            this.frequencySize = frequencySize;
         }
 
         public VocabularyMemoryInfo() {
@@ -260,10 +260,6 @@ public class BaseVocabularyEntry {
             memoryInfo.frequencySize = buffer.getInt();
             memoryInfo.numBlocks = buffer.getInt();
             memoryInfo.blockOffset = buffer.getLong();
-
-            if (frequencySize < 0 || docIdSize < 0) {
-                System.out.println("----------------> ");
-            }
         }
 
         public void writeBufferWithMemoryInfo(VocabularyMemoryInfo memoryInfo, MappedByteBuffer buffer) {
@@ -273,10 +269,6 @@ public class BaseVocabularyEntry {
             buffer.putInt(memoryInfo.frequencySize);
             buffer.putInt(memoryInfo.numBlocks);
             buffer.putLong(memoryInfo.blockOffset);
-
-            if (frequencySize < 0 || docIdSize < 0) {
-                System.out.println("----------------> ");
-            }
 
             memoryOffset += BLOCK_DESCRIPTOR_ENTRY_BYTES;
         }

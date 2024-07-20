@@ -228,7 +228,6 @@ public class PostingList {
         VocabularyEntry entry = Vocabulary.with(config).get(term);
         blocks = entry.readBlocks();
 
-
         if (blocks == null) {
             return;
         }
@@ -315,6 +314,6 @@ public class PostingList {
 
     public static class PostingStats {
         private int BM25Tf;
-        private int BM25Dl;
+        private int BM25Dl = 1;
     }
 }
