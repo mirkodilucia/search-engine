@@ -74,10 +74,10 @@ public class Spimi extends BaseSpimi {
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed) {
+            while (!allDocumentsProcessed && numIndexes < 10) {
                 int lines = 0;
-                //while (lines <= 2000) {
-                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                while (lines <= 2000) {
+                //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
                     if ((line = br.readLine()) == null) {
