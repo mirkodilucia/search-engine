@@ -76,7 +76,7 @@ public class Spimi extends BaseSpimi {
             boolean writeSuccess;
             while (!allDocumentsProcessed && numIndexes < 10) {
                 int lines = 0;
-                while (lines <= 2000) {
+                while (lines <= 100) {
                 //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)

@@ -23,7 +23,7 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
-        super(pId, documentId, documentLength, config.getDocumentIndexFile());
+        super(pId, documentId, documentLength);
         this.config = config;
     }
 

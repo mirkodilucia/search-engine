@@ -23,7 +23,7 @@ public class BaseDocumentIndexEntry {
         this.pId = pId;
     }
 
-    protected BaseDocumentIndexEntry(String pId, int documentId, int documentLength, String DOCUMENT_INDEX_FILE) {
+    protected BaseDocumentIndexEntry(String pId, int documentId, int documentLength) {
         this.pId = pId;
         this.documentId = documentId;
         this.documentLength = documentLength;
@@ -70,9 +70,10 @@ public class BaseDocumentIndexEntry {
                 return false;
 
             CharBuffer cb = StandardCharsets.UTF_8.decode(mbb);
-            if (cb.toString().split("\0").length == 0)
+            if (cb.toString().split("\0").length == 0) {
+                this.pId = null;
                 return true;
-
+            }
             this.pId = cb.toString().split("\0")[0];
 
             // Instantiate the buffer for reading other information

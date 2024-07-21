@@ -61,11 +61,11 @@ public class QueryParser {
 
     private static void showDocumentsResults(String[] documents) {
         if (documents.length == 0) {
-            System.out.println("No documents found.");
+            System.out.println("No documents found with the term provided");
             return;
         }
 
-        System.out.println("Documents found:");
+        System.out.println("Term found in these documents:");
         for (String document : Arrays.stream(documents)
                 .filter(Objects::nonNull)
                 .toArray(String[]::new)

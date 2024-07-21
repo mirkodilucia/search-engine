@@ -60,9 +60,6 @@ public class Merger {
 
                 vocabularyMemoryOffset = vocabularyEntry.writeEntry(vocabularyMemoryOffset, margerFileChannels.vocabularyChannel);
 
-                // documentsMemoryOffset += compressionResult.docsMemOffset;
-                // frequenciesMemoryOffset += compressionResult.freqsMemOffset;
-
                 vocabularySize++;
 
                 if (config.debug) {

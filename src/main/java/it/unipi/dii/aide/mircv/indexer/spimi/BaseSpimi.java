@@ -108,7 +108,7 @@ public class BaseSpimi implements SpimiListener {
                     // Update the statistics of the Vocabulary Entry, BM25Dl, BM25Tf
                     vocEntry.updateStatistics(entry);
                     vocEntry.updateBM25Statistics(entry.getBM25Tf(), entry.getBM25Dl());
-                    vocEntry.updateMemoryIdSize((int) numPostings * 4);
+                    vocEntry.updateMemoryIdSize((int) numPostings);
 
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 
