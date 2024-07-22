@@ -10,6 +10,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Objects;
 
 public class MergerWorker extends BaseMergerWorker {
 
@@ -101,6 +102,10 @@ public class MergerWorker extends BaseMergerWorker {
                                    long documentMemoryOffset, long frequenciesMemoryOffset
     ) throws IOException {
         PostingList finalList = new PostingList(config, termToProcess);
+
+        if (Objects.equals(vocabularyEntry.getTerm(), "years")) {
+            System.out.println("------->");
+        }
 
         for (int i=0; i < numIndexes; i++) {
             if (nextTerm[i] == null) {

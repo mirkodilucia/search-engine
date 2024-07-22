@@ -74,7 +74,7 @@ public class Spimi extends BaseSpimi {
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed && numIndexes < 10) {
+            while (!allDocumentsProcessed && documentId < 10) {
                 int lines = 0;
                 while (lines <= 100) {
                 //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
@@ -111,9 +111,12 @@ public class Spimi extends BaseSpimi {
                     HashMap<String, PostingList> partialIndex = this.buildPostingList(finalDocument);
                     index.putAll(partialIndex);
 
+                    if (documentId >= 982) {
+                        System.out.println(documentId);
+                    }
+
                     this.documentId++;
 
-                    this.incrementDocumentId();
                 }
 
                 writeSuccess = saveIndexToDisk(index, config.debug);
@@ -159,21 +162,27 @@ public class Spimi extends BaseSpimi {
                 continue;
             }
 
+            if (term.equals("yrh")) {
+                System.out.println("------>");
+            }
+
             PostingList postingList;
             if (!index.containsKey(term)) {
                 postingList = new PostingList(config, term);
                 index.put(term, postingList);
-                continue;
+            }else{
+                postingList = index.get(term);
             }
 
-            postingList = index.get(term);
-
             boolean updated = postingList.updateOrAddPosting(documentId);
-            if (updated) {
+            if (!updated) {
                 numPostings++;
             }
 
-            postingList.updateParameters(documentsLength);
+            int finalDocumentSize = finalDocument.getTokens().size();
+            postingList.updateParameters(finalDocumentSize);
+
+            System.out.println("end---;");
         }
 
         return index;

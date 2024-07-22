@@ -76,8 +76,7 @@ public class PostingList {
         }
 
         postings.add(new Posting(documentId, 1));
-
-        return true;
+        return false;
     }
 
     public void updateParameters(int documentsLength) {

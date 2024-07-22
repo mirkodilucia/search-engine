@@ -20,7 +20,7 @@
 
     <blockDescriptorConfig>
         <blockDescriptorsPath>data/block_descriptors.dat</blockDescriptorsPath>
-        <compressionEnabled>true</compressionEnabled>
+        <compressionEnabled>false</compressionEnabled>
     </blockDescriptorConfig>
 
     <invertedIndexConfig>

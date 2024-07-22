@@ -29,9 +29,7 @@ public class BaseDocumentIndexEntry {
         this.documentLength = documentLength;
     }
 
-    public BaseDocumentIndexEntry() {
-
-    }
+    public BaseDocumentIndexEntry() {}
 
     public long writeFile(FileChannel fc) {
         try {

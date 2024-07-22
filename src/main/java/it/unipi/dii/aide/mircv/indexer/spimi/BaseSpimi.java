@@ -113,6 +113,8 @@ public class BaseSpimi implements SpimiListener {
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 
                     if(debugMode){
+                        System.out.println("Vocabulary entry written to disk: " + vocEntry);
+
                         entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
                         vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
                     }
@@ -147,6 +149,5 @@ public class BaseSpimi implements SpimiListener {
 
     @Override
     public void incrementDocumentId() {
-        this.documentId++;
     }
 }

@@ -38,7 +38,7 @@ public class InitialDocument {
     }
 
     private void cleanText() {
-        plainText = plainText.replaceAll("[^a-zA-Z0-9]", " ");
+        plainText = plainText.replaceAll("[^a-zA-Z ]", " ");
     }
 
     private void tokenize() {
