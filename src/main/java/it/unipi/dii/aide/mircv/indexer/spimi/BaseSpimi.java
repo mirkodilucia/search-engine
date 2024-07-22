@@ -87,6 +87,9 @@ public class BaseSpimi implements SpimiListener {
 
                 long vocOffset = 0;
                 for (PostingList entry : index.values()) {
+                    if (entry.getTerm().equals("yrh")) {
+                        System.out.println("Found term yrh");
+                    }
                     // Create the Vocabulary Entry
                     VocabularyEntry vocEntry = new VocabularyEntry(
                             entry.getTerm(),
@@ -94,8 +97,8 @@ public class BaseSpimi implements SpimiListener {
                             new BaseVocabularyEntry.VocabularyMemoryInfo(
                                     docsBuffer.position(),
                                     freqsBuffer.position(),
-                                    (int) numPostings,
-                                    (int) numPostings)
+                                    (int) numPostings * 4,
+                                    (int) numPostings * 4)
                             );
 
                     // Write the Posting List in the inverted index files
@@ -108,7 +111,7 @@ public class BaseSpimi implements SpimiListener {
                     // Update the statistics of the Vocabulary Entry, BM25Dl, BM25Tf
                     vocEntry.updateStatistics(entry);
                     vocEntry.updateBM25Statistics(entry.getBM25Tf(), entry.getBM25Dl());
-                    vocEntry.updateMemoryIdSize((int) numPostings);
+                    //vocEntry.updateMemoryIdSize((int) numPostings);
 
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 

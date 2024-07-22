@@ -1,6 +1,7 @@
 package it.unipi.dii.aide.mircv.document.preprocess;
 
 import it.unipi.dii.aide.mircv.config.model.Config;
+import it.unipi.dii.aide.mircv.preprocess.PreProcessor;
 import it.unipi.dii.aide.mircv.preprocess.Stemmer;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
@@ -12,6 +13,7 @@ public class InitialDocument {
 
     private final String docId;
     private final Stemmer stemmer;
+    private final PreProcessor preProcessor = PreProcessor.getInstance();
     private final Config config;
 
     String plainText;
@@ -37,33 +39,25 @@ public class InitialDocument {
         this.plainText = content;
     }
 
-    private void cleanText() {
-        plainText = plainText.replaceAll("[^a-zA-Z ]", " ");
-    }
-
-    private void tokenize() {
-        tokens = plainText.split("\\s+");
-    }
 
     public FinalDocument process() {
-        this.cleanText();
-        this.tokenize();
+        plainText = preProcessor.cleanText(plainText);
+        tokens = stemmer.tokenize(plainText);
 
-        /** TODO: Implement the following methods **/
         if (config.getPreprocessConfig().isStemmerEnabled()) {
-         removeStopwords();
-         stem();
+            tokens = removeStopwords(tokens);
+            stem(tokens);
         }
 
         return new FinalDocument(docId, tokens);
     }
 
-    public void removeStopwords() {
-        this.relevantTokens = stemmer.removeStopwords(this.tokens);
+    public String[] removeStopwords(String[] tokens) {
+        return stemmer.removeStopwords(tokens);
     }
 
-    public void stem() {
-        this.stems = stemmer.getStems(this.relevantTokens);
+    public String[] stem(String[] tokens) {
+        return stemmer.getStems(tokens);
     }
 
 
