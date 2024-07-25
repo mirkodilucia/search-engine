@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.indexer.vocabulary.entry;
 
 import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
+import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
 
@@ -158,9 +159,9 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     }
 
     public void updateStatistics(PostingList entry) {
-        for (int i = 0; i < entry.getPostings().size(); i++) {
-            if (this.upperBoundInfo.maxTermFrequency < entry.getPostings().get(i).getFrequency()) {
-                this.upperBoundInfo.maxTermFrequency = entry.getPostings().get(i).getFrequency();
+        for (Posting posting: entry.getPostings()) {
+            if (this.upperBoundInfo.maxTermFrequency < posting.getFrequency()) {
+                this.upperBoundInfo.maxTermFrequency = posting.getFrequency();
             }
 
             this.documentFrequency++;

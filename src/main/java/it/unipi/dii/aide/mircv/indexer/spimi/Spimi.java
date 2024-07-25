@@ -34,13 +34,13 @@ public class Spimi extends BaseSpimi {
     public int executeSpimi() {
         numPostings = 0;
 
-        spimiIteration();
+        int documents = spimiIteration();
 
-        this.updateIndexState();
+        this.updateIndexState(documents);
         return numIndexes;
     }
 
-    private void updateIndexState() {
+    private void updateIndexState(int documentId) {
         if(!DocumentIndexState.updateStatistics(documentId - 1,
                 documentsLength
         )) {
@@ -68,8 +68,10 @@ public class Spimi extends BaseSpimi {
 
     }
 
-    private void spimiIteration() {
+    private int spimiIteration() {
         HashMap<String, PostingList> index = new HashMap<>();
+
+        int documentId = 0;
 
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
@@ -101,22 +103,21 @@ public class Spimi extends BaseSpimi {
                         continue;
 
                     // Build document index entry
-                    DocumentIndexEntry documentIndexEntry = buildDocumentIndexEntry(finalDocument);
+                    DocumentIndexEntry documentIndexEntry = buildDocumentIndexEntry(finalDocument, documentId);
                     this.documentsLength += documentIndexEntry.getDocumentLenght();
 
                     // Update document length
                     documentIndexEntry.writeFile(DOCUMENT_INDEX_FILE);
 
                     // Build posting list
-                    HashMap<String, PostingList> partialIndex = this.buildPostingList(finalDocument);
+                    HashMap<String, PostingList> partialIndex = this.buildPostingList(index, finalDocument, documentId);
                     index.putAll(partialIndex);
 
                     if (documentId >= 982) {
                         System.out.println(documentId);
                     }
 
-                    this.documentId++;
-
+                    documentId++;
                 }
 
                 writeSuccess = saveIndexToDisk(index, config.debug);
@@ -126,9 +127,8 @@ public class Spimi extends BaseSpimi {
                     System.out.println("Couldn't write index to disk.");
                     rollback();
                     numIndexes = -1;
-                    return;
+                    return -1;
                 }
-                index.clear();
             }
         }
         catch (FileNotFoundException e) {
@@ -136,6 +136,8 @@ public class Spimi extends BaseSpimi {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return documentId;
     }
 
     private void rollback() {
@@ -145,7 +147,7 @@ public class Spimi extends BaseSpimi {
         FileHandler.removeFile(config.getDocumentIndexFile());
     }
 
-        private DocumentIndexEntry buildDocumentIndexEntry(FinalDocument finalDocument) {
+        private DocumentIndexEntry buildDocumentIndexEntry(FinalDocument finalDocument, int documentId) {
         int documentsLength = finalDocument.getTokens().size();
         return new DocumentIndexEntry(
                 this.config,
@@ -154,16 +156,10 @@ public class Spimi extends BaseSpimi {
                 documentsLength);
     }
 
-    private HashMap<String, PostingList> buildPostingList(FinalDocument finalDocument) {
-        HashMap<String, PostingList> index = new HashMap<>();
-
+    private HashMap<String, PostingList> buildPostingList(HashMap<String, PostingList> index, FinalDocument finalDocument, int documentId) {
         for (String term : finalDocument.getTokens()) {
             if (term.isEmpty() || term.isBlank()) {
                 continue;
-            }
-
-            if (term.equals("yrh")) {
-                System.out.println("------>");
             }
 
             PostingList postingList;
@@ -181,8 +177,6 @@ public class Spimi extends BaseSpimi {
 
             int finalDocumentSize = finalDocument.getTokens().size();
             postingList.updateParameters(finalDocumentSize);
-
-            System.out.println("end---;");
         }
 
         return index;

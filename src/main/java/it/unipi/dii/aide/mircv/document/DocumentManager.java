@@ -40,7 +40,7 @@ public class DocumentManager {
                 document.append(line).append("\n");
                 lineCount++;
                 if (lineCount >= 200) {
-                    String documentId = "doc" + iteration;
+                    String documentId = "" + iteration;
                     documents.add(
                             new InitialDocument(configuration, documentId, document.toString())
                     );

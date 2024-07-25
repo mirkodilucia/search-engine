@@ -23,7 +23,6 @@ public class BaseSpimi implements SpimiListener {
 
     protected int numIndexes;
     protected long numPostings = 0;
-    protected int documentId = 0;
 
     protected int documentsLength = 0;
     protected boolean allDocumentsProcessed;
@@ -87,9 +86,6 @@ public class BaseSpimi implements SpimiListener {
 
                 long vocOffset = 0;
                 for (PostingList entry : index.values()) {
-                    if (entry.getTerm().equals("yrh")) {
-                        System.out.println("Found term yrh");
-                    }
                     // Create the Vocabulary Entry
                     VocabularyEntry vocEntry = new VocabularyEntry(
                             entry.getTerm(),
