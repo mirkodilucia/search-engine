@@ -49,7 +49,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         String key;
 
         while (start <= end) {
-            mid = (start + end) / 2;
+            mid = start + (end - start) / 2;
 
             entry.readVocabularyFromDisk(VocabularyEntry.ENTRY_SIZE * mid, VOCABULARY_PATH);
             key = entry.getTerm();
@@ -66,7 +66,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
             end = mid - 1;
         }
 
-        return entry;
+        return null;
     }
 
     public boolean readFromDisk(){

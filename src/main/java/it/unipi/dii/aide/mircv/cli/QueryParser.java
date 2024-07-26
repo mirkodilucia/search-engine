@@ -60,7 +60,7 @@ public class QueryParser {
     }
 
     private static void showDocumentsResults(String[] documents) {
-        if (documents.length == 0) {
+        if (documents == null || documents.length == 0) {
             System.out.println("No documents found with the term provided");
             return;
         }

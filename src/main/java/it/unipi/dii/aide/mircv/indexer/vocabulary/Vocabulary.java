@@ -12,7 +12,7 @@ import java.nio.channels.FileChannel;
 public class Vocabulary extends BaseVocabulary {
 
     private static Vocabulary instance = null;
-    private final static LruCache<String, VocabularyEntry> entries= new LruCache<>(1000);
+    private final static LruCache<String, VocabularyEntry> entries = new LruCache<>(1000);
 
     private Vocabulary(String vocabularyPath, String blockDescriptorsPath) {
         super(vocabularyPath, blockDescriptorsPath);
