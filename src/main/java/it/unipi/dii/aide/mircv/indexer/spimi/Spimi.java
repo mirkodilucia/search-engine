@@ -76,10 +76,10 @@ public class Spimi extends BaseSpimi {
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed && documentId < 10) {
+            while (!allDocumentsProcessed) {
                 int lines = 0;
-                while (lines <= 100) {
-                //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                //while (lines <= 100) {
+                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
                     if ((line = br.readLine()) == null) {
@@ -129,6 +129,8 @@ public class Spimi extends BaseSpimi {
                     numIndexes = -1;
                     return -1;
                 }
+
+                index.clear();
             }
         }
         catch (FileNotFoundException e) {
