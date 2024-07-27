@@ -13,6 +13,7 @@ import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.Vocabulary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.PriorityQueue;
 

@@ -63,7 +63,7 @@ public class Merger {
                 vocabularySize++;
 
                 if (config.debug) {
-                    //System.out.println("Vocabulary entry written to disk: " + vocabularyEntry);
+                    System.out.println("Vocabulary entry written to disk: " + vocabularyEntry);
 
                     mergedPostingList.debugSaveToDisk("debugDOCIDS.txt", "debugFREQS.txt", maxNumPostings);
                     vocabularyEntry.debugSaveToDisk("debugVOCABULARY.txt");

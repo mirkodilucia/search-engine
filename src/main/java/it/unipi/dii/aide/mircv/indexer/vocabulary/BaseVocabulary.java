@@ -55,7 +55,7 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
             key = entry.getTerm();
 
             if (key.equals(term)) {
-                break;
+                return entry;
             }
 
             if (key.compareTo(term) < 0) {

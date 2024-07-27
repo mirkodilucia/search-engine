@@ -76,10 +76,10 @@ public class Spimi extends BaseSpimi {
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed) {
+            while (!allDocumentsProcessed && documentId < 10) {
                 int lines = 0;
-                //while (lines <= 100) {
-                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                while (lines < 200) {
+                //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
                     if ((line = br.readLine()) == null) {
@@ -113,11 +113,11 @@ public class Spimi extends BaseSpimi {
                     HashMap<String, PostingList> partialIndex = this.buildPostingList(index, finalDocument, documentId);
                     index.putAll(partialIndex);
 
-                    if (documentId >= 982) {
-                        System.out.println(documentId);
-                    }
-
                     documentId++;
+
+                    if((documentId % 1_000) == 0 ){
+                        System.out.println("at docid: "+documentId);
+                    }
                 }
 
                 writeSuccess = saveIndexToDisk(index, config.debug);
@@ -130,7 +130,7 @@ public class Spimi extends BaseSpimi {
                     return -1;
                 }
 
-                index.clear();
+                //index.clear();
             }
         }
         catch (FileNotFoundException e) {

@@ -103,10 +103,6 @@ public class MergerWorker extends BaseMergerWorker {
     ) throws IOException {
         PostingList finalList = new PostingList(config, termToProcess);
 
-        if (Objects.equals(vocabularyEntry.getTerm(), "years")) {
-            System.out.println("------->");
-        }
-
         for (int i=0; i < numIndexes; i++) {
             if (nextTerm[i] == null) {
                 continue;
