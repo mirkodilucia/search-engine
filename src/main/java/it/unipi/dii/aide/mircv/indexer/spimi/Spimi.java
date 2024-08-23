@@ -23,7 +23,7 @@ public class Spimi extends BaseSpimi {
 
     public Spimi(Config config) {
         super(config);
-        MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 0.2);
+        MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 80 / 100);
     }
 
     public static Spimi with(Config config) {
@@ -76,10 +76,10 @@ public class Spimi extends BaseSpimi {
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed && documentId < 10) {
+            while (!allDocumentsProcessed) {
                 int lines = 0;
-                while (lines < 200) {
-                //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                //while (lines < 200) {
+                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
                     if ((line = br.readLine()) == null) {
@@ -130,7 +130,7 @@ public class Spimi extends BaseSpimi {
                     return -1;
                 }
 
-                //index.clear();
+                index.clear();
             }
         }
         catch (FileNotFoundException e) {
