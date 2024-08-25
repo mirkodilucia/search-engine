@@ -58,7 +58,7 @@ public class QueryHandler {
                 break;
 
             int pollingValue = priorityQueue.poll().getValue();
-            output[i] = documentIndex.get(pollingValue).getPId();
+            output[i] = documentIndex.getPId(pollingValue);
             i--;
         }
         return output;

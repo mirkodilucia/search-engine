@@ -50,4 +50,7 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         return documentIndexEntry.getDocumentLenght();
     }
 
+    public String getPId(int docid) {
+        return this.get(docid).getPId();
+    }
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
+    <compressedReading>true</compressedReading>
+    <compressedCollectionFile>data/collection.tar.gz</compressedCollectionFile>
+
     <debug>true</debug>
     <debugDir>data/debug</debugDir>
     <testDir>data/test</testDir>
@@ -20,7 +23,7 @@
 
     <blockDescriptorConfig>
         <blockDescriptorsPath>data/block_descriptors.dat</blockDescriptorsPath>
-        <compressionEnabled>false</compressionEnabled>
+        <compressionEnabled>true</compressionEnabled>
     </blockDescriptorConfig>
 
     <invertedIndexConfig>
@@ -35,7 +38,7 @@
     </partialResultsConfig>
 
     <scorerConfig>
-        <maxScoreEnabled>true</maxScoreEnabled>
+        <maxScoreEnabled>false</maxScoreEnabled>
     </scorerConfig>
 
 </Config>

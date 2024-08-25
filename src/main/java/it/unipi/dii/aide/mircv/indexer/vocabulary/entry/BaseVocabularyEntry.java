@@ -128,7 +128,7 @@ public class BaseVocabularyEntry {
     }
 
     public void computeIDF() {
-        this.inverseDocumentFrequency = this.upperBoundInfo.computeIDF();
+        this.inverseDocumentFrequency = Math.log10((double) DocumentIndexState.getCollectionSize() / documentFrequency);
     }
 
     //
@@ -180,10 +180,6 @@ public class BaseVocabularyEntry {
                 this.BM25Tf = tf;
                 this.BM25Dl = length;
             }
-        }
-
-        public double computeIDF() {
-            return Math.log10((double) BM25Dl / (double) BM25Tf);
         }
 
         public void setBM25Tf(int bm25Tf) {

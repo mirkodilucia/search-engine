@@ -41,8 +41,9 @@ public class Indexer {
 
             System.out.println("Total time: " + fullTime / 1000 + " seconds");
 
-        }catch (IOException e){
+            merger.printPerformanceStatistics();
 
+        }catch (IOException e){
             e.printStackTrace();
         }
     }

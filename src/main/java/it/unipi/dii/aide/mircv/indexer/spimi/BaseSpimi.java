@@ -6,6 +6,7 @@ import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.VocabularyEntry;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
+import it.unipi.dii.aide.mircv.utils.MemoryUtils;
 
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -50,7 +51,7 @@ public class BaseSpimi implements SpimiListener {
         System.out.println("Saving index to disk...");
 
         if (index.isEmpty()) {
-            System.out.println("Index is empty, nothing to save.");
+            System.out.println("Index is empty, nothing to save");
             return true;
         }
 
@@ -112,10 +113,10 @@ public class BaseSpimi implements SpimiListener {
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 
                     if(debugMode){
-                        System.out.println("Vocabulary entry written to disk: " + vocEntry);
+                        // System.out.println("Vocabulary entry written to disk: " + vocEntry);
 
-                        entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
-                        vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
+                        //entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
+                        //vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
                     }
                 }
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class InitialDocument {
 
-    private final static String RAW_COLLECTION_PATH = "data/raw_collection";
+    public final static String RAW_COLLECTION_PATH = "data/raw_collection";
 
     private final String docId;
     private final Stemmer stemmer;
@@ -60,7 +60,6 @@ public class InitialDocument {
         return stemmer.getStems(tokens);
     }
 
-
     public void writeFileString() {
         try {
             this.process();
@@ -85,6 +84,5 @@ public class InitialDocument {
 
         return null;
     }
-
 
 }

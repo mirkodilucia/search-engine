@@ -14,27 +14,27 @@ public class PreProcessor {
     private static final String REPLACEMENT = " ";
 
     public String cleanUrl(String input) {
-        return cleanByRegex(input, URL_MATCHER, REPLACEMENT).trim();
+        return cleanByRegex(input, URL_MATCHER, REPLACEMENT);
     }
 
     public String cleanHtmlTags(String input) {
-        return cleanByRegex(input, HTML_TAGS_MATCHER, REPLACEMENT).trim();
+        return cleanByRegex(input, HTML_TAGS_MATCHER, REPLACEMENT);
     }
 
     public String cleanNonDigit(String input) {
-        return cleanByRegex(input, NON_DIGIT_AND_PUNCTUATION_MATCHER, REPLACEMENT).trim();
+        return cleanByRegex(input, NON_DIGIT_AND_PUNCTUATION_MATCHER, REPLACEMENT);
     }
 
     public String cleanConsecutiveLetters(String input) {
-        return input.replaceAll(CONSECUTIVE_LETTERS_MATCHER, "$1$1").trim();
+        return cleanByRegex(input, CONSECUTIVE_LETTERS_MATCHER, "$1$1");
     }
 
     public String cleanMultipleSpaces(String input) {
-        return input.replaceAll(MULTIPLE_SPACE_MATCHER, " ").trim();
+        return cleanByRegex(input, MULTIPLE_SPACE_MATCHER, " ");
     }
 
     public String addSpaceToCamelCase(String input) {
-        return input.replaceAll(CAMEL_CASE_MATCHER, REPLACEMENT).trim();
+        return cleanByRegex(input, CAMEL_CASE_MATCHER, REPLACEMENT);
     }
 
     public String cleanByRegex(String input, String regexPattern, String replacement) {
@@ -51,8 +51,7 @@ public class PreProcessor {
         result = cleanMultipleSpaces(result);
         result = addSpaceToCamelCase(result);
 
-
-        return result;
+        return result.trim();
     }
 
     private PreProcessor() {}

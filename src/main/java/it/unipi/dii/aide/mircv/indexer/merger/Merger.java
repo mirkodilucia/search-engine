@@ -35,6 +35,12 @@ public class Merger {
         return new Merger(config);
     }
 
+    public void printPerformanceStatistics() {
+        System.out.println("Inverted index's memory occupancy:");
+        System.out.println("\t> docids: "+ documentsMemoryOffset + "bytes");
+        System.out.println("\t> freqs: "+ frequenciesMemoryOffset + "bytes");
+    }
+
     public boolean mergeIndexes(int indexes) {
         try {
             MergerFileChannel margerFileChannels = MergerFileChannel.open(config);

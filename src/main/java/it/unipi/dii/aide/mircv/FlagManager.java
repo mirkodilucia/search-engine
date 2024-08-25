@@ -25,23 +25,23 @@ public class FlagManager {
         }
 
         if (booleanFlags.containsKey("--debug")) {
-            config.debug = Boolean.parseBoolean(flags.get("--debug"));
+            config.debug = booleanFlags.get("--debug");
         }
 
         if(booleanFlags.containsKey("--compressed-reading")) {
-            config.compressedReading = Boolean.parseBoolean(flags.get("--compressed-reading"));
+            config.compressedReading = booleanFlags.get("--compressed-reading");
         }
 
         if (booleanFlags.containsKey("--stem")) {
-            config.getPreprocessConfig().setStemStopRemovalEnabled(Boolean.parseBoolean(flags.get("--stem")));
+            config.getPreprocessConfig().setStemStopRemovalEnabled(booleanFlags.get("--stem"));
         }
 
         if (booleanFlags.containsKey("--compression")) {
-            config.getBlockDescriptorConfig().setCompressionEnabled(Boolean.parseBoolean(flags.get("--compression")));
+            config.getBlockDescriptorConfig().setCompressionEnabled(booleanFlags.get("--compression"));
         }
 
         if (booleanFlags.containsKey("--maxScore")) {
-            config.scorerConfig.setMaxScoreEnabled(Boolean.parseBoolean(flags.get("--maxScore")));
+            config.scorerConfig.setMaxScoreEnabled(booleanFlags.get("--maxScore"));
         }
 
         return config;

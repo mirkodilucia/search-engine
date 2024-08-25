@@ -3,6 +3,9 @@
     <element name="Config">
         <complexType>
             <sequence>
+                <element name="compressedReading" type="boolean"/>
+                <element name="compressedCollectionFile" type="string"/>
+
                 <element name="debug" type="boolean"/>
                 <element name="debugDir" type="string" />
                 <element name="testDir" type="string" />

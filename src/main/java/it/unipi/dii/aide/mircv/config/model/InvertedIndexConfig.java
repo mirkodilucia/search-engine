@@ -24,11 +24,11 @@ public class InvertedIndexConfig {
     }
 
     public String getPartialIndexDocumentsPath(int i) {
-        return invertedIndexDocId + "_" + i + ".dat";
+        return invertedIndexDocId + "_" + i; // + ".dat";
     }
 
     public String getPartialIndexFrequenciesPath(int i) {
-        return invertedIndexFreqs + "_" + i + ".dat";
+        return invertedIndexFreqs + "_" + i; // + ".dat";
     }
 
     public void cleanUp() {

@@ -176,7 +176,7 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         this.memoryInfo.setDocumentIdOffset(documentMemoryOffset);
         this.memoryInfo.setFrequencyOffset(frequencyMemOffset);
 
-        this.inverseDocumentFrequency = (int) Math.log10(DocumentIndexState.getCollectionSize() / (double) this.documentFrequency);
+        //this.inverseDocumentFrequency = (int) Math.log10(DocumentIndexState.getCollectionSize() / (double) this.documentFrequency);
         this.upperBoundInfo.computeUpperBounds(inverseDocumentFrequency);
     }
 

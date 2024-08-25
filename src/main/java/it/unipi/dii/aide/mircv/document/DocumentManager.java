@@ -3,11 +3,11 @@ package it.unipi.dii.aide.mircv.document;
 import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.document.preprocess.InitialDocument;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.unipi.dii.aide.mircv.document.preprocess.InitialDocument.RAW_COLLECTION_PATH;
 
 public class DocumentManager {
 
@@ -22,7 +22,43 @@ public class DocumentManager {
     }
 
     public void start() throws IOException {
-        List<InitialDocument> documents = this.loadDocumentsFromTSV("data/collection.tsv");
+        //loadFile("data/collection.tsv");
+        //List<InitialDocument> documents = this.loadDocumentsFromTSV("data/collection.tsv");
+
+    }
+
+    private void loadFile(String filePath) {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            StringBuilder builder = new StringBuilder();
+
+            while (true) {
+                if ((line = br.readLine()) == null) {
+                    break;
+                }
+
+
+                String[] split = line.split("\t");
+                builder.append(line);
+                builder.append("\n");
+
+                if (split[0].equals("20000")) {
+                    // Write file with builder content
+
+                    File file = new File(RAW_COLLECTION_PATH + "/collections_20000.tsv");
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                        writer.write(builder.toString());
+                    }
+
+                    break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

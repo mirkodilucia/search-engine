@@ -6,6 +6,7 @@ import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class Stemmer {
@@ -16,7 +17,7 @@ public class Stemmer {
     private static final int THRESHOLD = 64;
     private static Stemmer INSTANCE;
 
-    private static final ArrayList<String> stopwords = new ArrayList<>();
+    private static HashMap<String, Integer> stopwords = new HashMap<>();
     private final Config configuration;
 
     private Stemmer(Config configuration) {
@@ -28,7 +29,7 @@ public class Stemmer {
         ArrayList<String> meaningfulToken = new ArrayList<>();
 
         for (String word : words) {
-            if (stopwords.contains(word) || word.length() > THRESHOLD) {
+            if (stopwords.containsKey(word) || word.length() > THRESHOLD) {
                 continue;
             }
 
@@ -40,13 +41,12 @@ public class Stemmer {
 
     public String[] getStems(String[] words) {
         PorterStemmer stemmer = new PorterStemmer();
-        ArrayList<String> stemmedTokens = new ArrayList<>();
 
-        for (String word : words) {
-            stemmedTokens.add(stemmer.stemWord(word));
+        for (int i=0; i<words.length; i++) {
+            words[i] = stemmer.stemWord(words[i]);
         }
 
-        return stemmedTokens.toArray(new String[0]);
+        return words;
     }
 
     public String[] tokenize(String text) {
@@ -73,7 +73,7 @@ public class Stemmer {
         }
 
         try {
-            stopwords.addAll(FileHandler.readStopwordLines(configuration.getPreprocessConfig().getStopwordsPath()));
+            stopwords = FileHandler.readStopwordLines(configuration.getPreprocessConfig().getStopwordsPath());
         } catch (Exception e) {
             e.printStackTrace();
         }

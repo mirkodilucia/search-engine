@@ -138,9 +138,7 @@ public class DAAT extends Scorer {
                 // System.out.println("heap is not full\t");
                 // insert the document and its score in the MinHeap
                 topKDocuments.add(new AbstractMap.SimpleEntry<>(documentScore, documentToProcess));
-            }
-
-            if(topKDocuments.size() == k) {
+            } else {
                 if (topKDocuments.peek() != null && documentScore > topKDocuments.peek().getKey()) {
 
                     topKDocuments.poll();

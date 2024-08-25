@@ -6,6 +6,7 @@ import java.nio.file.*;
 import java.nio.channels.*;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FileHandler {
 
@@ -79,8 +80,8 @@ public class FileHandler {
         }
     }
 
-    public static Collection<String> readStopwordLines(String stopwordPath) {
-        Collection<String> stopwords = new ArrayList<>();
+    public static HashMap<String, Integer> readStopwordLines(String stopwordPath) {
+        HashMap<String, Integer> stopwords = new HashMap<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(stopwordPath), StandardCharsets.UTF_8)) {
             for (String line; (line = br.readLine()) != null; ) {
@@ -88,7 +89,7 @@ public class FileHandler {
                     continue;
 
                 //add word to stopwords list
-                stopwords.add(line);
+                stopwords.put(line, 1);
             }
         } catch (Exception e) {
             e.printStackTrace();

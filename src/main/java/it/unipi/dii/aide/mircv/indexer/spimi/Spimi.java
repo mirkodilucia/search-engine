@@ -8,6 +8,7 @@ import it.unipi.dii.aide.mircv.document.table.DocumentIndexEntry;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
 import it.unipi.dii.aide.mircv.utils.FileHandler;
+import it.unipi.dii.aide.mircv.utils.MemoryUtils;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
@@ -19,11 +20,11 @@ public class Spimi extends BaseSpimi {
 
     private final static String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
-    private static long MEMORY_LIMIT;
+    public static long MEMORY_LIMIT;
 
     public Spimi(Config config) {
         super(config);
-        MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 80 / 100);
+        MEMORY_LIMIT = Math.round(Runtime.getRuntime().totalMemory() * 20 / 100);
     }
 
     public static Spimi with(Config config) {
@@ -69,17 +70,17 @@ public class Spimi extends BaseSpimi {
     }
 
     private int spimiIteration() {
-        HashMap<String, PostingList> index = new HashMap<>();
-
         int documentId = 0;
 
         try (BufferedReader br = loadBuffer()) {
             boolean allDocumentsProcessed = false;
             boolean writeSuccess;
-            while (!allDocumentsProcessed) {
+            while (!allDocumentsProcessed && documentId < 10) {
                 int lines = 0;
-                //while (lines < 200) {
-                while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
+                HashMap<String, PostingList> index = new HashMap<>();
+
+                while (lines < 200) {
+                //while (Runtime.getRuntime().freeMemory() > MEMORY_LIMIT) {
                     String line;
                     // if we reach the end of file (br.readline() -> null)
                     if ((line = br.readLine()) == null) {
@@ -110,13 +111,13 @@ public class Spimi extends BaseSpimi {
                     documentIndexEntry.writeFile(DOCUMENT_INDEX_FILE);
 
                     // Build posting list
-                    HashMap<String, PostingList> partialIndex = this.buildPostingList(index, finalDocument, documentId);
-                    index.putAll(partialIndex);
+                    this.buildPostingList(index, finalDocument, documentId);
 
                     documentId++;
 
                     if((documentId % 1_000) == 0 ){
                         System.out.println("at docid: "+documentId);
+                        MemoryUtils.getMemoryInfo();
                     }
                 }
 

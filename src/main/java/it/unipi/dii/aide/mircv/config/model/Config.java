@@ -6,6 +6,8 @@ import java.io.File;
 
 public class Config {
     public boolean compressedReading;
+    private String compressedCollectionFile;
+
     public boolean debug;
     private final String debugDir;
     private final String testDir;
@@ -25,7 +27,7 @@ public class Config {
     public PartialResultsConfig partialResultsConfig;
 
     public ScorerConfig scorerConfig;
-    private String compressedCollectionFile;
+
 
     public Config(String documentIndexFile, String datasetPath, String testDir, String debugDir, boolean debugEnabled) {
         super();
