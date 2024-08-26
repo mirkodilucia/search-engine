@@ -62,7 +62,7 @@ public class Merger {
                 vocabularyEntry.computeBlockInformation();
                 int maxNumPostings = vocabularyEntry.getMaxNumberOfPostingInBlock();
 
-                MergerFileChannel.CompressionResult compressionResult = iteratePostingList(margerFileChannels, vocabularyEntry, mergedPostingList, maxNumPostings);
+                iteratePostingList(margerFileChannels, vocabularyEntry, mergedPostingList, maxNumPostings);
 
                 vocabularyMemoryOffset = vocabularyEntry.writeEntry(vocabularyMemoryOffset, margerFileChannels.vocabularyChannel);
 
@@ -161,7 +161,7 @@ public class Merger {
     }
     private MergerFileChannel.CompressionResult processCompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel mergerFileChannels) {
         int postingInBlock = 0;
-        int nPostingsToBeWritten = mergerPostingIteration.nPostingsToBeWritten * 4;
+        int nPostingsToBeWritten = mergerPostingIteration.nPostingsToBeWritten;
 
         MergerFileChannel.CompressionResult result = new MergerFileChannel.CompressionResult();
 
@@ -201,6 +201,8 @@ public class Merger {
 
                     documentsMemoryOffset += compressedDocs.length;
                     frequenciesMemoryOffset += compressedFreqs.length;
+
+                    break;
                 }
             }
 
@@ -212,7 +214,5 @@ public class Merger {
 
     public void unset() {
         MergerWorker.unset(config);
-
-
     }
 }

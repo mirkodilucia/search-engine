@@ -22,7 +22,7 @@ public class DocumentManager {
     }
 
     public void start() throws IOException {
-        //loadFile("data/collection.tsv");
+        loadFile("data/collection.tsv");
         //List<InitialDocument> documents = this.loadDocumentsFromTSV("data/collection.tsv");
 
     }
@@ -43,7 +43,7 @@ public class DocumentManager {
                 builder.append(line);
                 builder.append("\n");
 
-                if (split[0].equals("20000")) {
+                if (split[0].equals("1000000")) {
                     // Write file with builder content
 
                     File file = new File(RAW_COLLECTION_PATH + "/collections_20000.tsv");

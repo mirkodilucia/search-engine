@@ -23,15 +23,14 @@ public class Indexer {
             System.out.println("Indexing started with parameters: " + Arrays.toString(args));
             long start = System.currentTimeMillis();
 
-            int spimiIndex = Spimi.with(config).executeSpimi();
+            //int spimiIndex = Spimi.with(config).executeSpimi();
 
             long spimiTime = System.currentTimeMillis();
             formatTime(start, spimiTime, "Spimi");
 
             Merger merger = Merger.with(config);
 
-
-            merger.mergeIndexes(spimiIndex);
+            merger.mergeIndexes(10);
 
             long stop = System.currentTimeMillis();
             formatTime(spimiTime, stop, "Merging");

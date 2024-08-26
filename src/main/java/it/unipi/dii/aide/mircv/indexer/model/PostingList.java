@@ -197,7 +197,7 @@ public class PostingList {
 
     public int getPostingsToBeWritten(int i, int maxNumPostings) {
         int alreadyWrittenPostings = i * maxNumPostings;
-        return (Math.min((this.getPostings().size() - alreadyWrittenPostings), maxNumPostings));
+        return Math.min((this.getPostings().size() - alreadyWrittenPostings), maxNumPostings);
     }
 
     @Override

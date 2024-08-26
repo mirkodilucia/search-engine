@@ -292,10 +292,6 @@ public class BaseVocabularyEntry {
                 this.numBlocks = (int) Math.ceil(Math.sqrt(documentFrequency));
         }
 
-        public int getMaxNumberOfPostingInBlock(int documentFrequency) {
-            return (int) Math.ceil(documentFrequency / (double) this.numBlocks);
-        }
-
         public int getHowManyBlockToWrite() {
             return numBlocks;
         }
@@ -324,6 +320,10 @@ public class BaseVocabularyEntry {
             }
 
             return blocks;
+        }
+
+        public int getMaxNumberOfPostingInBlock(int documentFrequency) {
+            return (int) Math.ceil(documentFrequency / (double) this.numBlocks);
         }
 
         public void setDocumentIdOffset(long docummentsMemOffset) {
