@@ -9,17 +9,32 @@ import java.nio.file.StandardOpenOption;
 
 public class DocumentIndexEntry extends BaseDocumentIndexEntry {
 
+    private static FileChannel documentIndexFileChannel;
     private Config config;
 
     protected String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
-    public DocumentIndexEntry(Config config, int documentId) {
+    public DocumentIndexEntry(Config config, int documentId, String documentIndexFile) {
         super(config.getDocumentIndexFile());
 
         DOCUMENT_INDEX_FILE = config.getDocumentIndexFile();
 
         this.config = config;
         this.documentId = documentId;
+
+        if (documentIndexFileChannel != null && documentIndexFileChannel.isOpen()) {
+            return;
+        }
+        try {
+            documentIndexFileChannel = FileChannelHandler.open(
+                    documentIndexFile,
+                    StandardOpenOption.READ,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.CREATE
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public DocumentIndexEntry(Config config, String pId, int documentId, int documentLength) {
@@ -48,19 +63,8 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         return "document:" + this.documentId + ":pid:" + this.pId + ":len:" + this.documentLength;
     }
 
-    public boolean readFile(long memoryOffset, String documentIndexFile) {
-        try (
-                FileChannel documentIndexFileChannel = FileChannelHandler.open(
-                        documentIndexFile,
-                        StandardOpenOption.READ,
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.CREATE
-                )) {
-                return this.readFile(memoryOffset, documentIndexFileChannel);
-        }catch (IOException ex) {
-            ex.printStackTrace();
-            return false;
-        }
+    public boolean readFile(long memoryOffset) {
+        return this.readFile(memoryOffset, documentIndexFileChannel);
     }
 
     public long writeFile(String documentIndexFile) {

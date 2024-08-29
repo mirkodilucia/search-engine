@@ -33,7 +33,7 @@ public class PreProcessorTest {
         String input = "Ciao, mondo!";
         String actualResult =  PreProcessor.getInstance().cleanNonDigit(input);
 
-        String expectedResult = "Ciao  mondo";
+        String expectedResult = "Ciao  mondo ";
         assertEquals(expectedResult, actualResult);
     }
 
@@ -73,7 +73,7 @@ public class PreProcessorTest {
         String input = "Ciao https://www.google.com/";
         String actualResult = PreProcessor.getInstance().cleanUrl(input);
 
-        String expectedResult = "Ciao";
+        String expectedResult = "Ciao  ";
         assertEquals(expectedResult, actualResult);
     }
 

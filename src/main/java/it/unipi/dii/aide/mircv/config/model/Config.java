@@ -42,7 +42,7 @@ public class Config {
     public Config() {
         this.vocabularyConfig = new VocabularyConfig(
                 "data/vocabulary.dat",
-                "data/documentIndexState.dat"
+                "data/document_index_state.dat"
         );
         this.preprocessConfig = new PreprocessConfig(
                 "data_resources/stopwords.dat",
@@ -61,7 +61,7 @@ public class Config {
 
         this.blockDescriptorConfig = new BlockDescriptorConfig(
                 "data/block_descriptors.dat",
-                true);
+                false);
 
         this.compressedReading = false;
         this.compressedCollectionFile = "data/compressed_collection.tar.gz";

@@ -29,7 +29,7 @@ public class Performances
     private static final String TREC_EVAL_RESULTS_PATH = "data/queries/search_engine_results_" + "bm25" + ".txt";
 
     private static final int k = 100;
-    private static final boolean maxScore = false;
+    private static final boolean maxScore = true;
     private static final boolean isTrecEvalTest = false;
 
     private static boolean storeResults(String topicId, PriorityQueue<Map.Entry<Double, Integer>> priorityQueue)
@@ -59,7 +59,7 @@ public class Performances
         config = new Config();
 
         System.out.println("Begin");
-        QueryHandler queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE);
+        QueryHandler queryHandler = QueryHandler.with(config);
         boolean success = queryHandler.setup();
 
         if (!success)
@@ -94,6 +94,7 @@ public class Performances
                 if(split.length != 2)
                     continue;
 
+                System.out.println("Searching:" + split[1]);
 
                 InitialDocument document = new InitialDocument(config, split[0], split[1].replaceAll("[^\\x00-\\x7F]", ""));
                 // Perform text preprocessing on the document

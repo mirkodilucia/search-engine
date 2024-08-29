@@ -38,8 +38,8 @@ public class DocumentIndeEntryTest {
             long offset1 = entry1.writeFile(documentIndexFile);
             assertEquals(0, offset1);
 
-            DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config, 0);
-            assertTrue(readEntry1.readFile(offset1, documentIndexFile));
+            DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config, 0, "data_test/documentIndexEntry/document_index_entry_test.dat");
+            assertTrue(readEntry1.readFile(offset1));
 
             assertEquals(entry1.toString(), readEntry1.toString());
         } catch (Exception e) {
@@ -64,9 +64,9 @@ public class DocumentIndeEntryTest {
             long offset2 = entry2.writeFile(documentIndexFile);
             assertEquals(72, offset2);
 
-            DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config, 0);
+            DocumentIndexEntry readEntry1 = new DocumentIndexEntry(config, 0, "data_test/documentIndexEntry/document_index_entry_test_1.dat");
             assertTrue(readEntry1.readFile(offset1, documentIndexFile));
-            DocumentIndexEntry readEntry2 = new DocumentIndexEntry(config, 1);
+            DocumentIndexEntry readEntry2 = new DocumentIndexEntry(config, 1, "data_test/documentIndexEntry/document_index_entry_test_1.dat");
             assertTrue(readEntry2.readFile(offset2, documentIndexFile));
 
             assertEquals(entry1.toString(), readEntry1.toString());

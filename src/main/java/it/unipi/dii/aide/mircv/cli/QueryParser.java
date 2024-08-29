@@ -20,6 +20,9 @@ public class QueryParser {
     public QueryParser(Config config, Scanner scanner) {
         this.config = config;
         this.scanner = scanner;
+
+        queryHandler = QueryHandler.with(config);
+        queryHandler.setup();
     }
 
     public boolean processQuery(String[] queryParams) {
@@ -39,8 +42,7 @@ public class QueryParser {
         String[] documents;
         ScoreFunction scoreFunction = askForScoringFunction();
 
-        queryHandler = QueryHandler.with(config, Mode.CONJUNCTIVE);
-        queryHandler.setup();
+        queryHandler = QueryHandler.with(config);
 
         documents = queryHandler.processQuery(queryParams[0], MAX_DOCUMENT_RESULT, Mode.CONJUNCTIVE, scoreFunction);
         showDocumentsResults(documents);
@@ -50,9 +52,6 @@ public class QueryParser {
     private boolean parseDisjunctiveQuery(String[] queryParams) {
         String[] documents;
         ScoreFunction scoreFunction = askForScoringFunction();
-
-        queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE);
-        queryHandler.setup();
 
         documents = queryHandler.processQuery(queryParams[0], MAX_DOCUMENT_RESULT, Mode.DISJUNCTIVE, scoreFunction);
         showDocumentsResults(documents);

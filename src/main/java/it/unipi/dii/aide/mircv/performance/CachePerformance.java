@@ -40,7 +40,7 @@ public class CachePerformance {
     {
         Config config = new Config();
 
-        QueryHandler queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE);
+        QueryHandler queryHandler = QueryHandler.with(config);
         boolean success = queryHandler.setup();
 
         try ( BufferedReader br = Files.newBufferedReader(Paths.get(QUERIES_PATH), StandardCharsets.UTF_8);
@@ -152,7 +152,7 @@ public class CachePerformance {
         Config config = new Config();
 
         System.out.println("Starting");
-        QueryHandler queryHandler = QueryHandler.with(config, Mode.DISJUNCTIVE);
+        QueryHandler queryHandler = QueryHandler.with(config);
 
         boolean setupSuccess = queryHandler.setup();
 

@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.indexer.model;
 import it.unipi.dii.aide.mircv.config.model.Config;
 import it.unipi.dii.aide.mircv.indexer.merger.MergerFileChannel;
 
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +16,8 @@ public class BlockDescriptor extends BaseBlockDescriptor {
     private static String INVERTED_INDEX_DOCS = "data/inverted_index_docs";
     private static String INVERTED_INDEX_FREQS = "data/inverted_index_freqs";
 
+    public static FileChannel docsFChan;
+    private static FileChannel freqsFChan;
 
     public BlockDescriptor() {
         super();
@@ -26,6 +29,25 @@ public class BlockDescriptor extends BaseBlockDescriptor {
 
     public static void init(Config config) {
         setupPath(config);
+
+        if (docsFChan != null && docsFChan.isOpen() &&
+            freqsFChan != null && freqsFChan.isOpen()) {
+            return;
+        }
+
+        try {
+            docsFChan = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_DOCS),
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.READ,
+                    StandardOpenOption.CREATE
+            );
+            freqsFChan = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_FREQS),
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.READ,
+                    StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void setupPath(Config config) {
@@ -44,17 +66,7 @@ public class BlockDescriptor extends BaseBlockDescriptor {
     }
 
     public ArrayList<Posting> getBlockPostings() {
-        try(
-                FileChannel docsFChan = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_DOCS),
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.READ,
-                        StandardOpenOption.CREATE
-                );
-                FileChannel freqsFChan = (FileChannel) Files.newByteChannel(Paths.get(INVERTED_INDEX_FREQS),
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.READ,
-                        StandardOpenOption.CREATE);
-        ){
+        try{
 
             MappedByteBuffer documentsBuffer = readDocumentsBuffer(docsFChan);
             MappedByteBuffer frequencyBuffer = readFrequenciesBuffer(freqsFChan);

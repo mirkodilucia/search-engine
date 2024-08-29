@@ -13,6 +13,7 @@ public class CommandLine {
 
     private static final int k = 10;
     private static final Scanner scanner = new Scanner(System.in);
+    private static QueryParser queryParser;
 
     public static void main(String[] args) {
         System.out.println("****** SEARCH ENGINE ******");
@@ -20,6 +21,8 @@ public class CommandLine {
 
         configLoaded = ConfigLoader.load();
         Config config = FlagManager.parseArgs(configLoaded, args);
+
+        queryParser = new QueryParser(config, scanner);
 
         System.out.println("What are you looking for? " + """
                 Please insert a query specifying your preferred mode:\s
@@ -49,7 +52,7 @@ public class CommandLine {
             }
 
             if (queryParams.length > 1) {
-                boolean result = new QueryParser(config, scanner).processQuery(queryParams);
+                boolean result = queryParser.processQuery(queryParams);
             }
         }
 

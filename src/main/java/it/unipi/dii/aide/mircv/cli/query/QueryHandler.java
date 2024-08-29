@@ -21,19 +21,18 @@ public class QueryHandler {
 
     private final Config config;
     private final Vocabulary vocabulary;
-    private final Mode mode;
     private final DocumentIndexTable documentIndex;
+    private Mode mode;
 
-    private QueryHandler(Config config, Mode mode) {
+    private QueryHandler(Config config) {
         this.config = config;
-        this.mode = mode;
 
         documentIndex = DocumentIndexTable.with(config);
         vocabulary = Vocabulary.with(config);
     }
 
-    public static QueryHandler with(Config config, Mode mode) {
-        return new QueryHandler(config, mode);
+    public static QueryHandler with(Config config) {
+        return new QueryHandler(config);
     }
 
     public boolean setup() {
@@ -78,6 +77,9 @@ public class QueryHandler {
         if (queryPosting == null || queryPosting.isEmpty()) {
             return null;
         }
+
+        this.mode = mode;
+
         PriorityQueue<Map.Entry<Double, Integer>> priorityQueue;
         if(config.scorerConfig.isMaxScoreEnabled())
             priorityQueue = DAAT.with(config, mode, scoreFunction).scoreQuery(queryPosting, maxDocumentResult);

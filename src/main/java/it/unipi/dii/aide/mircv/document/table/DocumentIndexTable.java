@@ -34,9 +34,14 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
     public boolean load() {
         long numDocuments = DocumentIndexState.getCollectionSize();
 
-        for(int i = 0; i < numDocuments; i++) {
-            DocumentIndexEntry entry = new DocumentIndexEntry(this.config, i);
-            if (entry.readFile((long) i * DocumentIndexEntry.ENTRY_SIZE, DOCUMENT_INDEX_FILE)) {
+        for(int i = 0; i < numDocuments + 1; i++) {
+            // Print status of the loading
+            if (i % 1000 == 0) {
+                System.out.println("Loading document index: " + i + "/" + numDocuments);
+            }
+
+            DocumentIndexEntry entry = new DocumentIndexEntry(this.config, i, DOCUMENT_INDEX_FILE);
+            if (entry.readFile((long) i * DocumentIndexEntry.ENTRY_SIZE)) {
                 this.put(entry.getDocumentId(), entry);
             }
             else
@@ -46,7 +51,10 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
     }
 
     public int getDocumentLength(int docId) {
-        DocumentIndexEntry documentIndexEntry =  this.get(docId);
+        DocumentIndexEntry documentIndexEntry = this.get(docId);
+        if (documentIndexEntry == null) {
+            return -1;
+        }
         return documentIndexEntry.getDocumentLenght();
     }
 
