@@ -38,8 +38,7 @@ This module can be compiled using the subsequent flags:
 
 In addition, the project is completely configurable just by changing the parameter in the config.xml file and the config class, this permits further customizations from the user.
 
-If no flags where to be specified, or no changes applied to the config, the query processing will work with standard parameters such as: no debug, no compressed reading (reading directly the collection.tsv file of the dataset
-no stemming and stopword removal, no compression on docids and frequencies and the use of the DAAT as scoring strategy.
+If no flags where to be specified, or no changes applied to the config, the query processing will work with standard parameters such as: no debug, no compressed reading (reading directly the collection.tsv file of the dataset no stemming and stopword removal, no compression on docids and frequencies and the use of the DAAT as scoring strategy.
 
 This flags can be found in the FlagManager class.
 
@@ -52,13 +51,16 @@ in particular:
 - selection of the scoring function: "tfidf" for the TFIDF or "bm25" for the BM25 one.
 
 The interface will start by asking the user the query terms and the mode, after the user will be asked to specify the scoring function.
+
 The results will be the top K mos relevant documents in discendant order based on the score from the scoring function.
 
 This module also containt the "QueryParser" and "QueryHandler" modules.
 
 #### Performance
 This part contains the tests used for assessing performance of the overall system, for the queries and cache test to understand the impact of the use of the the caching.
+
 For the query performance test, the results obtained are written in a text file, formatted in a suitable manner to be submitted for the TREC evaluation (trec_eval).
+
 Format example: "1 Q0 pid1    1 2.73 runid1"
 
 
