@@ -1,6 +1,6 @@
 # Search-engine project :page_with_curl:
 
-The project aim to develop a search engine able to index and process a minimum dataset of 8.8 million documents, in particular the dataset [at]([./documentation/documentation.pdf](https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020))
+The project aim to develop a search engine able to index and process a minimum dataset of 8.8 million documents, in particular the dataset that can be found [here](https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020))
 under the "Passage ranking dataset" section, first link. This project is related to the TREC evaluation for the MSMARCO dataset.
 
 This project was developed for the course "Multimedia Information Retrieval" of the MsC Artifical Intelligence and Data Engineering at University of Pisa for the 2022/2023 year course.
