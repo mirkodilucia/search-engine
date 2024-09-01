@@ -123,9 +123,12 @@ public class MaxScore extends Scorer {
 
     /**
      * method to score the documents in the posting lists given as input for NON-essential
-     *
+     * posting lists, skipping the documents that are not equal to the docidToProcess
+     * @param sortedLists: posting lists to be scored
+     * @param firstNonEssentialPostingListIndex: index of the first non-essential posting list
+     *                                         (i.e. the first posting list whose TUB is < current threshold)
+     *                                         in the sortedLists array
      */
-
     private double getNonEssentialPartialScoreWithSkipping(ArrayList<Map.Entry<PostingList, Double>> sortedLists, int firstNonEssentialPostingListIndex, int documentToProcess) {
         double nonEssentialPartialScore = 0;
 

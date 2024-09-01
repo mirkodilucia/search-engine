@@ -1,14 +1,9 @@
 package it.unipi.dii.aide.mircv.indexer.merger;
 
 import it.unipi.dii.aide.mircv.config.model.Config;
-import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
-import it.unipi.dii.aide.mircv.indexer.vocabulary.entry.BaseVocabularyEntry;
 import it.unipi.dii.aide.mircv.utils.FileChannelHandler;
-import it.unipi.dii.aide.mircv.compress.UnaryCompressor;
-import it.unipi.dii.aide.mircv.compress.VariableByteCompressor;
 
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
@@ -30,6 +25,13 @@ public class MergerFileChannel {
         BLOCK_DESCRIPTOR_FILE_PATH = config.getBlockDescriptorsPath();
     }
 
+    /**
+     * Constructor of the MergerFileChannel class that takes the file channels for the vocabulary, the inverted index and the block descriptor
+     * @param vocabularyChannel the file channel for the vocabulary
+     * @param documentIdChannel the file channel for the inverted index
+     * @param frequencyChannel the file channel for the inverted index frequency
+     * @param descriptorChannel the file channel for the block descriptor
+     */
     private MergerFileChannel(
             FileChannel vocabularyChannel,
             FileChannel documentIdChannel, FileChannel frequencyChannel, FileChannel descriptorChannel) {
@@ -39,6 +41,12 @@ public class MergerFileChannel {
         this.descriptorChannel = descriptorChannel;
     }
 
+    /**
+     * Open the file channels for the vocabulary, the inverted index and the block descriptor
+     * @param config the configuration object
+     * @return the MergerFileChannel object
+     * @throws IOException if an I/O error occurs
+     */
     public static MergerFileChannel open(Config config) throws IOException {
         return new MergerFileChannel(FileChannelHandler.open(VOCABULARY_FILE_PATH, StandardOpenOption.WRITE, StandardOpenOption.READ, StandardOpenOption.CREATE),
                 FileChannelHandler.open(INVERTED_DOCUMENT_INDEX_FILE_PATH, StandardOpenOption.WRITE, StandardOpenOption.READ, StandardOpenOption.CREATE),
@@ -47,58 +55,11 @@ public class MergerFileChannel {
         );
     }
 
-    public CompressionResult writeCompressedBlock(BlockDescriptor blockDescriptor,
-                                     MergerFileChannel mergerFileChannel,
-                                     int documentsMemOffset,
-                                     int frequenciesMemOffset,
-                                     int[] documentsId, int[] frequencies
-    ) {
-        try {
-            byte[] compressedDocs = VariableByteCompressor.integerArrayCompression(documentsId);
-            byte[] compressedFreqs = UnaryCompressor.integerArrayCompression(frequencies);
-
-            // Instantiation of MappedByteBuffer for integer list of docids and for integer list of freqs
-            MappedByteBuffer docsBuffer = mergerFileChannel.documentIdChannel.map(FileChannel.MapMode.READ_WRITE, documentsMemOffset, compressedDocs.length);
-            MappedByteBuffer freqsBuffer = mergerFileChannel.frequencyChannel.map(FileChannel.MapMode.READ_WRITE, frequenciesMemOffset, compressedFreqs.length);
-
-            // Write compressed posting lists to disk
-            docsBuffer.put(compressedDocs);
-            freqsBuffer.put(compressedFreqs);
-
-            BaseVocabularyEntry.VocabularyMemoryInfo memoryInfo = new BaseVocabularyEntry.VocabularyMemoryInfo(
-                    docsBuffer.position(),
-                    freqsBuffer.position(),
-                    compressedDocs.length,
-                    compressedFreqs.length
-            );
-
-            // Write the block descriptor on disk
-            CompressionResult result = blockDescriptor.writeBlock(mergerFileChannel.descriptorChannel);
-            if (result == null) {
-                System.err.println("Error while writing block descriptor on disk.");
-                throw new IOException();
-            }
-
-            return new CompressionResult(compressedDocs, compressedFreqs, documentsMemOffset, frequenciesMemOffset);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public static class CompressionResult {
         public byte[] compressedDocs;
         public byte[] compressedFreqs;
         public long docsMemOffset;
         public long freqsMemOffset;
-
-        public CompressionResult(byte[] compressedDocs, byte[] compressedFreqs, int docsMemOffset, int freqsMemOffset) {
-            this.compressedDocs = compressedDocs;
-            this.compressedFreqs = compressedFreqs;
-            this.docsMemOffset = docsMemOffset;
-            this.freqsMemOffset = freqsMemOffset;
-        }
 
         public CompressionResult() {
             this.compressedDocs = new byte[0];
@@ -110,13 +71,16 @@ public class MergerFileChannel {
             this.freqsMemOffset = frequenciesMemoryOffset;
         }
 
-
         public CompressionResult updateCompressionOffset(long docsMemOffset, long freqsMemOffset) {
             this.docsMemOffset += docsMemOffset;
             this.freqsMemOffset += freqsMemOffset;
             return this;
         }
 
+        /**
+         * Update the compression result with the intermediate result
+         * @param result the intermediate result
+         */
         public void updateCompressionResult(CompressionResult result) {
             if (result.compressedDocs == null || result.compressedDocs.length == 0)
                 this.compressedDocs = result.compressedDocs;

@@ -32,6 +32,10 @@ public class Spimi extends BaseSpimi {
         return new Spimi(config);
     }
 
+    /**
+     * Execute the SPIMI algorithm
+     * @return the number of indexes created
+     */
     public int executeSpimi() {
         numPostings = 0;
 
@@ -41,6 +45,11 @@ public class Spimi extends BaseSpimi {
         return numIndexes;
     }
 
+    /**
+     * Update the collection statistics
+     * @param documentId the index to save
+     * @return true if the index has been saved, false otherwise
+     */
     private void updateIndexState(int documentId) {
         if(!DocumentIndexState.updateStatistics(documentId - 1,
                 documentsLength
@@ -49,6 +58,11 @@ public class Spimi extends BaseSpimi {
         }
     }
 
+    /**
+     * Load the buffer for reading the datasets (compressed or not)
+     * @return
+     * @throws IOException
+     */
     //For reading compressed tar.gz dataset
     private BufferedReader loadBuffer() throws IOException {
         BufferedReader br;
@@ -69,6 +83,10 @@ public class Spimi extends BaseSpimi {
 
     }
 
+    /**
+     * Execute the SPIMI algorithm iteration
+     * @return the number of indexes created
+     */
     private int spimiIteration() {
         int documentId = 0;
 
@@ -142,6 +160,9 @@ public class Spimi extends BaseSpimi {
         return documentId;
     }
 
+    /**
+     * Discard the index and rollback the previous operations
+     */
     private void rollback() {
         FileHandler.deleteDirectory(config.getPartialIndexesDocumentsPath());
         FileHandler.deleteDirectory(config.getPartialIndexesFrequenciesPath());
@@ -158,6 +179,11 @@ public class Spimi extends BaseSpimi {
                 documentsLength);
     }
 
+    /**
+     * Build the posting list from the final document
+     * @param index the index to save
+     * @return the updated index
+     */
     private HashMap<String, PostingList> buildPostingList(HashMap<String, PostingList> index, FinalDocument finalDocument, int documentId) {
         for (String term : finalDocument.getTokens()) {
             if (term.isEmpty() || term.isBlank()) {
@@ -184,6 +210,11 @@ public class Spimi extends BaseSpimi {
         return index;
     }
 
+    /**
+     * Find the posting list associated with the term in the index or create a new one
+     * @param docId the document id
+     * @param postingList the posting list to update
+     */
     protected void updateOrAddPosting(int docId, PostingList postingList) {
         if (!postingList.getPostings().isEmpty()) {
             // last document inserted:

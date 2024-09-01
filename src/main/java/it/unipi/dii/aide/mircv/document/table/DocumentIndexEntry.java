@@ -14,6 +14,12 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
 
     protected String DOCUMENT_INDEX_FILE = "data/documents/document_index.dat";
 
+    /**
+     * Constructor of the DocumentIndexEntry class that takes the configuration object, the document id and the document index file
+     * @param config
+     * @param documentId
+     * @param documentIndexFile
+     */
     public DocumentIndexEntry(Config config, int documentId, String documentIndexFile) {
         super(config.getDocumentIndexFile());
 
@@ -67,6 +73,11 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         return this.readFile(memoryOffset, documentIndexFileChannel);
     }
 
+    /**
+     * Write the document index entry to the file
+     * @param documentIndexFile
+     * @return
+     */
     public long writeFile(String documentIndexFile) {
         try (
                 FileChannel documentIndexFileChannel = FileChannelHandler.open(
@@ -86,9 +97,12 @@ public class DocumentIndexEntry extends BaseDocumentIndexEntry {
         return pId;
     }
 
+    /**
+     * Write the document index entry to the file
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
-
         if(o == this)
             return true;
 

@@ -25,6 +25,11 @@ public class Stemmer {
         loadStopwords();
     }
 
+    /**
+     * Remove stopwords from the input words
+     * @param words the input words
+     * @return the words without stopwords
+     */
     public String[] removeStopwords(String[] words) {
         ArrayList<String> meaningfulToken = new ArrayList<>();
 
@@ -39,6 +44,11 @@ public class Stemmer {
         return meaningfulToken.toArray(new String[0]);
     }
 
+    /**
+     * Get the stems of the input words
+     * @param words the input words
+     * @return the stems of the input words
+     */
     public String[] getStems(String[] words) {
         PorterStemmer stemmer = new PorterStemmer();
 
@@ -49,6 +59,11 @@ public class Stemmer {
         return words;
     }
 
+    /**
+     * Tokenize the input text into words
+     * @param text the input text
+     * @return the tokens of the input text
+     */
     public String[] tokenize(String text) {
         ArrayList<String> tokens = new ArrayList<>();
 
@@ -67,6 +82,9 @@ public class Stemmer {
         return tokens.toArray(new String[0]);
     }
 
+    /**
+     * Load the stopwords from the file
+     */
     private void loadStopwords() {
         if (!stopwords.isEmpty()) {
             throw new IllegalStateException("Stopwords already loaded");
@@ -79,6 +97,11 @@ public class Stemmer {
         }
     }
 
+    /**
+     * Get the instance of the Stemmer
+     * @param configuration the configuration
+     * @return the instance of the Stemmer
+     */
     public static Stemmer with(Config configuration) {
 
         if (INSTANCE == null) {
@@ -88,6 +111,11 @@ public class Stemmer {
         return INSTANCE;
     }
 
+    /**
+     * Process the input document
+     * @param input the input document
+     * @return the processed document
+     */
     public String processDocument(String input) {
         String[] tokens = tokenize(input);
         String[] meaningfulTokens = removeStopwords(tokens);

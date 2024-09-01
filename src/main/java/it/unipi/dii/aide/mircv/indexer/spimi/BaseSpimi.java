@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BaseSpimi implements SpimiListener {
+public class BaseSpimi {
 
     private boolean debugMode = false;
 
@@ -26,7 +26,6 @@ public class BaseSpimi implements SpimiListener {
     protected long numPostings = 0;
 
     protected int documentsLength = 0;
-    protected boolean allDocumentsProcessed;
 
     protected static String PATH_TO_PARTIAL_VOCABULARIES = "data/vocabulary/vocabulary";
     protected static String PATH_TO_PARTIAL_INDEXES_DOCS = "data/indexes/partial_index_docs_";
@@ -39,12 +38,20 @@ public class BaseSpimi implements SpimiListener {
         this.setupPath(config);
     }
 
+    /**
+     * Setup the path to save the partial indexes
+     * @param config the configuration object
+     */
     private void setupPath(Config config) {
         PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
         PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
         PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
     }
 
+    /**
+     * Save the index to disk
+     * @return true if the index has been saved, false if the index is empty
+     */
     protected boolean saveIndexToDisk(HashMap<String, PostingList> index, boolean debugMode) {
         this.debugMode = debugMode;
 
@@ -59,6 +66,22 @@ public class BaseSpimi implements SpimiListener {
         return this.saveIndexToDisk(index);
     }
 
+    /**
+     * Save the index to disk in the correct order and format, and update the vocabulary file. The index is saved in the
+     * following format:
+     * - The documents are saved in a file with the following format:
+     *     - Each document is saved in a 4-byte integer
+     *     - The documents are saved in the order they appear in the index
+     *     - The frequencies are saved in a file with the following format: partial_index_docs_<index>.dat
+     *     - Each frequency is saved in a 4-byte integer
+     *     - The frequencies are saved in the order they appear in the index
+     *     - The vocabulary is saved in a file with the following format: partial_vocabulary_<index>.dat
+     * @param index the index to save with the format: term -> PostingList
+     * @return true if the index has been saved, false otherwise, in case of error while saving the index using the FileChannel API
+     * @see FileChannel
+     * @see PostingList
+     * @see VocabularyEntry
+     */
     private boolean saveIndexToDisk(HashMap<String, PostingList> index) {
         try (
                 FileChannel docsFchan = FileChannelHandler.open(PATH_TO_PARTIAL_INDEXES_DOCS + "_" + numIndexes + ".dat",
@@ -113,10 +136,10 @@ public class BaseSpimi implements SpimiListener {
                     vocOffset = vocEntry.writeEntry(vocOffset, vocabularyFchan);
 
                     if(debugMode){
-                        // System.out.println("Vocabulary entry written to disk: " + vocEntry);
+                        System.out.println("Vocabulary entry written to disk: " + vocEntry);
 
-                        //entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
-                        //vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
+                        entry.debugSaveToDisk("partialDOCIDS_" + numIndexes + ".txt", "partialFREQS_" + numIndexes + ".txt", (int) numPostings);
+                        vocEntry.debugSaveToDisk("partialVOC_" + numIndexes + ".txt");
                     }
                 }
 
@@ -130,24 +153,15 @@ public class BaseSpimi implements SpimiListener {
         }
     }
 
+    /**
+     * Get the sorted index by term in ascending order using the Java Stream API
+     * @param index the index to sort
+     * @return the sorted index
+     */
     private HashMap<String, PostingList> getSortedIndex(HashMap<String, PostingList> index) {
         return index.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-    }
-
-    @Override
-    public void updateDocumentLength(int length) {
-        this.documentsLength += length;
-    }
-
-    @Override
-    public void onSpimiFinished() {
-        this.allDocumentsProcessed = true;
-    }
-
-    @Override
-    public void incrementDocumentId() {
     }
 }

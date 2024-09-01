@@ -10,6 +10,10 @@ import java.util.HashMap;
 
 public class FileHandler {
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param path the path of the file
+     */
     public static void createFileIfNotExists(String path) {
         File file = new File(path);
         try {
@@ -19,6 +23,11 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param fileName the path of the file
+     * @param content the content to write
+     */
     public static void writeStringToFile(String fileName, String content) throws IOException {
         try (FileChannel channel = FileChannel.open(
                 new File(fileName).toPath(),
@@ -29,6 +38,10 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param fileName the path of the file
+     */
     public static String readStringFromFile(String fileName) throws IOException {
         try (FileChannel channel = FileChannel.open(
                 new File(fileName).toPath(),
@@ -44,6 +57,12 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Writes an object to a file
+     * @param fileName the path of the file
+     * @param object the object to write
+     * @throws IOException
+     */
     public static void writeObjectToFile(String fileName, Object object) throws IOException {
         try (FileChannel channel = FileChannel.open(
                 new File(fileName).toPath(),
@@ -54,6 +73,13 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads an object from a file
+     * @param fileName
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Object readObjectFromFile(String fileName) throws IOException, ClassNotFoundException {
         try (FileChannel channel = FileChannel.open(
                 new File(fileName).toPath(),
@@ -64,10 +90,18 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param s the path of the file
+     */
     public static boolean fileExists(String s) {
         return Files.exists(Paths.get(s));
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param s the path of the file
+     */
     public static void createFolderIfNotExists(String s) {
         if (Files.exists(Paths.get(s))) {
             return;
@@ -80,6 +114,10 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param stopwordPath the path of the file
+     */
     public static HashMap<String, Integer> readStopwordLines(String stopwordPath) {
         HashMap<String, Integer> stopwords = new HashMap<>();
 
@@ -98,6 +136,10 @@ public class FileHandler {
         return stopwords;
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param file the path of the file
+     */
     public static void removeFile(String file) {
         try {
             Files.deleteIfExists(Paths.get(file));
@@ -106,6 +148,10 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param pathToPartialVocabularies the path of the file
+     */
     public static void deleteFile(String pathToPartialVocabularies) {
         // Delete all file matching pathToPartialVocabularies * with regex
         String[] dir = pathToPartialVocabularies.split("(?<=/)(?!.*?/)");
@@ -125,6 +171,10 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Reads a file and returns its content as a list of strings
+     * @param partialIndexesDocumentsPath the path of the file
+     */
     public static void deleteDirectory(String partialIndexesDocumentsPath) {
         try {
             Files.walk(Paths.get(partialIndexesDocumentsPath))

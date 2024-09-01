@@ -28,6 +28,11 @@ public class PostingList {
         DEBUG_PATH = config.getDebugPath();
     }
 
+    /**
+     * Constructor for the PostingList
+     * @param config the configuration object
+     * @param term the term to create the PostingList
+     */
     public PostingList(Config config, String term) {
         this(config);
         this.term = term.split("\t")[0];
@@ -37,6 +42,10 @@ public class PostingList {
         }
     }
 
+    /**
+     * Parse the raw posting list
+     * @param rawPosting the raw posting list
+     */
     public void parsePostings(String rawPosting) {
         String[] documents = rawPosting.split(" ");
         for (String document : documents) {
@@ -49,10 +58,18 @@ public class PostingList {
         }
     }
 
+    /**
+     * Constructor for the PostingList
+     * @param config the configuration object
+     */
     public PostingList(Config config) {
         this.config = config;
     }
 
+    /**
+     * Add a document to the posting list
+     * @param docID the document ID to add
+     */
     public void add(int docID) {
         postings.add(new Posting(docID, 1));
     }
@@ -65,6 +82,11 @@ public class PostingList {
         return postings.isEmpty();
     }
 
+    /**
+     * Update the posting list with the new document ID
+     * @param documentId the document ID to update
+     * @return true if the document ID is already in the list, false otherwise
+     */
     public boolean updateOrAddPosting(int documentId) {
         if (!postings.isEmpty()) {
             Posting posting = postings.get(postings.size() - 1);
@@ -79,6 +101,10 @@ public class PostingList {
         return false;
     }
 
+    /**
+     * Update the parameters of the posting list
+     * @param documentsLength the length of the documents
+     */
     public void updateParameters(int documentsLength) {
         int tf = postings.size();
 
@@ -98,6 +124,15 @@ public class PostingList {
         return stats;
     }
 
+    /**
+     * Save the posting list to disk for debugging purposes
+     * @param docidsPath the path to save the document IDs
+     * @param freqsPath the path to save the frequencies
+     * @param maxPostingsPerBlock the maximum number of postings per block
+     *                            to save the posting list in blocks
+     *                            (useful for the SPIMI algorithm)
+     *                            @see it.unipi.dii.aide.mircv.indexer.spimi.BaseSpimi
+     */
     public void debugSaveToDisk(String docidsPath, String freqsPath, int maxPostingsPerBlock){
         FileHandler.createFolderIfNotExists(DEBUG_PATH);
         FileHandler.createFileIfNotExists(DEBUG_PATH + "/" + docidsPath);
@@ -138,6 +173,11 @@ public class PostingList {
         }
     }
 
+    /**
+     * Convert the posting list to a string
+     * @return the string representation of the posting list in the format: term -> docID:frequency
+     * @see Posting
+     */
     public String[] toStringPosting() {
 
         StringBuilder resultDocids = new StringBuilder();
@@ -195,11 +235,20 @@ public class PostingList {
         this.postings.addAll(postings);
     }
 
+    /**
+     * Get the number of postings to be written
+     * @param i the index of the block
+     * @param maxNumPostings the maximum number of postings per block
+     * @return the number of postings to be written
+     */
     public int getPostingsToBeWritten(int i, int maxNumPostings) {
         int alreadyWrittenPostings = i * maxNumPostings;
         return Math.min((this.getPostings().size() - alreadyWrittenPostings), maxNumPostings);
     }
 
+    /**
+     * Get the postings to be written in the block i with a maximum of maxNumPostings postings
+     */
     @Override
     public String toString() {
 
@@ -235,6 +284,10 @@ public class PostingList {
         postingIterator = postings.iterator();
     }
 
+    /**
+     * Get the next posting to process
+     * @return the next posting to process
+     */
     public Posting next() {
         if(!postingIterator.hasNext()) {
 
@@ -260,6 +313,11 @@ public class PostingList {
         return currentPosting;
     }
 
+    /**
+     * Select the posting with the document ID >= docId
+     * @param docId the document ID to search
+     * @return the posting with the document ID >= docId
+     */
     public Posting selectPostingScoreIterator(int docId) {
         // flag to check if the block has changed
         boolean blockChanged = false;
@@ -292,6 +350,11 @@ public class PostingList {
         return null;
     }
 
+    /**
+     * Update the BM25 parameters of the posting list with the new document length and term frequency in the document
+     * @param documentLength the length of the document
+     * @param termFrequency the frequency of the term in the document
+     */
     public void updateBM25Parameters(int documentLength, int termFrequency) {
         double currentRatio = (double) this.stats.BM25Tf / (double) (this.stats.BM25Dl + this.stats.BM25Tf);
         double newRatio = (double) termFrequency / (double) (documentLength + termFrequency);

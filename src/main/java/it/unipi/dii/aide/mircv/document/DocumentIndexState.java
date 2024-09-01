@@ -30,6 +30,10 @@ public class DocumentIndexState {
         COLLECTION_STATISTICS_FILE = Objects.requireNonNullElse(config.getCollectionStatisticsPath(), "data/collection/collection_statistics.dat");
     }
 
+    /**
+     * Read the collection statistics from the file
+     * @return true if the file is read correctly, false otherwise
+     */
     public static boolean readFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(COLLECTION_STATISTICS_FILE))) {
             collectionSize = ois.readLong();
@@ -45,6 +49,10 @@ public class DocumentIndexState {
         return false;
     }
 
+    /**
+     * Write the collection statistics to the file
+     * @return true if the file is written correctly, false otherwise
+     */
     public static boolean writeFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(COLLECTION_STATISTICS_FILE))) {
             oos.writeLong(collectionSize);

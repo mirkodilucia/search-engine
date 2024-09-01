@@ -89,6 +89,10 @@ public class QueryHandler {
         return retrieveKPid(priorityQueue, maxDocumentResult);
     }
 
+    /** Get the posting list of the query terms
+     * @param queryDoc The query document object
+     * @return the posting list of the query terms
+     */
     public ArrayList<PostingList> getQueryPosting(FinalDocument queryDoc) {
         ArrayList<PostingList> queryPosting = new ArrayList<>();
         ArrayList<String> queryTerms = new ArrayList<>(queryDoc.getTokens().stream().distinct().toList());

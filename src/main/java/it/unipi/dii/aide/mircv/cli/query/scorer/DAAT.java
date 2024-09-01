@@ -70,7 +70,10 @@ public class DAAT extends Scorer {
         return next;
     }
 
-
+    /** method to find the next docid to process in the posting lists
+     * @param postingDocScore: list of posting lists
+     * @return the next docid to process
+     */
     private int findNextDoc(ArrayList<PostingList> postingDocScore) {
         int nextToProcessDocID = -1;
 
@@ -98,6 +101,11 @@ public class DAAT extends Scorer {
         return nextToProcessDocID;
     }
 
+    /** method to compute the score of a document given the posting lists
+     * @param documentId: id of the document to score
+     * @param postingToScore: list of posting lists
+     * @return the score of the document
+     */
     private double computeDocumentScore(int documentId, ArrayList<PostingList> postingToScore) {
         double score = 0;
 

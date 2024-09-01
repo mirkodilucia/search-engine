@@ -38,6 +38,11 @@ public class BaseBlockDescriptor {
         this.frequencyOffset = frequenciesMemoryOffset;
     }
 
+    /**
+     * Write the block descriptor on disk
+     * @param fileChannel
+     * @return
+     */
     protected boolean writeBlockOnDisk(FileChannel fileChannel) {
         try {
             MappedByteBuffer buffer = fileChannel.map(FileChannel.MapMode.READ_WRITE, memoryOffset, BLOCK_DESCRIPTOR_ENTRY_BYTES);
@@ -53,7 +58,6 @@ public class BaseBlockDescriptor {
             e.printStackTrace();
             return false;
         }
-
     }
 
     public void setMaxDocumentsId(int maxDocumentsId) {
@@ -118,6 +122,10 @@ public class BaseBlockDescriptor {
         );
     }
 
+    /**
+     * Read the block postings from the disk and decompress them
+     * @return the block postings
+     */
     protected ArrayList<Posting> getCompressedPosting(
             MappedByteBuffer documentBuffer,
             MappedByteBuffer frequencyBuffer
@@ -144,6 +152,10 @@ public class BaseBlockDescriptor {
         return postings;
     }
 
+    /**
+     * Read the block postings from the disk
+     * @return the block postings
+     */
     protected ArrayList<Posting> getBlockPosting(
         MappedByteBuffer documentBuffer,
         MappedByteBuffer frequencyBuffer

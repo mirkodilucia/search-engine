@@ -31,6 +31,10 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         return INSTANCE;
    }
 
+    /**
+     * Load the document index from the file
+     * @return true if the document index is loaded correctly, false otherwise
+     */
     public boolean load() {
         long numDocuments = DocumentIndexState.getCollectionSize();
 
@@ -50,6 +54,11 @@ public class DocumentIndexTable extends LinkedHashMap<Integer, DocumentIndexEntr
         return true;
     }
 
+    /**
+     * Get the document length of a document
+     * @param docId the document id
+     * @return the document length
+     */
     public int getDocumentLength(int docId) {
         DocumentIndexEntry documentIndexEntry = this.get(docId);
         if (documentIndexEntry == null) {

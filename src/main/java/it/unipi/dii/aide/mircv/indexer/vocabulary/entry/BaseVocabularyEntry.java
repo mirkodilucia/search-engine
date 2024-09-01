@@ -86,6 +86,10 @@ public class BaseVocabularyEntry {
         upperBoundInfo.updateBM25Parameters(bm25Dl, bm25Tf);
     }
 
+    /**
+     * Update the memory information with the number of postings
+     * @param numPostings
+     */
     public void updateMemoryIdSize(int numPostings) {
         this.memoryInfo.setDocIdSize(numPostings * 4);
         this.memoryInfo.setFrequencySize(numPostings * 4);
@@ -127,11 +131,13 @@ public class BaseVocabularyEntry {
         return memoryInfo.blockOffset;
     }
 
+    /**
+     * Compute the IDF of the term in the collection of documents and set the value
+     */
     public void computeIDF() {
         this.inverseDocumentFrequency = Math.log10((double) DocumentIndexState.getCollectionSize() / documentFrequency);
     }
 
-    //
     public static class VocabularyEntryUpperBoundInfo {
 
         public int maxTermFrequency = 0;
@@ -173,6 +179,11 @@ public class BaseVocabularyEntry {
             buffer.putDouble(stats.maxBM25);
         }
 
+        /**
+         * Calculate and update the BM25 statistics of the term
+         * @param length the length of the document
+         * @param tf the term frequency in the document
+         */
         public void updateBM25Parameters(int length, int tf) {
             double currentRatio = (double) this.BM25Tf / (double) (this.BM25Dl + this.BM25Tf);
             double newRatio = (double) tf / (double) (length + tf);
@@ -190,6 +201,10 @@ public class BaseVocabularyEntry {
             BM25Dl = bm25Dl;
         }
 
+        /**
+         * Compute the upper bounds of the term in the collection of documents
+         * @param inverseDocumentFrequency the IDF of the term
+         */
         public void computeUpperBounds(double inverseDocumentFrequency) {
             this.maxTfIdf = (1 + Math.log10(this.maxTermFrequency)) * inverseDocumentFrequency;
 
@@ -286,6 +301,10 @@ public class BaseVocabularyEntry {
             return frequencySize;
         }
 
+        /**
+         * Compute the block information of the term
+         * @param documentFrequency the document frequency of the term
+         */
         public void computeBlockInformation(int documentFrequency) {
             this.blockOffset = BlockDescriptor.getMemoryOffset();
             if (documentFrequency >= 1024)
@@ -296,6 +315,10 @@ public class BaseVocabularyEntry {
             return numBlocks;
         }
 
+        /**
+         * Read the blocks from the block descriptor file
+         * @return
+         */
         public ArrayList<BlockDescriptor> readBlocks() {
             ArrayList<BlockDescriptor> blocks = new ArrayList<>();
 
@@ -322,6 +345,11 @@ public class BaseVocabularyEntry {
             return blocks;
         }
 
+        /**
+         * Get the maximum number of posting in a block
+         * @param documentFrequency
+         * @return
+         */
         public int getMaxNumberOfPostingInBlock(int documentFrequency) {
             return (int) Math.ceil(documentFrequency / (double) this.numBlocks);
         }

@@ -1,6 +1,5 @@
 package it.unipi.dii.aide.mircv.indexer.vocabulary.entry;
 
-import it.unipi.dii.aide.mircv.document.DocumentIndexState;
 import it.unipi.dii.aide.mircv.indexer.model.BlockDescriptor;
 import it.unipi.dii.aide.mircv.indexer.model.Posting;
 import it.unipi.dii.aide.mircv.indexer.model.PostingList;
@@ -56,6 +55,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         super(term, documentFrequency, inverseDocumentFrequency, stats, memoryInfo);
     }
 
+    /**
+     * Read the vocabulary entry from the disk
+     * @param memoryOffset the offset in the disk
+     * @param vocabularyFilePath the path of the vocabulary file
+     * @return the new offset
+     */
     public long readVocabularyFromDisk(long memoryOffset, String vocabularyFilePath) {
         try (
                 FileChannel vocabularyChannel = FileChannelHandler.open(vocabularyFilePath,
@@ -82,6 +87,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         }
     }
 
+    /**
+     * Read the vocabulary entry from the disk
+     * @param memoryOffset
+     * @param vocabularyFile
+     * @return
+     */
     public long readVocabularyFromDisk(long memoryOffset, FileChannel vocabularyFile) {
         try {
             // Open the buffer to read the term
@@ -104,6 +115,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         }
     }
 
+    /**
+     * Read the block descriptor from the disk
+     * @param memoryOffset
+     * @param blockDescriptorFile
+     * @return
+     */
     public long readBlockDescriptorFromDisk(long memoryOffset, FileChannel blockDescriptorFile) {
         try {
             // Open the buffer to read the block and stats
@@ -125,6 +142,12 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         }
     }
 
+    /**
+     * Write the vocabulary entry to the disk
+     * @param vocOffset the offset in the disk
+     * @param vocabularyFileChannel the file channel of the vocabulary file
+     * @return the new offset
+     */
     public long writeEntry(long vocOffset, FileChannel vocabularyFileChannel) {
         try {
             // Write the term
@@ -155,9 +178,13 @@ public class VocabularyEntry extends BaseVocabularyEntry {
     }
 
     public double getIdf() {
-        return inverseDocumentFrequency;// upperBoundInfo.getIdf();
+        return inverseDocumentFrequency;
     }
 
+    /**
+     * Update the statistics of the entry
+     * @param entry the posting list
+     */
     public void updateStatistics(PostingList entry) {
         for (Posting posting: entry.getPostings()) {
             if (this.upperBoundInfo.maxTermFrequency < posting.getFrequency()) {
@@ -172,6 +199,11 @@ public class VocabularyEntry extends BaseVocabularyEntry {
         return documentFrequency;
     }
 
+    /**
+     * Update the memory information of the entry
+     * @param documentMemoryOffset the offset of the document
+     * @param frequencyMemOffset the offset of the frequency
+     */
     public void update(long documentMemoryOffset, long frequencyMemOffset) {
         this.memoryInfo.setDocumentIdOffset(documentMemoryOffset);
         this.memoryInfo.setFrequencyOffset(frequencyMemOffset);

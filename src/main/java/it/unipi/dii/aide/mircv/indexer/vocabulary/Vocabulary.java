@@ -18,6 +18,11 @@ public class Vocabulary extends BaseVocabulary {
         super(vocabularyPath, blockDescriptorsPath);
     }
 
+    /**
+     * Get the instance of the Vocabulary
+     * @param config the configuration
+     * @return the instance of the Vocabulary
+     */
     public static Vocabulary with(Config config) {
         BlockDescriptor.init(config);
         DocumentIndexState.with(config);
@@ -30,6 +35,9 @@ public class Vocabulary extends BaseVocabulary {
         return instance;
     }
 
+    /**
+     * Unset the instance of the Vocabulary
+     */
     public void unset() {
         instance = null;
         this.clear();
@@ -41,10 +49,11 @@ public class Vocabulary extends BaseVocabulary {
         }
     }
 
-    public double getIdf(String term){
-        return get(term).getIdf();
-    }
-
+    /**
+     * Find the VocabularyEntry associated with the term using a binary search
+     * @param term the term to search
+     * @return the VocabularyEntry associated with the term
+     */
     public VocabularyEntry getEntry(String term){
         if(entries.containsKey(term))
             return entries.get(term);

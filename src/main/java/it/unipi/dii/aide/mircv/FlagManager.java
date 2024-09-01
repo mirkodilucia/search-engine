@@ -6,11 +6,20 @@ import it.unipi.dii.aide.mircv.config.model.VocabularyConfig;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages the flags passed as command line arguments
+ */
 public class FlagManager {
 
     private static final Map<String, String> flags = new HashMap<>();
     private static final Map<String, Boolean> booleanFlags = new HashMap<>();
 
+    /**
+     * Parses the command line arguments and sets the configuration accordingly
+     * @param config the configuration to be set
+     * @param args the command line arguments
+     * @return the configuration with the new settings
+     */
     public static Config parseArgs(Config config, String[] args) {
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];

@@ -22,12 +22,21 @@ public class BaseMergerWorker {
     public FileChannel[] documentsIdChannels;
     public FileChannel[] frequencyChannels;
 
+    /**
+     * Setup the path to save the partial indexes and the partial vocabulary
+     * @param config the configuration object
+     */
     private static void setupPath(Config config) {
         PATH_TO_PARTIAL_VOCABULARIES = config.getPartialVocabularyPath();
         PATH_TO_PARTIAL_INDEXES_DOCS = config.getPartialIndexesDocumentsPath();
         PATH_TO_PARTIAL_INDEXES_FREQS = config.getPartialIndexesFrequenciesPath();
     }
 
+    /**
+     * Constructor of the BaseMergerWorker
+     * @param configuration the configuration object
+     * @param numIndexes the number of indexes
+     */
     protected BaseMergerWorker(Config configuration, int numIndexes) {
         config = configuration;
         setupPath(config);
@@ -38,6 +47,10 @@ public class BaseMergerWorker {
         this.frequencyChannels = new FileChannel[numIndexes];
     }
 
+    /**
+     * Load the documentsIdChannels and the frequencyChannels
+     * @throws IOException if an I/O error occurs
+     */
     private MappedByteBuffer loadDocumentsIdChannels(VocabularyEntry term, int index) throws IOException {
         BaseVocabularyEntry.VocabularyMemoryInfo memoryInfo = term.getMemoryInfo();
         return documentsIdChannels[index].map(
@@ -47,7 +60,10 @@ public class BaseMergerWorker {
         );
     }
 
-
+    /**
+     * Load the frequencyChannels of the term
+     * @throws IOException if an I/O error occurs
+     */
     private MappedByteBuffer loadFrequencyChannels(VocabularyEntry term, int index) throws IOException {
         BaseVocabularyEntry.VocabularyMemoryInfo memoryInfo = term.getMemoryInfo();
         return frequencyChannels[index].map(
@@ -57,7 +73,10 @@ public class BaseMergerWorker {
         );
     }
 
-
+    /**
+     * Load the list of the term
+     * @throws IOException if an I/O error occurs
+     */
     protected PostingList loadList(VocabularyEntry vocabularyEntry, int index) throws IOException {
         MappedByteBuffer docBuffer = loadDocumentsIdChannels(vocabularyEntry, index);
         MappedByteBuffer freqBuffer = loadFrequencyChannels(vocabularyEntry, index);
@@ -72,6 +91,9 @@ public class BaseMergerWorker {
         return postingList;
     }
 
+    /**
+     * Close the file channels of the documentsIdChannels and the frequencyChannels
+     */
     protected void cleanup() {
         try{
             for(int i = 0; i < this.numIndexes; i++){
@@ -87,6 +109,9 @@ public class BaseMergerWorker {
         }
     }
 
+    /**
+     * Reset the BaseMergerWorker
+     */
     public static void unset(Config config) {
         setupPath(config);
 

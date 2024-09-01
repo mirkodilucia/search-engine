@@ -39,6 +39,11 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
 
     }
 
+    /**
+     * Find the VocabularyEntry associated with the term using a binary search
+     * @param term the term to search
+     * @return the VocabularyEntry associated with the term
+     */
     VocabularyEntry findEntry(String term) {
         VocabularyEntry entry = new VocabularyEntry();
 
@@ -69,6 +74,10 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         return null;
     }
 
+    /**
+     * Read the vocabulary from disk
+     * @return true if the operation was successful, false otherwise
+     */
     public boolean readFromDisk(){
 
         long position = 0;
@@ -99,10 +108,18 @@ public class BaseVocabulary extends LinkedHashMap<String, VocabularyEntry> {
         return position != -1;
     }
 
+    /**
+     * Write the vocabulary to disk
+     * @return true if the operation was successful, false otherwise
+     */
     public static void clearCache() {
         entries.clear();
     }
 
+    /**
+     * Write the vocabulary to disk
+     * @return true if the operation was successful, false otherwise
+     */
     public void reset() {
         clear();
         clearCache();

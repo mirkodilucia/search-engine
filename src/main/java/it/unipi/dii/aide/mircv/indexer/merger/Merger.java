@@ -35,12 +35,20 @@ public class Merger {
         return new Merger(config);
     }
 
+    /**
+     * print the performance statistics
+     */
     public void printPerformanceStatistics() {
         System.out.println("Inverted index's memory occupancy:");
         System.out.println("\t> docids: "+ documentsMemoryOffset + "bytes");
         System.out.println("\t> freqs: "+ frequenciesMemoryOffset + "bytes");
     }
 
+    /**
+     * Merge the indexes into a single one and save it to disk using the configuration object provided
+     * @param indexes the number of indexes to merge
+     * @return true if the indexes have been merged, false otherwise
+     */
     public boolean mergeIndexes(int indexes) {
         try {
             MergerFileChannel margerFileChannels = MergerFileChannel.open(config);
@@ -86,6 +94,14 @@ public class Merger {
         return false;
     }
 
+    /**
+     * Iterate the posting list and write the blocks to disk using the file channels provided
+     * @param mergerFileChannels the file channels to write the blocks
+     * @param entry the vocabulary entry to process
+     * @param mergedPostingList the posting list to process
+     * @param maxNumPostings the maximum number of postings in a block
+     * @return the compression result
+     */
     private MergerFileChannel.CompressionResult iteratePostingList(MergerFileChannel mergerFileChannels, VocabularyEntry entry, PostingList mergedPostingList, int maxNumPostings) {
         Iterator<Posting> postingListIterator = mergedPostingList.getPostings().iterator();
         int numBlocks = entry.getHowManyBlockToWrite();
@@ -115,6 +131,12 @@ public class Merger {
         return result;
     }
 
+    /**
+     * Process the uncompressed posting list and write the blocks to disk using the file channels provided
+     * @param mergerPostingIteration the posting iteration to process
+     * @param mergerFileChannels the file channels to write the blocks
+     * @return the compression result
+     */
     private MergerFileChannel.CompressionResult processUncompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel mergerFileChannels) {
         int postingInBlock = 0;
         int nPostingsToBeWritten = mergerPostingIteration.nPostingsToBeWritten * 4;
@@ -159,6 +181,13 @@ public class Merger {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Process the compressed posting list and write the blocks to disk using the file channels provided
+     * @param mergerPostingIteration the posting iteration to process
+     * @param mergerFileChannels the file channels to write the blocks
+     * @return the compression result
+     */
     private MergerFileChannel.CompressionResult processCompressedPostingList(MergerPostingIteration mergerPostingIteration, MergerFileChannel mergerFileChannels) {
         int postingInBlock = 0;
         int nPostingsToBeWritten = mergerPostingIteration.nPostingsToBeWritten;
@@ -212,6 +241,9 @@ public class Merger {
         }
     }
 
+    /**
+     * Unset the configuration object
+     */
     public void unset() {
         MergerWorker.unset(config);
     }

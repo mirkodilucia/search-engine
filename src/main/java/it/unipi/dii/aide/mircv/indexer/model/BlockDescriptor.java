@@ -27,6 +27,10 @@ public class BlockDescriptor extends BaseBlockDescriptor {
         super(documentsMemoryOffset, frequenciesMemoryOffset);
     }
 
+    /**
+     * Initialize the block descriptor with the configuration object
+     * @param config the configuration object
+     */
     public static void init(Config config) {
         setupPath(config);
 
@@ -50,12 +54,21 @@ public class BlockDescriptor extends BaseBlockDescriptor {
         }
     }
 
+    /**
+     * Setup the path to save the inverted index
+     * @param config the configuration object
+     */
     private static void setupPath(Config config) {
         COMPRESSION_ENABLED = config.getCompressionEnabled();
         INVERTED_INDEX_DOCS = config.getInvertedIndexDocs();
         INVERTED_INDEX_FREQS = config.getInvertedIndexFreqsFile();
     }
 
+    /**
+     * Write the block on the disk using the file channel
+     * @param descriptorChannel the file channel to write the block
+     * @return true if the block has been written, false otherwise
+     */
     public MergerFileChannel.CompressionResult writeBlock(FileChannel descriptorChannel) {
         boolean result = writeBlockOnDisk(descriptorChannel);
         if (result) {
@@ -65,6 +78,10 @@ public class BlockDescriptor extends BaseBlockDescriptor {
         return null;
     }
 
+    /**
+     * Read the block postings from the disk
+     * @return the block postings
+     */
     public ArrayList<Posting> getBlockPostings() {
         try{
 

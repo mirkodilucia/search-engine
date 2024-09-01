@@ -17,6 +17,11 @@ public class QueryParser {
     private final Scanner scanner;
     private final Config config;
 
+    /**
+     * Constructor of the QueryParser class that takes the configuration object and the scanner
+     * @param config
+     * @param scanner
+     */
     public QueryParser(Config config, Scanner scanner) {
         this.config = config;
         this.scanner = scanner;
@@ -25,6 +30,11 @@ public class QueryParser {
         queryHandler.setup();
     }
 
+    /**
+     * Process the query
+     * @param queryParams the query parameters
+     * @return true if the query is processed correctly, false otherwise
+     */
     public boolean processQuery(String[] queryParams) {
         if (CommandParser.isConjunctiveMode(queryParams)) {
             return parseConjuntiveQuery(queryParams);
@@ -38,6 +48,11 @@ public class QueryParser {
         return false;
     }
 
+    /**
+     * Parse the conjunctive query
+     * @param queryParams the query parameters
+     * @return true if the query is processed correctly, false otherwise
+     */
     private boolean parseConjuntiveQuery(String[] queryParams) {
         String[] documents;
         ScoreFunction scoreFunction = askForScoringFunction();
@@ -49,6 +64,11 @@ public class QueryParser {
         return true;
     }
 
+    /**
+     * Parse the disjunctive query
+     * @param queryParams the query parameters
+     * @return true if the query is processed correctly, false otherwise
+     */
     private boolean parseDisjunctiveQuery(String[] queryParams) {
         String[] documents;
         ScoreFunction scoreFunction = askForScoringFunction();
@@ -58,6 +78,10 @@ public class QueryParser {
         return true;
     }
 
+    /**
+     * Show the documents results of the query
+     * @param documents the documents
+     */
     private static void showDocumentsResults(String[] documents) {
         if (documents == null || documents.length == 0) {
             System.out.println("No documents found with the term provided");
@@ -73,6 +97,10 @@ public class QueryParser {
         }
     }
 
+    /**
+     * Ask the user for the scoring function to apply
+     * @return the scoring function
+     */
     private ScoreFunction askForScoringFunction() {
         System.out.println("Which scoring function would you like to apply?\nType tfidf or bm25");
         String response = scanner.nextLine();
