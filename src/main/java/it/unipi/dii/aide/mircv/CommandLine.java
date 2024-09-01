@@ -11,7 +11,6 @@ public class CommandLine {
 
     private static Config configLoaded;
 
-    private static final int k = 10;
     private static final Scanner scanner = new Scanner(System.in);
     private static QueryParser queryParser;
 
