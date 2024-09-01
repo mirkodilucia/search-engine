@@ -7,7 +7,7 @@ This project was developed for the course "Multimedia Information Retrieval" of 
 
 The project was developed by Chianese Andrea and Di Lucia Mirko, in pair programming.
 
-For further details see the documentation [here](./documentation/Project_documentation.pdf)
+For further details see the documentation [here](https://github.com/mirkodilucia/search-engine/blob/main/Documentation_MIRCV_Search_Engine.pdf)
 
 ### Project architecture
 
