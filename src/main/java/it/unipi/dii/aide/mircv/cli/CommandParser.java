@@ -3,15 +3,7 @@ package it.unipi.dii.aide.mircv.cli;
 public class CommandParser {
 
     public static boolean isHelpCommand(String[] queryParams) {
-        if(queryParams[0].equals("help")){
-            System.out.println("""
-                    Please insert a query specifying your preferred mode:
-                                -c for conjunctive mode or -d for disjunctive mode. Here's an example:s
-                                This is a query example -c s
-                                Insert -h for help or -b to terminate the service""");
-            return true;
-        }
-        return false;
+        return queryParams[0].equals("help");
     }
 
     public static boolean isBreakCommand(String[] queryParams) {

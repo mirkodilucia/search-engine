@@ -24,13 +24,13 @@ public class CommandLine {
 
         queryParser = new QueryParser(config, scanner);
 
-        System.out.println("What are you looking for? " + """
+        while (true) {
+            System.out.println("What are you looking for? " + """
                 Please insert a query specifying your preferred mode:\s
                 -c for conjunctive mode or -d for disjunctive mode. Here's an example:\s
                 This is a query example -c \s
                 Type "help" to get help or "break" to terminate the service""");
 
-        while (true) {
             String query = scanner.nextLine();
             if (!CommandParser.isValidQuery(query)) {
                 System.out.println("The query you entered is empty.");
