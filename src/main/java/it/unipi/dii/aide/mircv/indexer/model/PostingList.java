@@ -318,7 +318,7 @@ public class PostingList {
      * @param docId the document ID to search
      * @return the posting with the document ID >= docId
      */
-    public Posting selectPostingScoreIterator(int docId) {
+    public Posting nextGEQ(int docId) {
         // flag to check if the block has changed
         boolean blockChanged = false;
         // move to the block with max docid >= docid

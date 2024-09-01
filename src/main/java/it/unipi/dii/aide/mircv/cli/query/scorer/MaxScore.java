@@ -147,7 +147,7 @@ public class MaxScore extends Scorer {
                 continue;
             }
 
-            Posting posting = postingListDoubleEntry.getKey().selectPostingScoreIterator(documentToProcess);
+            Posting posting = postingListDoubleEntry.getKey().nextGEQ(documentToProcess);
             if (posting != null && posting.getDocumentId() == documentToProcess) {
                 Vocabulary vocabulary = Vocabulary.with(config);
                 double idf = vocabulary
@@ -267,7 +267,7 @@ public class MaxScore extends Scorer {
                 }
 
                 if (currentPosting.getDocumentId() < next) {
-                    currentPosting = currentPostingList.selectPostingScoreIterator(next);
+                    currentPosting = currentPostingList.nextGEQ(next);
 
                     if (currentPosting == null) {
                         return -1;
