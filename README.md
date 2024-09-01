@@ -7,8 +7,6 @@ This project was developed for the course "Multimedia Information Retrieval" of 
 
 The project was developed by Chianese Andrea and Di Lucia Mirko, in pair programming.
 
-The final branch containing the last, refactored version of the project is the "reactor-project", this is the branch containing the final project to be considered.
-
 For further details see the documentation [here](./documentation/Project_documentation.pdf)
 
 ### Project architecture
